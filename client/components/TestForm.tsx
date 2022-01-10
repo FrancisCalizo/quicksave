@@ -18,10 +18,7 @@ export default function TestForm() {
     e.preventDefault();
 
     try {
-      const res = await axios.post(
-        'http://localhost:5000/expenses',
-        formValues
-      );
+      const res = await axios.post('/expenses', formValues);
 
       console.log(res);
     } catch (error) {

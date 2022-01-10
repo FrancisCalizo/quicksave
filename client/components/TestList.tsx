@@ -7,7 +7,7 @@ export default function TestList() {
   useEffect(() => {
     (async function getList() {
       try {
-        const res = await axios.get('http://localhost:5000/expenses');
+        const res = await axios.get('/expenses');
 
         setList(res.data);
       } catch (error) {
