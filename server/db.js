@@ -1,8 +1,6 @@
 const ClientClass = require('pg').Client;
 
-const pgUrl =
-  'postgres://tolabgxv:wCI6ydvOK26S-SsHFrssnevZ62qgeyVL@castor.db.elephantsql.com/tolabgxv';
-const client = new ClientClass(pgUrl);
+const client = new ClientClass(process.env.PG_URL);
 
 (async function connect(client) {
   try {
