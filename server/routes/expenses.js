@@ -2,10 +2,58 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../db');
 
-// @route     POST expenses
-// @desc      Create an expense
+// @route     GET /getAllExpenses
+// @desc      Get all expenses
 // @access    Private
-router.post('/', async (req, res) => {
+router.get('/getAllExpenses', async (req, res) => {
+  try {
+    const allExpenses = await pool.query('SELECT * FROM expense');
+
+    res.json(allExpenses.rows);
+  } catch (error) {
+    console.log(error.message);
+  }
+});
+
+// @route     GET getSingleExpense/:id
+// @desc      Get a single expense
+// @access    Private
+router.get('/getSingleExpense/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const expense = await pool.query('SELECT * FROM expense WHERE expense_id = $1', [id]);
+
+    res.json(expense.rows[0]);
+  } catch (error) {
+    console.log(error.message);
+  }
+});
+
+// @route     GET /getAllExpensesByMonth
+// @desc      Get all expenses for a particular month (and year)
+// @body      { month: number, year: number }
+// @access    Private
+router.get('/getAllExpensesByMonth', async (req, res) => {
+  try {
+    const { month, year } = req.body;
+
+    const expense = await pool.query(
+      'SELECT * FROM expense WHERE EXTRACT(MONTH FROM date) = $1 and EXTRACT(YEAR FROM date) = $2',
+      [month, year]
+    );
+
+    res.json(expense.rows);
+  } catch (error) {
+    console.log(error.message);
+  }
+});
+
+// @route     POST /createExpense
+// @desc      Create an expense
+// @body      { description: string, amount: number, date: date }
+// @access    Private
+router.post('/createExpense', async (req, res) => {
   try {
     const { description, amount, date } = req.body;
 
@@ -20,49 +68,20 @@ router.post('/', async (req, res) => {
   }
 });
 
-// @route     GET expenses
-// @desc      Get all expenses
-// @access    Private
-router.get('/', async (req, res) => {
-  try {
-    const allExpenses = await pool.query('SELECT * FROM expense');
-
-    res.json(allExpenses.rows);
-  } catch (error) {
-    console.log(error.message);
-  }
-});
-
-// @route     GET expenses/:id
-// @desc      Get a single expense
-// @access    Private
-router.get('/:id', async (req, res) => {
-  try {
-    const { id } = req.params;
-
-    const expense = await pool.query(
-      'SELECT * FROM expense WHERE expense_id = $1',
-      [id]
-    );
-
-    res.json(expense.rows[0]);
-  } catch (error) {
-    console.log(error.message);
-  }
-});
-
-// @route     PUT expenses/:id
+// @route     PUT updateExpense/:id
 // @desc      Update an expense
 // @access    Private
-router.put('/:id', async (req, res) => {
+router.put('/updateExpense/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const { description, amount, date } = req.body;
 
-    await pool.query(
-      'UPDATE expense SET description = $1, amount = $2, date =$3 WHERE expense_id = $4',
-      [description, amount, date, id]
-    );
+    await pool.query('UPDATE expense SET description = $1, amount = $2, date =$3 WHERE expense_id = $4', [
+      description,
+      amount,
+      date,
+      id,
+    ]);
 
     res.json('Expense updated succesfully');
   } catch (error) {
@@ -70,10 +89,10 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// @route     DELETE expenses
+// @route     DELETE deleteExpense/:id
 // @desc      Delete an expense
 // @access    Private
-router.delete('/:id', async (req, res) => {
+router.delete('/deleteExpense/:id', async (req, res) => {
   try {
     const { id } = req.params;
 
