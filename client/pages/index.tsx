@@ -3,8 +3,6 @@ import NextLink from 'next/link';
 
 import { Button, Center, Link } from '@chakra-ui/react';
 
-import DashboardLayout from 'components/layout/dashboard/DashboardLayout';
-
 export default function Home() {
   return (
     <>
