@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FaPlus, FaChevronDown } from 'react-icons/fa';
+import { FaPlus, FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import DatePicker from 'react-datepicker';
 import { format } from 'date-fns';
 
@@ -57,7 +57,7 @@ export default function Nonrecurring() {
           </Heading>
           <IconButton
             aria-label="Change Date"
-            icon={<FaChevronDown />}
+            icon={isDatePickerOpen ? <FaChevronUp /> : <FaChevronDown />}
             size="sm"
             ml={4}
             onClick={() => setIsDatePickerOpen((isOpen) => !isOpen)}

@@ -19,16 +19,53 @@ a {
 .react-datepicker {
   position: absolute;
   border: 1px solid gainsboro;
+  margin-top: 2px;
   padding: 1rem;
   border-radius: 5px;
+  background: white;
+  z-index: 9;
 }
 
 .react-datepicker-year-header {
   text-align: center;
-  margin: 1rem 0;
+  position: absolute;
+  top: 18px;
+  left: 41%;
+}
+
+.react-datepicker__monthPicker {
+  margin-top: 1rem;
 }
 
 .react-datepicker__month-wrapper {
   display: flex;
   justify-content: space-around;
+  margin-top: 0.5rem;
+}
+
+.react-datepicker__navigation-icon--previous {
+  color: white;
+}
+
+.react-datepicker__navigation-icon--previous::before {
+  display: inline-block;
+  content: '<';
+  color: black;
+  transform: translateX(25px);
+}
+
+.react-datepicker__navigation-icon--next {
+  color: white;
+}
+
+button.react-datepicker__navigation-icon--next {
+  background: red;
+  margin-right: 20px;
+}
+
+.react-datepicker__navigation-icon--next::after {
+  display: inline-block;
+  content: '>';
+  color: black;
+  transform: translateX(-25px);
 }
