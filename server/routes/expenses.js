@@ -36,7 +36,7 @@ router.get('/getSingleExpense/:id', async (req, res) => {
 // @access    Private
 router.get('/getAllExpensesByMonth', async (req, res) => {
   try {
-    const { month, year } = req.body;
+    const { month, year } = req.query;
 
     const expense = await pool.query(
       'SELECT * FROM expense WHERE EXTRACT(MONTH FROM date) = $1 and EXTRACT(YEAR FROM date) = $2',
