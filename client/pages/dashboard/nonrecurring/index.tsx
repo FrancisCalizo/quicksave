@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaPlus, FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import DatePicker from 'react-datepicker';
 import { format } from 'date-fns';
+import axios from 'axios';
 
 import {
   Flex,
@@ -34,8 +35,28 @@ export default function Nonrecurring() {
     onClose: onAddLabelClose,
   } = useDisclosure();
 
-  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const [date, setDate] = useState(new Date());
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+  const [expenses, setExpenses] = useState([]);
+
+  useEffect(() => {
+    getList(+format(date, 'M'), +format(date, 'yyyy'));
+  }, []);
+
+  async function getList(month: number, year: number) {
+    try {
+      const res = await axios.get('/getAllExpensesByMonth', {
+        params: {
+          month,
+          year,
+        },
+      });
+
+      setExpenses(res.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   return (
     <>
@@ -75,6 +96,7 @@ export default function Nonrecurring() {
             onChange={(date: any) => {
               setDate(date);
               setIsDatePickerOpen(false);
+              getList(+format(date, 'M'), +format(date, 'yyyy'));
             }}
             dateFormat="MM/yyyy"
             showMonthYearPicker
