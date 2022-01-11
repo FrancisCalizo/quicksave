@@ -29,6 +29,13 @@ import {
   Td,
   chakra,
   Box,
+  NumberInput,
+  NumberInputField,
+  FormControl,
+  FormLabel,
+  Input,
+  InputLeftAddon,
+  InputGroup,
 } from '@chakra-ui/react';
 
 import DashboardLayout from 'components/layout/dashboard/DashboardLayout';
@@ -70,7 +77,8 @@ export default function Nonrecurring() {
       },
       {
         Header: '',
-        accessor: 'null',
+        accessor: 'NULL',
+        disableSortBy: true,
       },
     ],
     []
@@ -147,7 +155,7 @@ export default function Nonrecurring() {
         </Flex>
 
         <Box id="table-container" my={12}>
-          <Table {...getTableProps()} size="sm">
+          <Table {...getTableProps()}>
             <Thead>
               {headerGroups.map((headerGroup) => (
                 <Tr {...headerGroup.getHeaderGroupProps()}>
@@ -209,14 +217,27 @@ export default function Nonrecurring() {
           <ModalHeader>Add Expense</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis, nisi.
+            <FormControl isRequired mb={4}>
+              <FormLabel htmlFor="amount">Amount</FormLabel>
+              <InputGroup>
+                <InputLeftAddon children="$" />
+                <NumberInput width="100%">
+                  <NumberInputField id="amount" />
+                </NumberInput>
+              </InputGroup>
+            </FormControl>
+
+            <FormControl isRequired>
+              <FormLabel htmlFor="transaction-name">Transaction Name</FormLabel>
+              <Input id="transaction-name" />
+            </FormControl>
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onAddExpenseClose}>
-              Close
+            <Button variant="outline" mr={3} onClick={onAddExpenseClose}>
+              Cancel
             </Button>
-            <Button variant="ghost">Secondary Action</Button>
+            <Button colorScheme="blue">Add New Expense</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
