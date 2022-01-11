@@ -19,8 +19,16 @@ import { format } from 'date-fns';
 import DashboardLayout from 'components/layout/dashboard/DashboardLayout';
 
 export default function Nonrecurring() {
-  const { isOpen: isAddExpenseOpen, onOpen: onAddExpenseOpen, onClose: onAddExpenseClose } = useDisclosure();
-  const { isOpen: isAddLabelOpen, onOpen: onAddLabelOpen, onClose: onAddLabelClose } = useDisclosure();
+  const {
+    isOpen: isAddExpenseOpen,
+    onOpen: onAddExpenseOpen,
+    onClose: onAddExpenseClose,
+  } = useDisclosure();
+  const {
+    isOpen: isAddLabelOpen,
+    onOpen: onAddLabelOpen,
+    onClose: onAddLabelClose,
+  } = useDisclosure();
 
   return (
     <>
@@ -67,7 +75,9 @@ export default function Nonrecurring() {
         <ModalContent>
           <ModalHeader>Add Expense</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis, nisi.</ModalBody>
+          <ModalBody>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis, nisi.
+          </ModalBody>
 
           <ModalFooter>
             <Button colorScheme="blue" mr={3} onClick={onAddExpenseClose}>
@@ -84,7 +94,9 @@ export default function Nonrecurring() {
         <ModalContent>
           <ModalHeader>Add Label</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis, nisi.</ModalBody>
+          <ModalBody>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis, nisi.
+          </ModalBody>
 
           <ModalFooter>
             <Button colorScheme="blue" mr={3} onClick={onAddLabelClose}>
