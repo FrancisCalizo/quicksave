@@ -39,11 +39,6 @@ export default function Nonrecurring() {
     onOpen: onAddExpenseOpen,
     onClose: onAddExpenseClose,
   } = useDisclosure();
-  const {
-    isOpen: isAddLabelOpen,
-    onOpen: onAddLabelOpen,
-    onClose: onAddLabelClose,
-  } = useDisclosure();
 
   const [date, setDate] = useState(new Date());
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
@@ -146,9 +141,6 @@ export default function Nonrecurring() {
           />
         )}
         <Flex justify="flex-end" align="center">
-          <Button leftIcon={<Icon as={FaPlus} />} mr={4} onClick={onAddLabelOpen}>
-            Add Label
-          </Button>
           <Button colorScheme="green" leftIcon={<Icon as={FaPlus} />} onClick={onAddExpenseOpen}>
             Add Expense
           </Button>
@@ -222,25 +214,6 @@ export default function Nonrecurring() {
 
           <ModalFooter>
             <Button colorScheme="blue" mr={3} onClick={onAddExpenseClose}>
-              Close
-            </Button>
-            <Button variant="ghost">Secondary Action</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-
-      {/* Add Label Modal */}
-      <Modal isOpen={isAddLabelOpen} onClose={onAddLabelClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Add Label</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis, nisi.
-          </ModalBody>
-
-          <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onAddLabelClose}>
               Close
             </Button>
             <Button variant="ghost">Secondary Action</Button>
