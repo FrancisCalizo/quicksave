@@ -49,10 +49,15 @@ export default function Nonrecurring() {
         py={6}
       >
         <Flex align="center">
-          <Heading as="h2" size="lg">
-            {format(new Date(), 'MMMM')}{' '}
+          <Heading
+            as="h2"
+            size="lg"
+            cursor="pointer"
+            onClick={() => setIsDatePickerOpen((isOpen) => !isOpen)}
+          >
+            {format(date, 'MMMM')}{' '}
             <Text as="span" fontWeight="normal">
-              {format(new Date(), 'yyyy')}
+              {format(date, 'yyyy')}
             </Text>
           </Heading>
           <IconButton
