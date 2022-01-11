@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { FaPlus, FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import { TriangleDownIcon, TriangleUpIcon } from '@chakra-ui/icons';
+import { useTable, useSortBy } from 'react-table';
 import DatePicker from 'react-datepicker';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import axios from 'axios';
 
 import {
@@ -19,6 +21,14 @@ import {
   ModalCloseButton,
   Heading,
   Text,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  chakra,
+  Box,
 } from '@chakra-ui/react';
 
 import DashboardLayout from 'components/layout/dashboard/DashboardLayout';
@@ -42,6 +52,39 @@ export default function Nonrecurring() {
   useEffect(() => {
     getList(+format(date, 'M'), +format(date, 'yyyy'));
   }, []);
+
+  // TEMP
+  const columns = React.useMemo(
+    () => [
+      {
+        Header: 'Date',
+        accessor: 'date',
+        Cell: (props: any) => format(parseISO(props.value), 'M/dd/yy'),
+      },
+      {
+        Header: 'Transaction',
+        accessor: 'description',
+      },
+      {
+        Header: 'Amount',
+        accessor: 'amount',
+      },
+      {
+        Header: 'Category',
+        accessor: 'category',
+      },
+      {
+        Header: '',
+        accessor: 'null',
+      },
+    ],
+    []
+  );
+
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable(
+    { columns, data: expenses } as any,
+    useSortBy
+  );
 
   async function getList(month: number, year: number) {
     try {
@@ -102,7 +145,6 @@ export default function Nonrecurring() {
             showMonthYearPicker
           />
         )}
-
         <Flex justify="flex-end" align="center">
           <Button leftIcon={<Icon as={FaPlus} />} mr={4} onClick={onAddLabelOpen}>
             Add Label
@@ -111,6 +153,50 @@ export default function Nonrecurring() {
             Add Expense
           </Button>
         </Flex>
+
+        <Box id="table-container" my={12}>
+          <Table {...getTableProps()} size="sm">
+            <Thead>
+              {headerGroups.map((headerGroup) => (
+                <Tr {...headerGroup.getHeaderGroupProps()}>
+                  {headerGroup.headers.map((column: any) => (
+                    <Th
+                      {...column.getHeaderProps(column.getSortByToggleProps())}
+                      isNumeric={column.isNumeric}
+                    >
+                      {column.render('Header')}
+                      <chakra.span pl="4">
+                        {column.isSorted ? (
+                          column.isSortedDesc ? (
+                            <TriangleDownIcon aria-label="sorted descending" />
+                          ) : (
+                            <TriangleUpIcon aria-label="sorted ascending" />
+                          )
+                        ) : null}
+                      </chakra.span>
+                    </Th>
+                  ))}
+                </Tr>
+              ))}
+            </Thead>
+
+            <Tbody {...getTableBodyProps()}>
+              {rows.map((row) => {
+                prepareRow(row);
+
+                return (
+                  <Tr {...row.getRowProps()}>
+                    {row.cells.map((cell: any) => (
+                      <Td {...cell.getCellProps()} isNumeric={cell.column.isNumeric}>
+                        {cell.render('Cell')}
+                      </Td>
+                    ))}
+                  </Tr>
+                );
+              })}
+            </Tbody>
+          </Table>
+        </Box>
       </Flex>
 
       {/* Right Section */}
