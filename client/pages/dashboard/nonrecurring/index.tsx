@@ -1,6 +1,12 @@
+import React, { useState } from 'react';
+import { FaPlus, FaChevronDown } from 'react-icons/fa';
+import DatePicker from 'react-datepicker';
+import { format } from 'date-fns';
+
 import {
   Flex,
   Button,
+  IconButton,
   Icon,
   useDisclosure,
   Modal,
@@ -13,8 +19,6 @@ import {
   Heading,
   Text,
 } from '@chakra-ui/react';
-import { FaPlus } from 'react-icons/fa';
-import { format } from 'date-fns';
 
 import DashboardLayout from 'components/layout/dashboard/DashboardLayout';
 
@@ -30,6 +34,9 @@ export default function Nonrecurring() {
     onClose: onAddLabelClose,
   } = useDisclosure();
 
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+  const [date, setDate] = useState(new Date());
+
   return (
     <>
       {/* Middle Section */}
@@ -41,12 +48,33 @@ export default function Nonrecurring() {
         px={4}
         py={6}
       >
-        <Heading as="h2" size="lg">
-          {format(new Date(), 'MMMM')}{' '}
-          <Text as="span" fontWeight="normal">
-            {format(new Date(), 'yyyy')}
-          </Text>
-        </Heading>
+        <Flex align="center">
+          <Heading as="h2" size="lg">
+            {format(new Date(), 'MMMM')}{' '}
+            <Text as="span" fontWeight="normal">
+              {format(new Date(), 'yyyy')}
+            </Text>
+          </Heading>
+          <IconButton
+            aria-label="Change Date"
+            icon={<FaChevronDown />}
+            size="sm"
+            ml={4}
+            onClick={() => setIsDatePickerOpen((isOpen) => !isOpen)}
+          />
+        </Flex>
+        {isDatePickerOpen && (
+          <DatePicker
+            inline
+            selected={date}
+            onChange={(date: any) => {
+              setDate(date);
+              setIsDatePickerOpen(false);
+            }}
+            dateFormat="MM/yyyy"
+            showMonthYearPicker
+          />
+        )}
 
         <Flex justify="flex-end" align="center">
           <Button leftIcon={<Icon as={FaPlus} />} mr={4} onClick={onAddLabelOpen}>
