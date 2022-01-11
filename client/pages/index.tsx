@@ -1,6 +1,7 @@
 import Head from 'next/head';
+import NextLink from 'next/link';
 
-import { Flex } from '@chakra-ui/react';
+import { Button, Center, Link } from '@chakra-ui/react';
 
 import DashboardLayout from 'components/layout/dashboard/DashboardLayout';
 
@@ -13,23 +14,11 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      {/* Column 2 */}
-      <Flex w={['100%', '100%', '60%', '60%', '55%']} flexDir="column" overflow="auto" minH="100vh">
-        <h3>Column 2</h3>
-      </Flex>
-
-      {/* Column 3 */}
-      <Flex
-        w={['100%', '100%', '30%']}
-        bgColor="#F5F5F5"
-        flexDir="column"
-        overflow="auto"
-        minW={[null, null, '300px', '300px', '400px']}
-      >
-        <h3>Column 3</h3>
-      </Flex>
+      <Center h="100vh">
+        <Link as={NextLink} href={'/dashboard'}>
+          <Button colorScheme="green">Go to Dashboard</Button>
+        </Link>
+      </Center>
     </>
   );
 }
-
-Home.getLayout = (page: any) => <DashboardLayout>{page}</DashboardLayout>;

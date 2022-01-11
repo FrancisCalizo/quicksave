@@ -1,6 +1,6 @@
 export const SIDEBAR_LINKS = [
-  { title: 'Overview', route: '/' },
-  { title: 'Income', route: '/income' },
-  { title: 'Recurring', route: '/recurring' },
-  { title: 'Nonrecurring', route: '/nonrecurring' },
+  { title: 'Overview', route: '/dashboard' },
+  { title: 'Income', route: '/dashboard/income' },
+  { title: 'Recurring', route: '/dashboard/recurring' },
+  { title: 'Nonrecurring', route: '/dashboard/nonrecurring' },
 ];
