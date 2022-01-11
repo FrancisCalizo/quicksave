@@ -16,7 +16,9 @@ export default function Sidebar() {
       color="#fff"
       py={4}
     >
-      <Heading as="h3">QuickSave.</Heading>
+      <Heading as="h3" fontSize={['4xl', '4xl', '2xl', '3xl', '4xl']}>
+        QuickSave.
+      </Heading>
 
       <Flex direction="column" w="100%">
         {SIDEBAR_LINKS.map((link, key) => (

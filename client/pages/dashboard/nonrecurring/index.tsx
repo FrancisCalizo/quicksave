@@ -10,9 +10,11 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
+  Heading,
+  Text,
 } from '@chakra-ui/react';
 import { FaPlus } from 'react-icons/fa';
-import { MdLabel } from 'react-icons/md';
+import { format } from 'date-fns';
 
 import DashboardLayout from 'components/layout/dashboard/DashboardLayout';
 
@@ -31,6 +33,13 @@ export default function Nonrecurring() {
         px={4}
         py={6}
       >
+        <Heading as="h2" size="lg">
+          {format(new Date(), 'MMMM')}{' '}
+          <Text as="span" fontWeight="normal">
+            {format(new Date(), 'yyyy')}
+          </Text>
+        </Heading>
+
         <Flex justify="flex-end" align="center">
           <Button leftIcon={<Icon as={FaPlus} />} mr={4} onClick={onAddLabelOpen}>
             Add Label
