@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { FaPlus, FaChevronDown, FaChevronUp } from 'react-icons/fa';
-import { TriangleDownIcon, TriangleUpIcon } from '@chakra-ui/icons';
-import { useTable, useSortBy } from 'react-table';
 import { format } from 'date-fns';
 import startOfMonth from 'date-fns/startOfMonth';
 import endOfMonth from 'date-fns/endOfMonth';
@@ -23,13 +21,6 @@ import {
   ModalCloseButton,
   Heading,
   Text,
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  chakra,
   Box,
   NumberInput,
   NumberInputField,
@@ -43,7 +34,7 @@ import {
 
 import Combobox from 'components/Combobox';
 import DashboardLayout from 'components/layout/dashboard/DashboardLayout';
-import { reactTableColumns } from 'utils';
+import ExpenseTable from 'components/pages/nonrecurring/ExpenseTable';
 
 const emptyForm = {
   transactionName: '',
@@ -68,6 +59,7 @@ export default function Nonrecurring() {
   const [formState, setFormState] = useState(emptyForm);
 
   useEffect(() => {
+    // Load expense list for given date
     getList(+format(date, 'M'), +format(date, 'yyyy'));
 
     // Set Min and Max Date for DatePicker
@@ -77,7 +69,21 @@ export default function Nonrecurring() {
     });
   }, []);
 
-  const columns = React.useMemo(() => reactTableColumns, []);
+  async function getList(month: number, year: number) {
+    try {
+      const res = await axios.get('/getAllExpensesByMonth', {
+        params: {
+          month,
+          year,
+        },
+      });
+
+      setExpenses(res.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   const handleAddNewExpense = async () => {
     try {
       await axios.post('/createExpense', {
@@ -113,26 +119,6 @@ export default function Nonrecurring() {
       });
     }
   };
-
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable(
-    { columns, data: expenses } as any,
-    useSortBy
-  );
-
-  async function getList(month: number, year: number) {
-    try {
-      const res = await axios.get('/getAllExpensesByMonth', {
-        params: {
-          month,
-          year,
-        },
-      });
-
-      setExpenses(res.data);
-    } catch (error) {
-      console.error(error);
-    }
-  }
 
   return (
     <>
@@ -189,47 +175,7 @@ export default function Nonrecurring() {
         </Flex>
 
         <Box id="table-container" my={12}>
-          <Table {...getTableProps()}>
-            <Thead>
-              {headerGroups.map((headerGroup) => (
-                <Tr {...headerGroup.getHeaderGroupProps()}>
-                  {headerGroup.headers.map((column: any) => (
-                    <Th
-                      {...column.getHeaderProps(column.getSortByToggleProps())}
-                      isNumeric={column.isNumeric}
-                    >
-                      {column.render('Header')}
-                      <chakra.span pl="4">
-                        {column.isSorted ? (
-                          column.isSortedDesc ? (
-                            <TriangleDownIcon aria-label="sorted descending" />
-                          ) : (
-                            <TriangleUpIcon aria-label="sorted ascending" />
-                          )
-                        ) : null}
-                      </chakra.span>
-                    </Th>
-                  ))}
-                </Tr>
-              ))}
-            </Thead>
-
-            <Tbody {...getTableBodyProps()}>
-              {rows.map((row) => {
-                prepareRow(row);
-
-                return (
-                  <Tr {...row.getRowProps()}>
-                    {row.cells.map((cell: any) => (
-                      <Td {...cell.getCellProps()} isNumeric={cell.column.isNumeric}>
-                        {cell.render('Cell')}
-                      </Td>
-                    ))}
-                  </Tr>
-                );
-              })}
-            </Tbody>
-          </Table>
+          <ExpenseTable data={expenses} />
         </Box>
       </Flex>
 
