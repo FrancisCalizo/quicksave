@@ -55,11 +55,11 @@ router.get('/getAllExpensesByMonth', async (req, res) => {
 // @access    Private
 router.post('/createExpense', async (req, res) => {
   try {
-    const { description, amount, date } = req.body;
+    const { description, amount, date, category } = req.body;
 
     const newExpense = await pool.query(
-      'INSERT INTO expense (description, amount, date) VALUES($1, $2, $3) RETURNING *',
-      [description, amount, date]
+      'INSERT INTO expense (description, amount, date, category) VALUES($1, $2, $3, $4) RETURNING *',
+      [description, amount, date, category]
     );
 
     res.json(newExpense.rows[0]);

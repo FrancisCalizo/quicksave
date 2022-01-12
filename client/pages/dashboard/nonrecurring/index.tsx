@@ -109,6 +109,7 @@ export default function Nonrecurring() {
         amount: Number(formState.amount),
         date: formState.date,
         description: formState.transactionName,
+        category: formState.category,
       });
 
       console.log(res);
@@ -248,10 +249,10 @@ export default function Nonrecurring() {
       </Flex>
 
       {/* Add Expense Modal */}
-      <Modal isOpen={isAddExpenseOpen} onClose={onAddExpenseClose} size="lg">
+      <Modal isOpen={isAddExpenseOpen} onClose={onAddExpenseClose} size="lg" motionPreset="scale">
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Add Expense</ModalHeader>
+          <ModalHeader borderTopRadius={5}>Add Expense</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <FormControl isRequired mb={4}>
@@ -308,7 +309,7 @@ export default function Nonrecurring() {
             {/* TODO: Add Notes Input (Textarea) */}
           </ModalBody>
 
-          <ModalFooter>
+          <ModalFooter borderTop="1px solid gainsboro">
             <Button variant="outline" mr={3} onClick={onAddExpenseClose}>
               Cancel
             </Button>
