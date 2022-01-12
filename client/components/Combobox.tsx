@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useCombobox } from 'downshift';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
-import { Input, List, ListItem, Flex, IconButton } from '@chakra-ui/react';
+import { Input as ChakraInput, List, ListItem, Flex, IconButton } from '@chakra-ui/react';
 
-const ComboboxInput = React.forwardRef(({ ...props }, ref: any) => {
-  return <Input {...props} borderRightRadius={0} ref={ref} />;
-});
+const Input = React.forwardRef(({ ...props }, ref: any) => (
+  <ChakraInput {...props} borderRightRadius={0} ref={ref} />
+));
 
 const ComboboxList = React.forwardRef(({ isOpen, ...props }: any, ref) => {
   return (
@@ -42,17 +42,17 @@ const ComboboxItem = React.forwardRef(({ itemIndex, highlightedIndex, ...props }
 });
 
 interface ComboboxProps {
+  selectedItem: string;
+  handleSelectedItemChange: (value: any) => any;
   items: string[];
 }
 
-export default function Combobox({ items }: ComboboxProps) {
+export default function Combobox({ selectedItem, handleSelectedItemChange, items }: ComboboxProps) {
   const [inputItems, setInputItems] = useState(items);
 
   const {
     isOpen,
-    selectedItem,
     getToggleButtonProps,
-    getLabelProps,
     getMenuProps,
     getInputProps,
     getComboboxProps,
@@ -60,6 +60,8 @@ export default function Combobox({ items }: ComboboxProps) {
     getItemProps,
   } = useCombobox({
     items: inputItems,
+    selectedItem,
+    onSelectedItemChange: handleSelectedItemChange,
     onInputValueChange: ({ inputValue }: any) => {
       setInputItems(
         items.filter((item) => item.toLowerCase().startsWith(inputValue.toLowerCase()))
@@ -70,7 +72,7 @@ export default function Combobox({ items }: ComboboxProps) {
   return (
     <div {...getComboboxProps()} style={{ position: 'relative' }}>
       <Flex alignItems="center">
-        <ComboboxInput {...getInputProps()} />
+        <Input {...getInputProps()} />
         <IconButton
           {...getToggleButtonProps()}
           aria-label={'toggle menu'}

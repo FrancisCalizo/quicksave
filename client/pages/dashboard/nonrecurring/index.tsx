@@ -48,6 +48,7 @@ const emptyForm = {
   transactionName: '',
   amount: '',
   date: '',
+  category: '',
 };
 
 export default function Nonrecurring() {
@@ -296,6 +297,10 @@ export default function Nonrecurring() {
             <FormControl isRequired mb={4}>
               <FormLabel htmlFor="category">Category</FormLabel>
               <Combobox
+                selectedItem={formState.category}
+                handleSelectedItemChange={({ selectedItem }) => {
+                  setFormState((old) => ({ ...old, category: selectedItem }));
+                }}
                 items={['Groceries', 'Exercise & Health', 'Eating Out', 'Misc', 'Splurge']}
               />
             </FormControl>
