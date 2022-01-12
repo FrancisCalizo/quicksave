@@ -43,6 +43,12 @@ import {
 import DashboardLayout from 'components/layout/dashboard/DashboardLayout';
 import { formatCurrency } from 'utils';
 
+const emptyForm = {
+  transactionName: '',
+  amount: '',
+  date: '',
+};
+
 export default function Nonrecurring() {
   const {
     isOpen: isAddExpenseOpen,
@@ -51,9 +57,10 @@ export default function Nonrecurring() {
   } = useDisclosure();
 
   const [date, setDate] = useState(new Date());
-  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const [expenses, setExpenses] = useState([]);
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const [minMaxDates, setMinMaxDates] = useState({ min: '', max: '' });
+  const [formState, setFormState] = useState(emptyForm);
 
   useEffect(() => {
     getList(+format(date, 'M'), +format(date, 'yyyy'));
@@ -93,6 +100,20 @@ export default function Nonrecurring() {
     ],
     []
   );
+
+  const handleAddNewExpense = async () => {
+    try {
+      const res = await axios.post('/createExpense', {
+        amount: Number(formState.amount),
+        date: formState.date,
+        description: formState.transactionName,
+      });
+
+      console.log(res);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable(
     { columns, data: expenses } as any,
@@ -225,38 +246,63 @@ export default function Nonrecurring() {
       </Flex>
 
       {/* Add Expense Modal */}
-      <Modal isOpen={isAddExpenseOpen} onClose={onAddExpenseClose}>
+      <Modal isOpen={isAddExpenseOpen} onClose={onAddExpenseClose} size="lg">
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Add Expense</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <FormControl isRequired mb={4}>
-              <FormLabel htmlFor="amount">Amount</FormLabel>
-              <InputGroup>
-                <InputLeftAddon children="$" />
-                <NumberInput width="100%">
-                  <NumberInputField id="amount" />
-                </NumberInput>
-              </InputGroup>
-            </FormControl>
-
-            <FormControl isRequired mb={4}>
               <FormLabel htmlFor="transaction-name">Transaction Name</FormLabel>
-              <Input id="transaction-name" />
+              <Input
+                id="transaction-name"
+                value={formState.transactionName}
+                onChange={(e) =>
+                  setFormState((old) => ({ ...old, transactionName: e.target.value }))
+                }
+              />
             </FormControl>
 
-            <FormControl isRequired mb={4}>
-              <FormLabel htmlFor="date">Date</FormLabel>
-              <Input type="date" min={minMaxDates.min} max={minMaxDates.max} />
-            </FormControl>
+            <Flex>
+              <FormControl isRequired mb={4} mr={2}>
+                <FormLabel htmlFor="amount">Amount</FormLabel>
+                <InputGroup>
+                  <InputLeftAddon children="$" />
+                  {/* TODO: This will probably need to be a text input with regex */}
+                  <NumberInput
+                    width="100%"
+                    value={formState.amount}
+                    onChange={(val) => setFormState((old) => ({ ...old, amount: val }))}
+                  >
+                    <NumberInputField id="amount" borderLeftRadius={0} />
+                  </NumberInput>
+                </InputGroup>
+              </FormControl>
+
+              <FormControl isRequired mb={4} ml={2}>
+                <FormLabel htmlFor="date">Date</FormLabel>
+                <Input
+                  type="date"
+                  min={minMaxDates.min}
+                  max={minMaxDates.max}
+                  value={formState.date}
+                  onChange={(e) => setFormState((old) => ({ ...old, date: e.target.value }))}
+                />
+              </FormControl>
+
+              {/* TODO: Add Category Input (combobox) */}
+
+              {/* TODO: Add Notes Input (Textarea) */}
+            </Flex>
           </ModalBody>
 
           <ModalFooter>
             <Button variant="outline" mr={3} onClick={onAddExpenseClose}>
               Cancel
             </Button>
-            <Button colorScheme="blue">Add New Expense</Button>
+            <Button colorScheme="blue" onClick={handleAddNewExpense}>
+              Add New Expense
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
