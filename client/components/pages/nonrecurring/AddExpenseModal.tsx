@@ -65,10 +65,14 @@ export default function AddExpenseModal(props: AddExpenseModalprops) {
           <FormControl isRequired mb={4}>
             <FormLabel htmlFor="transaction-name">Transaction Name</FormLabel>
             <Input
+              autoFocus
               id="transaction-name"
               value={formState.description}
               onChange={(e) =>
-                setFormState((old: any) => ({ ...old, description: e.target.value }))
+                setFormState((old: any) => ({
+                  ...old,
+                  description: e.target.value,
+                }))
               }
             />
           </FormControl>
@@ -82,7 +86,9 @@ export default function AddExpenseModal(props: AddExpenseModalprops) {
                 <NumberInput
                   width="100%"
                   value={formState.amount}
-                  onChange={(val) => setFormState((old: any) => ({ ...old, amount: val }))}
+                  onChange={(val) =>
+                    setFormState((old: any) => ({ ...old, amount: val }))
+                  }
                 >
                   <NumberInputField id="amount" borderLeftRadius={0} />
                 </NumberInput>
@@ -96,7 +102,9 @@ export default function AddExpenseModal(props: AddExpenseModalprops) {
                 min={minMaxDates.min}
                 max={minMaxDates.max}
                 value={formState.date}
-                onChange={(e) => setFormState((old: any) => ({ ...old, date: e.target.value }))}
+                onChange={(e) =>
+                  setFormState((old: any) => ({ ...old, date: e.target.value }))
+                }
               />
             </FormControl>
           </Flex>
@@ -107,9 +115,18 @@ export default function AddExpenseModal(props: AddExpenseModalprops) {
             <Combobox
               selectedItem={formState.category}
               handleSelectedItemChange={({ selectedItem }) => {
-                setFormState((old: any) => ({ ...old, category: selectedItem }));
+                setFormState((old: any) => ({
+                  ...old,
+                  category: selectedItem,
+                }));
               }}
-              items={['Groceries', 'Exercise & Health', 'Eating Out', 'Misc', 'Splurge']}
+              items={[
+                'Groceries',
+                'Exercise & Health',
+                'Eating Out',
+                'Misc',
+                'Splurge',
+              ]}
             />
           </FormControl>
 
@@ -127,7 +144,16 @@ export default function AddExpenseModal(props: AddExpenseModalprops) {
           >
             Cancel
           </Button>
-          <Button colorScheme="blue" onClick={handleAddNewExpense}>
+          <Button
+            colorScheme="blue"
+            onClick={handleAddNewExpense}
+            disabled={
+              !formState.description ||
+              !formState.amount ||
+              !formState.date ||
+              !formState.category
+            }
+          >
             Add New Expense
           </Button>
         </ModalFooter>
