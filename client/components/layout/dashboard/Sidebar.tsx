@@ -3,7 +3,7 @@ import NextLink from 'next/link';
 
 import { Flex, Link, Heading, Box } from '@chakra-ui/react';
 
-import { SIDEBAR_LINKS } from 'components/routes';
+import { SIDEBAR_LINKS } from 'utils/routes';
 
 export default function Sidebar() {
   return (
