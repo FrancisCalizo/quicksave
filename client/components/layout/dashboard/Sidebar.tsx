@@ -16,7 +16,7 @@ export default function Sidebar() {
       color="#fff"
       py={4}
     >
-      <Heading as="h3" fontSize={['4xl', '4xl', '2xl', '3xl', '4xl']}>
+      <Heading as="h3" fontSize={['3xl', '3xl', '2xl']}>
         QuickSave.
       </Heading>
 

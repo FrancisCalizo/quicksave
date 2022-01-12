@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FaPlus, FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import { TriangleDownIcon, TriangleUpIcon } from '@chakra-ui/icons';
 import { useTable, useSortBy } from 'react-table';
-import { format, parseISO } from 'date-fns';
+import { format } from 'date-fns';
 import startOfMonth from 'date-fns/startOfMonth';
 import endOfMonth from 'date-fns/endOfMonth';
 import DatePicker from 'react-datepicker';
@@ -43,7 +43,7 @@ import {
 
 import Combobox from 'components/Combobox';
 import DashboardLayout from 'components/layout/dashboard/DashboardLayout';
-import { formatCurrency } from 'utils';
+import { reactTableColumns } from 'utils';
 
 const emptyForm = {
   transactionName: '',
@@ -77,35 +77,7 @@ export default function Nonrecurring() {
     });
   }, []);
 
-  const columns = React.useMemo(
-    () => [
-      {
-        Header: 'Date',
-        accessor: 'date',
-        Cell: (props: any) => format(parseISO(props.value), 'M/dd/yy'),
-      },
-      {
-        Header: 'Transaction',
-        accessor: 'description',
-      },
-      {
-        Header: 'Amount',
-        accessor: 'amount',
-        Cell: (props: any) => formatCurrency(props.value),
-      },
-      {
-        Header: 'Category',
-        accessor: 'category',
-      },
-      {
-        Header: '',
-        accessor: 'NULL',
-        disableSortBy: true,
-      },
-    ],
-    []
-  );
-
+  const columns = React.useMemo(() => reactTableColumns, []);
   const handleAddNewExpense = async () => {
     try {
       await axios.post('/createExpense', {
