@@ -40,6 +40,7 @@ import {
   InputGroup,
 } from '@chakra-ui/react';
 
+import Combobox from 'components/Combobox';
 import DashboardLayout from 'components/layout/dashboard/DashboardLayout';
 import { formatCurrency } from 'utils';
 
@@ -289,11 +290,17 @@ export default function Nonrecurring() {
                   onChange={(e) => setFormState((old) => ({ ...old, date: e.target.value }))}
                 />
               </FormControl>
-
-              {/* TODO: Add Category Input (combobox) */}
-
-              {/* TODO: Add Notes Input (Textarea) */}
             </Flex>
+
+            {/* TODO: Get categories from the backend and implement into items prop */}
+            <FormControl isRequired mb={4}>
+              <FormLabel htmlFor="category">Category</FormLabel>
+              <Combobox
+                items={['Groceries', 'Exercise & Health', 'Eating Out', 'Misc', 'Splurge']}
+              />
+            </FormControl>
+
+            {/* TODO: Add Notes Input (Textarea) */}
           </ModalBody>
 
           <ModalFooter>
