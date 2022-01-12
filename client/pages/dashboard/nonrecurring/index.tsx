@@ -12,32 +12,18 @@ import {
   IconButton,
   Icon,
   useDisclosure,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
   Heading,
   Text,
   Box,
-  NumberInput,
-  NumberInputField,
-  FormControl,
-  FormLabel,
-  Input,
-  InputLeftAddon,
-  InputGroup,
   useToast,
 } from '@chakra-ui/react';
 
-import Combobox from 'components/Combobox';
 import DashboardLayout from 'components/layout/dashboard/DashboardLayout';
 import ExpenseTable from 'components/pages/nonrecurring/ExpenseTable';
+import AddExpenseModal from 'components/pages/nonrecurring/AddExpenseModal';
 
-const emptyForm = {
-  transactionName: '',
+export const emptyForm = {
+  description: '',
   amount: '',
   date: '',
   category: '',
@@ -89,7 +75,7 @@ export default function Nonrecurring() {
       await axios.post('/createExpense', {
         amount: Number(formState.amount),
         date: formState.date,
-        description: formState.transactionName,
+        description: formState.description,
         category: formState.category,
       });
 
@@ -191,95 +177,14 @@ export default function Nonrecurring() {
       </Flex>
 
       {/* Add Expense Modal */}
-      <Modal
-        isOpen={isAddExpenseOpen}
-        onClose={() => {
-          onAddExpenseClose();
-          setFormState(emptyForm);
-        }}
-        size="lg"
-        motionPreset="scale"
-      >
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader borderTopRadius={5}>
-            <Heading size="lg" color="gray.500">
-              Add Expense
-            </Heading>
-          </ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <FormControl isRequired mb={4}>
-              <FormLabel htmlFor="transaction-name">Transaction Name</FormLabel>
-              <Input
-                id="transaction-name"
-                value={formState.transactionName}
-                onChange={(e) =>
-                  setFormState((old) => ({ ...old, transactionName: e.target.value }))
-                }
-              />
-            </FormControl>
-
-            <Flex>
-              <FormControl isRequired mb={4} mr={2}>
-                <FormLabel htmlFor="amount">Amount</FormLabel>
-                <InputGroup>
-                  <InputLeftAddon children="$" />
-                  {/* TODO: This will probably need to be a text input with regex */}
-                  <NumberInput
-                    width="100%"
-                    value={formState.amount}
-                    onChange={(val) => setFormState((old) => ({ ...old, amount: val }))}
-                  >
-                    <NumberInputField id="amount" borderLeftRadius={0} />
-                  </NumberInput>
-                </InputGroup>
-              </FormControl>
-
-              <FormControl isRequired mb={4} ml={2}>
-                <FormLabel htmlFor="date">Date</FormLabel>
-                <Input
-                  type="date"
-                  min={minMaxDates.min}
-                  max={minMaxDates.max}
-                  value={formState.date}
-                  onChange={(e) => setFormState((old) => ({ ...old, date: e.target.value }))}
-                />
-              </FormControl>
-            </Flex>
-
-            {/* TODO: Get categories from the backend and implement into items prop */}
-            <FormControl isRequired mb={4}>
-              <FormLabel htmlFor="category">Category</FormLabel>
-              <Combobox
-                selectedItem={formState.category}
-                handleSelectedItemChange={({ selectedItem }) => {
-                  setFormState((old) => ({ ...old, category: selectedItem }));
-                }}
-                items={['Groceries', 'Exercise & Health', 'Eating Out', 'Misc', 'Splurge']}
-              />
-            </FormControl>
-
-            {/* TODO: Add Notes Input (Textarea) */}
-          </ModalBody>
-
-          <ModalFooter borderTop="1px solid gainsboro">
-            <Button
-              variant="outline"
-              mr={3}
-              onClick={() => {
-                onAddExpenseClose();
-                setFormState(emptyForm);
-              }}
-            >
-              Cancel
-            </Button>
-            <Button colorScheme="blue" onClick={handleAddNewExpense}>
-              Add New Expense
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      <AddExpenseModal
+        isAddExpenseOpen={isAddExpenseOpen}
+        onAddExpenseClose={onAddExpenseClose}
+        formState={formState}
+        setFormState={setFormState}
+        minMaxDates={minMaxDates}
+        handleAddNewExpense={handleAddNewExpense}
+      />
     </>
   );
 }
