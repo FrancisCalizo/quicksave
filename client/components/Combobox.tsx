@@ -30,7 +30,8 @@ const ComboboxItem = React.forwardRef(({ itemIndex, highlightedIndex, ...props }
   return (
     <ListItem
       transition="background-color 220ms, color 220ms"
-      bg={isActive ? 'teal.100' : null}
+      bg={isActive ? 'green.400' : null}
+      color={isActive ? 'white' : 'black'}
       borderRadius={5}
       px={4}
       py={2}

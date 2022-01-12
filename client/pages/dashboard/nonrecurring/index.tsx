@@ -38,6 +38,7 @@ import {
   Input,
   InputLeftAddon,
   InputGroup,
+  useToast,
 } from '@chakra-ui/react';
 
 import Combobox from 'components/Combobox';
@@ -52,6 +53,8 @@ const emptyForm = {
 };
 
 export default function Nonrecurring() {
+  const toast = useToast();
+
   const {
     isOpen: isAddExpenseOpen,
     onOpen: onAddExpenseOpen,
@@ -105,16 +108,37 @@ export default function Nonrecurring() {
 
   const handleAddNewExpense = async () => {
     try {
-      const res = await axios.post('/createExpense', {
+      await axios.post('/createExpense', {
         amount: Number(formState.amount),
         date: formState.date,
         description: formState.transactionName,
         category: formState.category,
       });
 
-      console.log(res);
+      await getList(+format(date, 'M'), +format(date, 'yyyy'));
+
+      setFormState(emptyForm);
+      onAddExpenseClose();
+
+      toast({
+        title: 'Success!',
+        description: 'Expense was added successfully.',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+        position: 'bottom-right',
+      });
     } catch (error) {
       console.error(error);
+
+      toast({
+        title: 'Oops!',
+        description: 'There was an error processing your request.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        position: 'bottom-right',
+      });
     }
   };
 
@@ -157,7 +181,7 @@ export default function Nonrecurring() {
             onClick={() => setIsDatePickerOpen((isOpen) => !isOpen)}
           >
             {format(date, 'MMMM')}{' '}
-            <Text as="span" fontWeight="normal">
+            <Text as="span" fontWeight="normal" color="gray.500">
               {format(date, 'yyyy')}
             </Text>
           </Heading>
@@ -249,10 +273,22 @@ export default function Nonrecurring() {
       </Flex>
 
       {/* Add Expense Modal */}
-      <Modal isOpen={isAddExpenseOpen} onClose={onAddExpenseClose} size="lg" motionPreset="scale">
+      <Modal
+        isOpen={isAddExpenseOpen}
+        onClose={() => {
+          onAddExpenseClose();
+          setFormState(emptyForm);
+        }}
+        size="lg"
+        motionPreset="scale"
+      >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader borderTopRadius={5}>Add Expense</ModalHeader>
+          <ModalHeader borderTopRadius={5}>
+            <Heading size="lg" color="gray.500">
+              Add Expense
+            </Heading>
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <FormControl isRequired mb={4}>
@@ -310,7 +346,14 @@ export default function Nonrecurring() {
           </ModalBody>
 
           <ModalFooter borderTop="1px solid gainsboro">
-            <Button variant="outline" mr={3} onClick={onAddExpenseClose}>
+            <Button
+              variant="outline"
+              mr={3}
+              onClick={() => {
+                onAddExpenseClose();
+                setFormState(emptyForm);
+              }}
+            >
               Cancel
             </Button>
             <Button colorScheme="blue" onClick={handleAddNewExpense}>
