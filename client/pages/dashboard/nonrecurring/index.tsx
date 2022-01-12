@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { FaPlus, FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import { TriangleDownIcon, TriangleUpIcon } from '@chakra-ui/icons';
 import { useTable, useSortBy } from 'react-table';
-import DatePicker from 'react-datepicker';
 import { format, parseISO } from 'date-fns';
+import startOfMonth from 'date-fns/startOfMonth';
+import endOfMonth from 'date-fns/endOfMonth';
+import DatePicker from 'react-datepicker';
 import axios from 'axios';
 
 import {
@@ -39,6 +41,7 @@ import {
 } from '@chakra-ui/react';
 
 import DashboardLayout from 'components/layout/dashboard/DashboardLayout';
+import { formatCurrency } from 'utils';
 
 export default function Nonrecurring() {
   const {
@@ -50,12 +53,18 @@ export default function Nonrecurring() {
   const [date, setDate] = useState(new Date());
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const [expenses, setExpenses] = useState([]);
+  const [minMaxDates, setMinMaxDates] = useState({ min: '', max: '' });
 
   useEffect(() => {
     getList(+format(date, 'M'), +format(date, 'yyyy'));
+
+    // Set Min and Max Date for DatePicker
+    setMinMaxDates({
+      min: format(startOfMonth(date), 'yyyy-MM-dd'),
+      max: format(endOfMonth(date), 'yyyy-MM-dd'),
+    });
   }, []);
 
-  // TEMP
   const columns = React.useMemo(
     () => [
       {
@@ -70,6 +79,7 @@ export default function Nonrecurring() {
       {
         Header: 'Amount',
         accessor: 'amount',
+        Cell: (props: any) => formatCurrency(props.value),
       },
       {
         Header: 'Category',
@@ -143,6 +153,10 @@ export default function Nonrecurring() {
               setDate(date);
               setIsDatePickerOpen(false);
               getList(+format(date, 'M'), +format(date, 'yyyy'));
+              setMinMaxDates({
+                min: format(startOfMonth(date), 'yyyy-MM-dd'),
+                max: format(endOfMonth(date), 'yyyy-MM-dd'),
+              });
             }}
             dateFormat="MM/yyyy"
             showMonthYearPicker
@@ -227,9 +241,14 @@ export default function Nonrecurring() {
               </InputGroup>
             </FormControl>
 
-            <FormControl isRequired>
+            <FormControl isRequired mb={4}>
               <FormLabel htmlFor="transaction-name">Transaction Name</FormLabel>
               <Input id="transaction-name" />
+            </FormControl>
+
+            <FormControl isRequired mb={4}>
+              <FormLabel htmlFor="date">Date</FormLabel>
+              <Input type="date" min={minMaxDates.min} max={minMaxDates.max} />
             </FormControl>
           </ModalBody>
 
