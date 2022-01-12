@@ -8,7 +8,7 @@ import { SIDEBAR_LINKS } from 'utils/routes';
 export default function Sidebar() {
   return (
     <Flex
-      w={['100%', '100%', '10%', '15%', '15%']}
+      w={['100%', '100%', '10%', '10%', '10%']}
       direction="column"
       justify="space-between"
       align="center"
@@ -23,7 +23,13 @@ export default function Sidebar() {
       <Flex direction="column" w="100%">
         {SIDEBAR_LINKS.map((link, key) => (
           <Link key={key} m={5} as={NextLink} href={link.route}>
-            <Box as="button" py={3} w="100%" textAlign="left" _hover={{ bg: 'green.600' }}>
+            <Box
+              as="button"
+              py={3}
+              w="100%"
+              textAlign="left"
+              _hover={{ bg: 'green.600' }}
+            >
               {link.title}
             </Box>
           </Link>

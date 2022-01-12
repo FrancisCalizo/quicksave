@@ -110,7 +110,7 @@ export default function Nonrecurring() {
     <>
       {/* Middle Section */}
       <Flex
-        w={['100%', '100%', '60%', '60%', '55%']}
+        w={['100%', '100%', '60%', '60%', '60%']}
         direction="column"
         overflow="auto"
         minHeight="100vh"
@@ -155,7 +155,11 @@ export default function Nonrecurring() {
           />
         )}
         <Flex justify="flex-end" align="center">
-          <Button colorScheme="green" leftIcon={<Icon as={FaPlus} />} onClick={onAddExpenseOpen}>
+          <Button
+            colorScheme="green"
+            leftIcon={<Icon as={FaPlus} />}
+            onClick={onAddExpenseOpen}
+          >
             Add Expense
           </Button>
         </Flex>
@@ -189,4 +193,6 @@ export default function Nonrecurring() {
   );
 }
 
-Nonrecurring.getLayout = (page: any) => <DashboardLayout>{page}</DashboardLayout>;
+Nonrecurring.getLayout = (page: any) => (
+  <DashboardLayout>{page}</DashboardLayout>
+);
