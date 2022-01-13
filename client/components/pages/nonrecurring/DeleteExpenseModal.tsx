@@ -27,7 +27,7 @@ export default function DeleteExpenseModal(props: DeleteExpenseModalProps) {
     handleDeleteExpense,
     selectedRowInfo,
   } = props;
-  console.log(selectedRowInfo);
+
   return (
     <Modal
       isOpen={isDeleteExpenseOpen}

@@ -32,6 +32,7 @@ interface AddExpenseModalprops {
   setFormState: any;
   minMaxDates: { min: string; max: string };
   handleAddNewExpense: () => void;
+  isSubmitting: boolean;
 }
 
 export default function AddExpenseModal(props: AddExpenseModalprops) {
@@ -42,6 +43,7 @@ export default function AddExpenseModal(props: AddExpenseModalprops) {
     setFormState,
     minMaxDates,
     handleAddNewExpense,
+    isSubmitting,
   } = props;
 
   return (
@@ -90,6 +92,12 @@ export default function AddExpenseModal(props: AddExpenseModalprops) {
                   onChange={(val) =>
                     setFormState((old: any) => ({ ...old, amount: val }))
                   }
+                  onBlur={(e: any) => {
+                    setFormState((old: any) => ({
+                      ...old,
+                      amount: parseFloat(e.target.value).toFixed(2),
+                    }));
+                  }}
                 >
                   <NumberInputField id="amount" borderLeftRadius={0} />
                 </NumberInput>
@@ -165,7 +173,8 @@ export default function AddExpenseModal(props: AddExpenseModalprops) {
               !formState.description ||
               !formState.amount ||
               !formState.date ||
-              !formState.category
+              !formState.category ||
+              isSubmitting
             }
           >
             Add New Expense

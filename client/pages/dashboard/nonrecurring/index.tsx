@@ -49,6 +49,7 @@ export default function Nonrecurring() {
   const [date, setDate] = useState(new Date());
   const [expenses, setExpenses] = useState([]);
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [minMaxDates, setMinMaxDates] = useState({ min: '', max: '' });
   const [formState, setFormState] = useState(emptyForm);
   const [selectedRowInfo, setSelectedRowInfo] = useState({});
@@ -80,6 +81,8 @@ export default function Nonrecurring() {
   }
 
   const handleAddNewExpense = async () => {
+    setIsSubmitting(true);
+
     try {
       await axios.post('/createExpense', {
         amount: Number(formState.amount),
@@ -87,6 +90,7 @@ export default function Nonrecurring() {
         description: formState.description,
         category: formState.category,
         notes: formState.notes,
+        userId: 1, // TODO: Hardcoded until I figure out the user situation
       });
 
       await getList(+format(date, 'M'), +format(date, 'yyyy'));
@@ -114,6 +118,8 @@ export default function Nonrecurring() {
         position: 'bottom-right',
       });
     }
+
+    setIsSubmitting(false);
   };
 
   const handleDeleteExpense = async (expenseId: number) => {
@@ -232,6 +238,7 @@ export default function Nonrecurring() {
         setFormState={setFormState}
         minMaxDates={minMaxDates}
         handleAddNewExpense={handleAddNewExpense}
+        isSubmitting={isSubmitting}
       />
 
       {/* Delete Expense Modal */}
