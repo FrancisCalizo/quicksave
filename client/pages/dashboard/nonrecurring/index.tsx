@@ -106,6 +106,34 @@ export default function Nonrecurring() {
     }
   };
 
+  const handleDeleteExpense = async (expenseId: number) => {
+    try {
+      await axios.delete(`/deleteExpense/${expenseId}`);
+
+      await getList(+format(date, 'M'), +format(date, 'yyyy'));
+
+      toast({
+        title: 'Success!',
+        description: 'Expense was deleted successfully.',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+        position: 'bottom-right',
+      });
+    } catch (error) {
+      console.error(error);
+
+      toast({
+        title: 'Oops!',
+        description: 'There was an error processing your request.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        position: 'bottom-right',
+      });
+    }
+  };
+
   return (
     <>
       {/* Middle Section */}
@@ -165,7 +193,10 @@ export default function Nonrecurring() {
         </Flex>
 
         <Box id="table-container" my={12}>
-          <ExpenseTable data={expenses} />
+          <ExpenseTable
+            data={expenses}
+            handleDeleteExpense={handleDeleteExpense}
+          />
         </Box>
       </Flex>
 

@@ -1,22 +1,83 @@
 import React from 'react';
-import { Table, Thead, Tbody, Tr, Th, Td, chakra } from '@chakra-ui/react';
+import { format, parseISO } from 'date-fns';
 import { useTable, useSortBy } from 'react-table';
-import { TriangleDownIcon, TriangleUpIcon } from '@chakra-ui/icons';
 
-import { reactTableColumns } from 'utils';
+import { TriangleDownIcon, TriangleUpIcon } from '@chakra-ui/icons';
+import { FaTrash, FaFileAlt } from 'react-icons/fa';
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  chakra,
+  Badge,
+  Flex,
+  IconButton,
+} from '@chakra-ui/react';
+
 import { Expense } from 'utils/types';
+import { formatCurrency } from 'utils';
 
 interface ExpenseTableProps {
   data: Expense[];
+  handleDeleteExpense: (expenseId: number) => void;
 }
 
-export default function ExpenseTable({ data }: ExpenseTableProps) {
+export default function ExpenseTable(props: ExpenseTableProps) {
+  const { data, handleDeleteExpense } = props;
+
+  const reactTableColumns = [
+    {
+      Header: 'Date',
+      accessor: 'date',
+      Cell: (props: any) => format(parseISO(props.value), 'M/dd/yy'),
+    },
+    {
+      Header: 'Transaction',
+      accessor: 'description',
+    },
+    {
+      Header: 'Amount',
+      accessor: 'amount',
+      Cell: (props: any) => formatCurrency(props.value),
+    },
+    {
+      Header: 'Category',
+      accessor: 'category',
+      Cell: (props: any) => <Badge p={1}>{props.value}</Badge>,
+    },
+    {
+      Header: '',
+      accessor: 'NULL',
+      disableSortBy: true,
+      Cell: (props: any) => (
+        <Flex alignItems="center">
+          <IconButton
+            aria-label="View Notes"
+            variant="outline"
+            colorScheme="twitter"
+            mr={3}
+          >
+            <FaFileAlt />
+          </IconButton>
+          <IconButton
+            aria-label="Delete Expense"
+            colorScheme="red"
+            onClick={() => handleDeleteExpense(props.row?.original?.expense_id)}
+          >
+            <FaTrash />
+          </IconButton>
+        </Flex>
+      ),
+    },
+  ];
+
   const columns = React.useMemo(() => reactTableColumns, []);
 
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable(
-    { columns, data } as any,
-    useSortBy
-  );
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+    useTable({ columns, data } as any, useSortBy);
 
   return (
     <Table {...getTableProps()}>
