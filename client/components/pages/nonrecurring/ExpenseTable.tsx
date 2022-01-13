@@ -15,6 +15,14 @@ import {
   Badge,
   Flex,
   IconButton,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverHeader,
+  PopoverBody,
+  PopoverArrow,
+  PopoverCloseButton,
+  Text,
 } from '@chakra-ui/react';
 
 import { Expense } from 'utils/types';
@@ -55,14 +63,33 @@ export default function ExpenseTable(props: ExpenseTableProps) {
       disableSortBy: true,
       Cell: (props: any) => (
         <Flex alignItems="center">
-          <IconButton
-            aria-label="View Notes"
-            variant="outline"
-            colorScheme="twitter"
-            mr={3}
-          >
-            <FaFileAlt />
-          </IconButton>
+          <Popover placement="left">
+            <PopoverTrigger>
+              <IconButton
+                aria-label="View Notes"
+                variant="outline"
+                colorScheme={
+                  props.row?.original.notes ? 'twitter' : 'blackAlpha'
+                }
+                mr={3}
+              >
+                <FaFileAlt />
+              </IconButton>
+            </PopoverTrigger>
+            <PopoverContent>
+              <PopoverArrow />
+              <PopoverCloseButton />
+              <PopoverHeader>
+                <Text fontWeight="bold">Notes</Text>
+              </PopoverHeader>
+              <PopoverBody>
+                {props.row?.original.notes || (
+                  <Text color="gray.500">No notes available.</Text>
+                )}
+              </PopoverBody>
+            </PopoverContent>
+          </Popover>
+
           <IconButton
             aria-label="Delete Expense"
             colorScheme="red"
