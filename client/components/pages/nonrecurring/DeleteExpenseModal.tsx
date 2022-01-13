@@ -27,7 +27,7 @@ export default function DeleteExpenseModal(props: DeleteExpenseModalProps) {
     handleDeleteExpense,
     selectedRowInfo,
   } = props;
-
+  console.log(selectedRowInfo);
   return (
     <Modal
       isOpen={isDeleteExpenseOpen}
@@ -63,7 +63,7 @@ export default function DeleteExpenseModal(props: DeleteExpenseModalProps) {
           </Button>
           <Button
             colorScheme="red"
-            onClick={() => handleDeleteExpense(selectedRowInfo.expenseId)}
+            onClick={() => handleDeleteExpense(selectedRowInfo.expense_id)}
           >
             Delete Expense
           </Button>

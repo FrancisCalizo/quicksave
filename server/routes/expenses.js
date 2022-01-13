@@ -22,7 +22,7 @@ router.get('/getSingleExpense/:id', async (req, res) => {
   try {
     const { id } = req.params;
 
-    const expense = await pool.query('SELECT * FROM expense WHERE expenseId = $1', [id]);
+    const expense = await pool.query('SELECT * FROM expense WHERE expense_id = $1', [id]);
 
     res.json(expense.rows[0]);
   } catch (error) {
@@ -76,7 +76,7 @@ router.put('/updateExpense/:id', async (req, res) => {
     const { id } = req.params;
     const { description, amount, date } = req.body;
 
-    await pool.query('UPDATE expense SET description = $1, amount = $2, date =$3 WHERE expenseId = $4', [
+    await pool.query('UPDATE expense SET description = $1, amount = $2, date =$3 WHERE expense_id = $4', [
       description,
       amount,
       date,
@@ -96,7 +96,7 @@ router.delete('/deleteExpense/:id', async (req, res) => {
   try {
     const { id } = req.params;
 
-    await pool.query('DELETE FROM expense WHERE expenseId = $1', [id]);
+    await pool.query('DELETE FROM expense WHERE expense_id = $1', [id]);
 
     res.json('Expense deleted succesfully');
   } catch (error) {

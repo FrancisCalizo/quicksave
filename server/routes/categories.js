@@ -9,7 +9,7 @@ router.get('/getAllCategoriesByUser/:id', async (req, res) => {
   const { id } = req.params;
 
   try {
-    const categories = await pool.query('SELECT * FROM category WHERE userId = $1', [id]);
+    const categories = await pool.query('SELECT * FROM category WHERE user_id = $1', [id]);
 
     res.json(categories.rows);
   } catch (error) {
@@ -25,7 +25,7 @@ router.post('/createCategory', async (req, res) => {
   try {
     const { name, userId } = req.body;
 
-    const newCategory = await pool.query('INSERT INTO category (name, userId) VALUES($1, $2) RETURNING *', [
+    const newCategory = await pool.query('INSERT INTO category (name, user_id) VALUES($1, $2) RETURNING *', [
       name,
       userId,
     ]);
@@ -44,7 +44,7 @@ router.put('/updateCategory/:id', async (req, res) => {
     const { id } = req.params;
     const { name } = req.body;
 
-    await pool.query('UPDATE category SET name = $1 WHERE categoryId = $2', [name, id]);
+    await pool.query('UPDATE category SET name = $1 WHERE category_id = $2', [name, id]);
 
     res.json('Category updated succesfully');
   } catch (error) {
@@ -59,7 +59,7 @@ router.delete('/deleteCategory/:id', async (req, res) => {
   try {
     const { id } = req.params;
 
-    await pool.query('DELETE FROM category WHERE categoryId = $1', [id]);
+    await pool.query('DELETE FROM category WHERE category_id = $1', [id]);
 
     res.json('Category deleted succesfully');
   } catch (error) {
