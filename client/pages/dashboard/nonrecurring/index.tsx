@@ -171,7 +171,7 @@ export default function Nonrecurring() {
 
       {/* Right Section */}
       <Flex
-        w={['100%', '100%', '30%']}
+        w={['100%', '100%', '40%']}
         bgColor="#F5F5F5"
         flexDir="column"
         overflow="auto"

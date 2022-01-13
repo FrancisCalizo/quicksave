@@ -8,7 +8,7 @@ import { SIDEBAR_LINKS } from 'utils/routes';
 export default function Sidebar() {
   return (
     <Flex
-      w={['100%', '100%', '10%', '10%', '10%']}
+      w={['100%', '100%', '170px', '170px', '170px']}
       direction="column"
       justify="space-between"
       align="center"
@@ -20,20 +20,32 @@ export default function Sidebar() {
         QuickSave.
       </Heading>
 
-      <Flex direction="column" w="100%">
-        {SIDEBAR_LINKS.map((link, key) => (
-          <Link key={key} m={5} as={NextLink} href={link.route}>
-            <Box
-              as="button"
-              py={3}
-              w="100%"
-              textAlign="left"
-              _hover={{ bg: 'green.600' }}
-            >
-              {link.title}
-            </Box>
-          </Link>
-        ))}
+      <Flex direction="column" w="100%" bg="green.300">
+        {SIDEBAR_LINKS.map((link, key) => {
+          // https://stackoverflow.com/a/64277686
+          const Icon = link.icon;
+
+          return (
+            <Link key={key} m={5} as={NextLink} href={link.route}>
+              <Box
+                as="button"
+                py={2}
+                w="100%"
+                textAlign="left"
+                _hover={{ bg: 'green.600' }}
+                display="flex"
+                alignItems="center"
+                pl={3}
+              >
+                <Icon
+                  size="1.25em"
+                  style={{ marginRight: 10, color: '#fff' }}
+                />{' '}
+                {link.title}
+              </Box>
+            </Link>
+          );
+        })}
       </Flex>
 
       <div />
