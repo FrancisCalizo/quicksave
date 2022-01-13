@@ -18,6 +18,7 @@ import {
   Input,
   InputLeftAddon,
   InputGroup,
+  Textarea,
 } from '@chakra-ui/react';
 
 import Combobox from 'components/Combobox';
@@ -130,7 +131,20 @@ export default function AddExpenseModal(props: AddExpenseModalprops) {
             />
           </FormControl>
 
-          {/* TODO: Add Notes Input (Textarea) */}
+          <FormControl mb={4}>
+            <FormLabel htmlFor="notes">Notes</FormLabel>
+            <Textarea
+              id="notes"
+              resize="vertical"
+              value={formState.notes}
+              onChange={(e) =>
+                setFormState((old: any) => ({
+                  ...old,
+                  notes: e.target.value,
+                }))
+              }
+            />
+          </FormControl>
         </ModalBody>
 
         <ModalFooter borderTop="1px solid gainsboro">

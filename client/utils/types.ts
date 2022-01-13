@@ -3,4 +3,5 @@ export type Expense = {
   description: string;
   amount: string | number;
   category: string;
+  notes: string;
 };

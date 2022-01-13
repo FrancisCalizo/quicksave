@@ -28,6 +28,7 @@ export const emptyForm = {
   amount: '',
   date: '',
   category: '',
+  notes: '',
 };
 
 export default function Nonrecurring() {
@@ -85,6 +86,7 @@ export default function Nonrecurring() {
         date: formState.date,
         description: formState.description,
         category: formState.category,
+        notes: formState.notes,
       });
 
       await getList(+format(date, 'M'), +format(date, 'yyyy'));
