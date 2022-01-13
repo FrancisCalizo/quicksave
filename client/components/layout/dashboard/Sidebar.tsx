@@ -20,7 +20,7 @@ export default function Sidebar() {
         QuickSave.
       </Heading>
 
-      <Flex direction="column" w="100%" bg="green.300">
+      <Flex direction="column" w="100%">
         {SIDEBAR_LINKS.map((link, key) => {
           // https://stackoverflow.com/a/64277686
           const Icon = link.icon;
@@ -29,7 +29,7 @@ export default function Sidebar() {
             <Link key={key} m={5} as={NextLink} href={link.route}>
               <Box
                 as="button"
-                py={2}
+                py={3}
                 w="100%"
                 textAlign="left"
                 _hover={{ bg: 'green.600' }}

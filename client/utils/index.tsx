@@ -1,4 +1,6 @@
+import { Badge, Flex, IconButton } from '@chakra-ui/react';
 import { format, parseISO } from 'date-fns';
+import { FaTrash, FaFileAlt } from 'react-icons/fa';
 
 export const formatCurrency = (value: number) =>
   Intl.NumberFormat('en-US', {
@@ -26,10 +28,26 @@ export const reactTableColumns = [
   {
     Header: 'Category',
     accessor: 'category',
+    Cell: (props: any) => <Badge p={1}>{props.value}</Badge>,
   },
   {
     Header: '',
     accessor: 'NULL',
     disableSortBy: true,
+    Cell: (_: never) => (
+      <Flex alignItems="center">
+        <IconButton
+          aria-label="View Notes"
+          variant="outline"
+          colorScheme="twitter"
+          mr={3}
+        >
+          <FaFileAlt />
+        </IconButton>
+        <IconButton aria-label="Delete Expense" colorScheme="red">
+          <FaTrash />
+        </IconButton>
+      </Flex>
+    ),
   },
 ];
