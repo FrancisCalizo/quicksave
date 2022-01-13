@@ -48,6 +48,7 @@ export default function Nonrecurring() {
 
   const [date, setDate] = useState(new Date());
   const [expenses, setExpenses] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [minMaxDates, setMinMaxDates] = useState({ min: '', max: '' });
@@ -63,6 +64,17 @@ export default function Nonrecurring() {
       min: format(startOfMonth(date), 'yyyy-MM-dd'),
       max: format(endOfMonth(date), 'yyyy-MM-dd'),
     });
+
+    // Load User Expense Categories
+    (async function getAllCategoriesByUser(userId: number) {
+      try {
+        const res = await axios.get(`/getAllCategoriesByUser/${userId}`);
+
+        setCategories(res.data);
+      } catch (error) {
+        console.error(error);
+      }
+    })(1); // TODO: Hardcode the Userid until I get the User situation figured out
   }, []);
 
   async function getList(month: number, year: number) {
@@ -239,6 +251,7 @@ export default function Nonrecurring() {
         minMaxDates={minMaxDates}
         handleAddNewExpense={handleAddNewExpense}
         isSubmitting={isSubmitting}
+        categories={categories}
       />
 
       {/* Delete Expense Modal */}

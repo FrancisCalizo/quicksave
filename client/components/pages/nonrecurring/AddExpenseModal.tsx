@@ -33,6 +33,7 @@ interface AddExpenseModalprops {
   minMaxDates: { min: string; max: string };
   handleAddNewExpense: () => void;
   isSubmitting: boolean;
+  categories: any[];
 }
 
 export default function AddExpenseModal(props: AddExpenseModalprops) {
@@ -44,6 +45,7 @@ export default function AddExpenseModal(props: AddExpenseModalprops) {
     minMaxDates,
     handleAddNewExpense,
     isSubmitting,
+    categories,
   } = props;
 
   return (
@@ -129,6 +131,7 @@ export default function AddExpenseModal(props: AddExpenseModalprops) {
                   category: selectedItem,
                 }));
               }}
+              // TODO: Replace these with loaded categories and values
               items={[
                 'Groceries',
                 'Exercise & Health',
