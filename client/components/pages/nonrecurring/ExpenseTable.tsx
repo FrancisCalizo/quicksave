@@ -22,11 +22,12 @@ import { formatCurrency } from 'utils';
 
 interface ExpenseTableProps {
   data: Expense[];
-  handleDeleteExpense: (expenseId: number) => void;
+  onDeleteExpenseOpen: () => void;
+  setSelectedRowInfo: (value: any) => any;
 }
 
 export default function ExpenseTable(props: ExpenseTableProps) {
-  const { data, handleDeleteExpense } = props;
+  const { data, onDeleteExpenseOpen, setSelectedRowInfo } = props;
 
   const reactTableColumns = [
     {
@@ -65,7 +66,10 @@ export default function ExpenseTable(props: ExpenseTableProps) {
           <IconButton
             aria-label="Delete Expense"
             colorScheme="red"
-            onClick={() => handleDeleteExpense(props.row?.original?.expense_id)}
+            onClick={() => {
+              setSelectedRowInfo(props.row?.original);
+              onDeleteExpenseOpen();
+            }}
           >
             <FaTrash />
           </IconButton>

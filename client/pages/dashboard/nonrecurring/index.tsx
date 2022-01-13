@@ -21,6 +21,7 @@ import {
 import DashboardLayout from 'components/layout/dashboard/DashboardLayout';
 import ExpenseTable from 'components/pages/nonrecurring/ExpenseTable';
 import AddExpenseModal from 'components/pages/nonrecurring/AddExpenseModal';
+import DeleteExpenseModal from 'components/pages/nonrecurring/DeleteExpenseModal';
 
 export const emptyForm = {
   description: '',
@@ -38,11 +39,18 @@ export default function Nonrecurring() {
     onClose: onAddExpenseClose,
   } = useDisclosure();
 
+  const {
+    isOpen: isDeleteExpenseOpen,
+    onOpen: onDeleteExpenseOpen,
+    onClose: onDeleteExpenseClose,
+  } = useDisclosure();
+
   const [date, setDate] = useState(new Date());
   const [expenses, setExpenses] = useState([]);
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const [minMaxDates, setMinMaxDates] = useState({ min: '', max: '' });
   const [formState, setFormState] = useState(emptyForm);
+  const [selectedRowInfo, setSelectedRowInfo] = useState({});
 
   useEffect(() => {
     // Load expense list for given date
@@ -111,6 +119,8 @@ export default function Nonrecurring() {
       await axios.delete(`/deleteExpense/${expenseId}`);
 
       await getList(+format(date, 'M'), +format(date, 'yyyy'));
+
+      onDeleteExpenseClose();
 
       toast({
         title: 'Success!',
@@ -195,7 +205,8 @@ export default function Nonrecurring() {
         <Box id="table-container" my={12}>
           <ExpenseTable
             data={expenses}
-            handleDeleteExpense={handleDeleteExpense}
+            setSelectedRowInfo={setSelectedRowInfo}
+            onDeleteExpenseOpen={onDeleteExpenseOpen}
           />
         </Box>
       </Flex>
@@ -219,6 +230,14 @@ export default function Nonrecurring() {
         setFormState={setFormState}
         minMaxDates={minMaxDates}
         handleAddNewExpense={handleAddNewExpense}
+      />
+
+      {/* Delete Expense Modal */}
+      <DeleteExpenseModal
+        isDeleteExpenseOpen={isDeleteExpenseOpen}
+        onDeleteExpenseClose={onDeleteExpenseClose}
+        handleDeleteExpense={handleDeleteExpense}
+        selectedRowInfo={selectedRowInfo}
       />
     </>
   );
