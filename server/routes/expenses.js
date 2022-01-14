@@ -39,7 +39,9 @@ router.get('/getAllExpensesByMonth', async (req, res) => {
     const { month, year } = req.query;
 
     const expense = await pool.query(
-      'SELECT * FROM expense WHERE EXTRACT(MONTH FROM date) = $1 and EXTRACT(YEAR FROM date) = $2 order by date asc',
+      'SELECT e.expense_id, e.description, e.amount, e.date, e.notes, c.category_id, c.name as category ' +
+        'FROM expense AS e INNER JOIN category as c ON e.category = c.category_id ' +
+        'WHERE EXTRACT(MONTH FROM date) = $1 and EXTRACT(YEAR FROM date) = $2 order by date asc',
       [month, year]
     );
 
