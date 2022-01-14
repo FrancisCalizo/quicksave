@@ -95,9 +95,13 @@ export default function AddExpenseModal(props: AddExpenseModalprops) {
                     setFormState((old: any) => ({ ...old, amount: val }))
                   }
                   onBlur={(e: any) => {
+                    const val = Math.abs(
+                      Number(parseFloat(e.target.value).toFixed(2))
+                    );
+
                     setFormState((old: any) => ({
                       ...old,
-                      amount: parseFloat(e.target.value).toFixed(2),
+                      amount: val ? val.toFixed(2) : 0,
                     }));
                   }}
                 >
