@@ -131,14 +131,7 @@ export default function AddExpenseModal(props: AddExpenseModalprops) {
                   category: selectedItem,
                 }));
               }}
-              // TODO: Replace these with loaded categories and values
-              items={[
-                'Groceries',
-                'Exercise & Health',
-                'Eating Out',
-                'Misc',
-                'Splurge',
-              ]}
+              items={categories}
             />
           </FormControl>
 

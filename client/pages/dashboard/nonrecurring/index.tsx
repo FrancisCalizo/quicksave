@@ -27,7 +27,7 @@ export const emptyForm = {
   description: '',
   amount: '',
   date: '',
-  category: '',
+  category: { name: '', category_id: 0, user_id: 0 },
   notes: '',
 };
 
@@ -100,7 +100,7 @@ export default function Nonrecurring() {
         amount: Number(formState.amount),
         date: formState.date,
         description: formState.description,
-        category: formState.category,
+        category: formState.category.category_id,
         notes: formState.notes,
         userId: 1, // TODO: Hardcoded until I figure out the user situation
       });

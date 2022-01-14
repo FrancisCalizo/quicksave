@@ -1,7 +1,15 @@
 import React, { useState } from 'react';
 import { useCombobox } from 'downshift';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
-import { Input as ChakraInput, List, ListItem, Flex, IconButton } from '@chakra-ui/react';
+import {
+  Input as ChakraInput,
+  List,
+  ListItem,
+  Flex,
+  IconButton,
+} from '@chakra-ui/react';
+
+import { CategoryObject } from 'utils/types';
 
 const Input = React.forwardRef(({ ...props }, ref: any) => (
   <ChakraInput {...props} borderRightRadius={0} ref={ref} />
@@ -24,31 +32,37 @@ const ComboboxList = React.forwardRef(({ isOpen, ...props }: any, ref) => {
   );
 });
 
-const ComboboxItem = React.forwardRef(({ itemIndex, highlightedIndex, ...props }: any, ref) => {
-  const isActive = itemIndex === highlightedIndex;
+const ComboboxItem = React.forwardRef(
+  ({ itemIndex, highlightedIndex, ...props }: any, ref) => {
+    const isActive = itemIndex === highlightedIndex;
 
-  return (
-    <ListItem
-      transition="background-color 220ms, color 220ms"
-      bg={isActive ? 'green.400' : null}
-      color={isActive ? 'white' : 'black'}
-      borderRadius={5}
-      px={4}
-      py={2}
-      cursor="pointer"
-      {...props}
-      ref={ref}
-    />
-  );
-});
+    return (
+      <ListItem
+        transition="background-color 220ms, color 220ms"
+        bg={isActive ? 'green.400' : null}
+        color={isActive ? 'white' : 'black'}
+        borderRadius={5}
+        px={4}
+        py={2}
+        cursor="pointer"
+        {...props}
+        ref={ref}
+      />
+    );
+  }
+);
 
 interface ComboboxProps {
-  selectedItem: string;
+  selectedItem: CategoryObject;
   handleSelectedItemChange: (value: any) => any;
-  items: string[];
+  items: CategoryObject[];
 }
 
-export default function Combobox({ selectedItem, handleSelectedItemChange, items }: ComboboxProps) {
+export default function Combobox({
+  selectedItem,
+  handleSelectedItemChange,
+  items,
+}: ComboboxProps) {
   const [inputItems, setInputItems] = useState(items);
 
   const {
@@ -63,9 +77,13 @@ export default function Combobox({ selectedItem, handleSelectedItemChange, items
     items: inputItems,
     selectedItem,
     onSelectedItemChange: handleSelectedItemChange,
+    itemToString: (item) => (item ? item.name : ''),
+
     onInputValueChange: ({ inputValue }: any) => {
       setInputItems(
-        items.filter((item) => item.toLowerCase().startsWith(inputValue.toLowerCase()))
+        items.filter((item) =>
+          item.name.toLowerCase().startsWith(inputValue.toLowerCase())
+        )
       );
     },
   });
@@ -91,7 +109,7 @@ export default function Combobox({ selectedItem, handleSelectedItemChange, items
             highlightedIndex={highlightedIndex}
             key={index}
           >
-            {item}
+            {item.name}
           </ComboboxItem>
         ))}
       </ComboboxList>
