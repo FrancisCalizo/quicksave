@@ -60,7 +60,7 @@ export default function Nonrecurring() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [minMaxDates, setMinMaxDates] = useState({ min: '', max: '' });
   const [formState, setFormState] = useState(emptyForm);
-  const [selectedRowInfo, setSelectedRowInfo] = useState({});
+  const [selectedRowInfo, setSelectedRowInfo] = useState<any>({});
 
   useEffect(() => {
     // Load expense list for given date
@@ -145,23 +145,23 @@ export default function Nonrecurring() {
     setIsSubmitting(true);
 
     try {
-      // await axios.post('/createExpense', {
-      //   amount: Number(formState.amount),
-      //   date: formState.date,
-      //   description: formState.description,
-      //   category: formState.category.category_id,
-      //   notes: formState.notes,
-      //   userId: 1, // TODO: Hardcoded until I figure out the user situation
-      // });
+      await axios.put(`/updateExpense/${selectedRowInfo.expense_id}`, {
+        amount: Number(formState.amount),
+        date: formState.date,
+        description: formState.description,
+        category: formState.category.category_id,
+        notes: formState.notes,
+        userId: 1, // TODO: Hardcoded until I figure out the user situation
+      });
 
       await getList(+format(date, 'M'), +format(date, 'yyyy'));
 
       setFormState(emptyForm);
-      onAddExpenseClose();
+      onEditExpenseClose();
 
       toast({
         title: 'Success!',
-        description: 'Expense was added successfully.',
+        description: 'Expense was updated successfully.',
         status: 'success',
         duration: 5000,
         isClosable: true,

@@ -76,14 +76,12 @@ router.post('/createExpense', async (req, res) => {
 router.put('/updateExpense/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const { description, amount, date } = req.body;
+    const { description, amount, date, category, notes } = req.body;
 
-    await pool.query('UPDATE expense SET description = $1, amount = $2, date =$3 WHERE expense_id = $4', [
-      description,
-      amount,
-      date,
-      id,
-    ]);
+    await pool.query(
+      'UPDATE expense SET description = $1, amount = $2, date =$3, category = $4, notes = $5' + 'WHERE expense_id = $6',
+      [description, amount, date, category, notes, id]
+    );
 
     res.json('Expense updated succesfully');
   } catch (error) {
