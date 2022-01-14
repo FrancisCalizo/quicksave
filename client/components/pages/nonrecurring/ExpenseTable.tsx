@@ -25,17 +25,27 @@ import {
   Text,
 } from '@chakra-ui/react';
 
-import { Expense } from 'utils/types';
+import { Expense, CategoryObject } from 'utils/types';
 import { formatCurrency } from 'utils';
 
 interface ExpenseTableProps {
   data: Expense[];
   onDeleteExpenseOpen: () => void;
+  onEditExpenseOpen: () => void;
   setSelectedRowInfo: (value: any) => any;
+  setFormState: any;
+  categories: CategoryObject[];
 }
 
 export default function ExpenseTable(props: ExpenseTableProps) {
-  const { data, onDeleteExpenseOpen, setSelectedRowInfo } = props;
+  const {
+    data,
+    onDeleteExpenseOpen,
+    onEditExpenseOpen,
+    setSelectedRowInfo,
+    setFormState,
+    categories,
+  } = props;
 
   const reactTableColumns = [
     {
@@ -110,9 +120,20 @@ export default function ExpenseTable(props: ExpenseTableProps) {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ columns, data } as any, useSortBy);
 
-  const handleRowClick = (row: any, event: any) => {
+  const handleRowclick = (row: any, event: any) => {
     if (event.target.type !== 'button') {
-      console.log('row', row);
+      setSelectedRowInfo(row.original);
+      onEditExpenseOpen();
+
+      const date = row.original.date;
+
+      setFormState({
+        description: row.original.description,
+        amount: Number(row.original.amount),
+        date: date.substring(0, date.indexOf('T')),
+        category: categories.find((cat) => cat.name === row.original.category),
+        notes: row.original.notes,
+      });
     }
   };
 
@@ -143,13 +164,13 @@ export default function ExpenseTable(props: ExpenseTableProps) {
       </Thead>
 
       <Tbody {...getTableBodyProps()}>
-        {rows.map((row) => {
+        {rows.map((row: any) => {
           prepareRow(row);
 
           return (
             <Tr
               {...row.getRowProps()}
-              onClick={(e) => handleRowClick(row, e)}
+              onClick={(e: any) => handleRowclick(row, e)}
               _hover={{
                 background: 'gray.100',
                 transform: 'scale(1.01)',

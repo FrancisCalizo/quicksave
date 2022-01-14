@@ -22,6 +22,7 @@ import DashboardLayout from 'components/layout/dashboard/DashboardLayout';
 import ExpenseTable from 'components/pages/nonrecurring/ExpenseTable';
 import AddExpenseModal from 'components/pages/nonrecurring/AddExpenseModal';
 import DeleteExpenseModal from 'components/pages/nonrecurring/DeleteExpenseModal';
+import EditExpenseModal from 'components/pages/nonrecurring/EditExpenseModal';
 
 export const emptyForm = {
   description: '',
@@ -44,6 +45,12 @@ export default function Nonrecurring() {
     isOpen: isDeleteExpenseOpen,
     onOpen: onDeleteExpenseOpen,
     onClose: onDeleteExpenseClose,
+  } = useDisclosure();
+
+  const {
+    isOpen: isEditExpenseOpen,
+    onOpen: onEditExpenseOpen,
+    onClose: onEditExpenseClose,
   } = useDisclosure();
 
   const [date, setDate] = useState(new Date());
@@ -104,6 +111,48 @@ export default function Nonrecurring() {
         notes: formState.notes,
         userId: 1, // TODO: Hardcoded until I figure out the user situation
       });
+
+      await getList(+format(date, 'M'), +format(date, 'yyyy'));
+
+      setFormState(emptyForm);
+      onAddExpenseClose();
+
+      toast({
+        title: 'Success!',
+        description: 'Expense was added successfully.',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+        position: 'bottom-right',
+      });
+    } catch (error) {
+      console.error(error);
+
+      toast({
+        title: 'Oops!',
+        description: 'There was an error processing your request.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        position: 'bottom-right',
+      });
+    }
+
+    setIsSubmitting(false);
+  };
+
+  const handleEditExpense = async () => {
+    setIsSubmitting(true);
+
+    try {
+      // await axios.post('/createExpense', {
+      //   amount: Number(formState.amount),
+      //   date: formState.date,
+      //   description: formState.description,
+      //   category: formState.category.category_id,
+      //   notes: formState.notes,
+      //   userId: 1, // TODO: Hardcoded until I figure out the user situation
+      // });
 
       await getList(+format(date, 'M'), +format(date, 'yyyy'));
 
@@ -227,6 +276,9 @@ export default function Nonrecurring() {
             data={expenses}
             setSelectedRowInfo={setSelectedRowInfo}
             onDeleteExpenseOpen={onDeleteExpenseOpen}
+            onEditExpenseOpen={onEditExpenseOpen}
+            setFormState={setFormState}
+            categories={categories}
           />
         </Box>
       </Flex>
@@ -260,6 +312,18 @@ export default function Nonrecurring() {
         onDeleteExpenseClose={onDeleteExpenseClose}
         handleDeleteExpense={handleDeleteExpense}
         selectedRowInfo={selectedRowInfo}
+      />
+
+      {/* Edit Expense Modal */}
+      <EditExpenseModal
+        isEditExpenseOpen={isEditExpenseOpen}
+        onEditExpenseClose={onEditExpenseClose}
+        formState={formState}
+        setFormState={setFormState}
+        minMaxDates={minMaxDates}
+        handleEditExpense={handleEditExpense}
+        isSubmitting={isSubmitting}
+        categories={categories}
       />
     </>
   );

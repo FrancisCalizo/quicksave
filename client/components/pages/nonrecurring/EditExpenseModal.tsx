@@ -25,34 +25,34 @@ import Combobox from 'components/Combobox';
 import { emptyForm } from 'pages/dashboard/nonrecurring';
 import { Expense } from 'utils/types';
 
-interface AddExpenseModalprops {
-  isAddExpenseOpen: boolean;
-  onAddExpenseClose: () => void;
+interface EditExpenseModalprops {
+  isEditExpenseOpen: boolean;
+  onEditExpenseClose: () => void;
   formState: Expense;
   setFormState: any;
   minMaxDates: { min: string; max: string };
-  handleAddNewExpense: () => void;
+  handleEditExpense: () => void;
   isSubmitting: boolean;
   categories: any[];
 }
 
-export default function AddExpenseModal(props: AddExpenseModalprops) {
+export default function EditExpenseModal(props: EditExpenseModalprops) {
   const {
-    isAddExpenseOpen,
-    onAddExpenseClose,
+    isEditExpenseOpen,
+    onEditExpenseClose,
     formState,
     setFormState,
     minMaxDates,
-    handleAddNewExpense,
+    handleEditExpense,
     isSubmitting,
     categories,
   } = props;
 
   return (
     <Modal
-      isOpen={isAddExpenseOpen}
+      isOpen={isEditExpenseOpen}
       onClose={() => {
-        onAddExpenseClose();
+        onEditExpenseClose();
         setFormState(emptyForm);
       }}
       size="lg"
@@ -62,7 +62,7 @@ export default function AddExpenseModal(props: AddExpenseModalprops) {
       <ModalContent>
         <ModalHeader borderTopRadius={5}>
           <Heading size="lg" color="gray.500">
-            Add Expense
+            Edit Expense
           </Heading>
         </ModalHeader>
         <ModalCloseButton />
@@ -87,6 +87,7 @@ export default function AddExpenseModal(props: AddExpenseModalprops) {
               <FormLabel htmlFor="amount">Amount</FormLabel>
               <InputGroup>
                 <InputLeftAddon children="$" />
+                {/* TODO: This will probably need to be a text input with regex */}
                 <NumberInput
                   width="100%"
                   value={formState.amount}
@@ -159,7 +160,7 @@ export default function AddExpenseModal(props: AddExpenseModalprops) {
             variant="outline"
             mr={3}
             onClick={() => {
-              onAddExpenseClose();
+              onEditExpenseClose();
               setFormState(emptyForm);
             }}
           >
@@ -167,7 +168,7 @@ export default function AddExpenseModal(props: AddExpenseModalprops) {
           </Button>
           <Button
             colorScheme="blue"
-            onClick={handleAddNewExpense}
+            onClick={handleEditExpense}
             disabled={
               !formState.description ||
               !formState.amount ||
@@ -176,7 +177,7 @@ export default function AddExpenseModal(props: AddExpenseModalprops) {
               isSubmitting
             }
           >
-            Add New Expense
+            Update Expense
           </Button>
         </ModalFooter>
       </ModalContent>
