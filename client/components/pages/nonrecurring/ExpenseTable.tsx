@@ -73,7 +73,7 @@ export default function ExpenseTable(props: ExpenseTableProps) {
                 }
                 mr={3}
               >
-                <FaFileAlt />
+                <FaFileAlt style={{ pointerEvents: 'none' }} />
               </IconButton>
             </PopoverTrigger>
             <PopoverContent>
@@ -98,7 +98,7 @@ export default function ExpenseTable(props: ExpenseTableProps) {
               onDeleteExpenseOpen();
             }}
           >
-            <FaTrash />
+            <FaTrash style={{ pointerEvents: 'none' }} />
           </IconButton>
         </Flex>
       ),
@@ -109,6 +109,12 @@ export default function ExpenseTable(props: ExpenseTableProps) {
 
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ columns, data } as any, useSortBy);
+
+  const handleRowClick = (row: any, event: any) => {
+    if (event.target.type !== 'button') {
+      console.log('row', row);
+    }
+  };
 
   return (
     <Table {...getTableProps()}>
@@ -141,7 +147,16 @@ export default function ExpenseTable(props: ExpenseTableProps) {
           prepareRow(row);
 
           return (
-            <Tr {...row.getRowProps()}>
+            <Tr
+              {...row.getRowProps()}
+              onClick={(e) => handleRowClick(row, e)}
+              _hover={{
+                background: 'gray.100',
+                transform: 'scale(1.01)',
+                transition: 'transform .1s linear',
+                cursor: 'pointer',
+              }}
+            >
               {row.cells.map((cell: any) => (
                 <Td {...cell.getCellProps()} isNumeric={cell.column.isNumeric}>
                   {cell.render('Cell')}
