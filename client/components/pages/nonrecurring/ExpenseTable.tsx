@@ -26,7 +26,7 @@ import {
 } from '@chakra-ui/react';
 
 import { Expense, CategoryObject } from 'utils/types';
-import { formatCurrency } from 'utils';
+import { formatCurrency, BADGE_COLORS } from 'utils';
 
 interface ExpenseTableProps {
   data: Expense[];
@@ -65,23 +65,33 @@ export default function ExpenseTable(props: ExpenseTableProps) {
     {
       Header: 'Category',
       accessor: 'category',
-      Cell: (props: any) => <Badge p={1}>{props.value}</Badge>,
+      Cell: (props: any) => (
+        <Badge
+          px={2}
+          py={1}
+          textTransform="capitalize"
+          colorScheme={BADGE_COLORS[props.row.original.category_id]}
+          borderRadius={5}
+        >
+          {props.value}
+        </Badge>
+      ),
     },
     {
       Header: '',
       accessor: 'NULL',
       disableSortBy: true,
       Cell: (props: any) => (
-        <Flex alignItems="center">
+        <Flex alignItems="center" position="relative">
           <Popover placement="left">
             <PopoverTrigger>
               <IconButton
                 aria-label="View Notes"
                 variant="outline"
+                mr={3}
                 colorScheme={
                   props.row?.original.notes ? 'twitter' : 'blackAlpha'
                 }
-                mr={3}
               >
                 <FaFileAlt style={{ pointerEvents: 'none' }} />
               </IconButton>
