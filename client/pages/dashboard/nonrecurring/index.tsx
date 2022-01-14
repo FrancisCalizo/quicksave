@@ -23,6 +23,7 @@ import ExpenseTable from 'components/pages/nonrecurring/ExpenseTable';
 import AddExpenseModal from 'components/pages/nonrecurring/AddExpenseModal';
 import DeleteExpenseModal from 'components/pages/nonrecurring/DeleteExpenseModal';
 import EditExpenseModal from 'components/pages/nonrecurring/EditExpenseModal';
+import { formatCurrency } from 'utils';
 
 export const emptyForm = {
   description: '',
@@ -261,7 +262,66 @@ export default function Nonrecurring() {
             showMonthYearPicker
           />
         )}
-        <Flex justify="flex-end" align="center">
+
+        <Flex alignItems="center" justifyContent="space-between" my={4}>
+          <Box
+            w="full"
+            px={2}
+            py={4}
+            boxShadow="md"
+            rounded="md"
+            overflow="hidden"
+            bg="gray.50"
+            border="1px solid gainsboro"
+          >
+            <Heading size="sm" textAlign="center" mb={2} color="blackAlpha.700">
+              Spending Limit
+            </Heading>
+
+            <Heading size="md" textAlign="center">
+              {formatCurrency(1750)}
+            </Heading>
+          </Box>
+          <Box
+            w="full"
+            px={2}
+            py={4}
+            mx={4}
+            boxShadow="md"
+            rounded="md"
+            overflow="hidden"
+            bg="gray.50"
+            border="1px solid gainsboro"
+          >
+            <Heading size="sm" textAlign="center" mb={2} color="blackAlpha.700">
+              Total Spent
+            </Heading>
+
+            <Heading size="md" textAlign="center">
+              {formatCurrency(1500)}
+            </Heading>
+          </Box>
+          <Box
+            w="full"
+            px={2}
+            py={4}
+            boxShadow="md"
+            rounded="md"
+            overflow="hidden"
+            bg="gray.50"
+            border="1px solid gainsboro"
+          >
+            <Heading size="sm" textAlign="center" mb={2} color="blackAlpha.700">
+              Remaining Balance
+            </Heading>
+
+            <Heading size="md" textAlign="center">
+              {formatCurrency(250)}
+            </Heading>
+          </Box>
+        </Flex>
+
+        <Flex justify="flex-end" align="center" mt={8} mb={2}>
           <Button
             colorScheme="green"
             leftIcon={<Icon as={FaPlus} />}
@@ -271,7 +331,7 @@ export default function Nonrecurring() {
           </Button>
         </Flex>
 
-        <Box id="table-container" my={12}>
+        <Box id="table-container">
           <ExpenseTable
             data={expenses}
             setSelectedRowInfo={setSelectedRowInfo}
