@@ -138,7 +138,7 @@ export default function ExpenseTable(props: ExpenseTableProps) {
   };
 
   return (
-    <Table {...getTableProps()}>
+    <Table {...getTableProps()} size="sm">
       <Thead>
         {headerGroups.map((headerGroup) => (
           <Tr {...headerGroup.getHeaderGroupProps()}>
