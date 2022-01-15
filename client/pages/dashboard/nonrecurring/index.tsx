@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { FaPlus, FaChevronDown, FaChevronUp } from 'react-icons/fa';
-import { format } from 'date-fns';
 import startOfMonth from 'date-fns/startOfMonth';
 import endOfMonth from 'date-fns/endOfMonth';
 import DatePicker from 'react-datepicker';
+import CountUp from 'react-countup';
+import { format } from 'date-fns';
 import axios from 'axios';
 
 import {
@@ -62,6 +63,13 @@ export default function Nonrecurring() {
   const [minMaxDates, setMinMaxDates] = useState({ min: '', max: '' });
   const [formState, setFormState] = useState(emptyForm);
   const [selectedRowInfo, setSelectedRowInfo] = useState<any>({});
+
+  // TODO: Temporary. DELETE LATER
+  const [tempAmount, setTempAmount] = useState({
+    limit: 1750,
+    spent: 1500,
+    remaining: 250,
+  });
 
   useEffect(() => {
     // Load expense list for given date
@@ -278,9 +286,22 @@ export default function Nonrecurring() {
               Spending Limit
             </Heading>
 
-            <Heading size="md" textAlign="center">
-              {formatCurrency(1750)}
-            </Heading>
+            <CountUp
+              start={0}
+              end={tempAmount.limit}
+              delay={0}
+              duration={2}
+              formattingFn={useCallback(
+                (value: number) => formatCurrency(value),
+                [tempAmount.limit]
+              )}
+            >
+              {({ countUpRef }) => (
+                <Heading size="md" textAlign="center">
+                  <span ref={countUpRef} />
+                </Heading>
+              )}
+            </CountUp>
           </Box>
           <Box
             w="full"
@@ -297,9 +318,22 @@ export default function Nonrecurring() {
               Total Spent
             </Heading>
 
-            <Heading size="md" textAlign="center">
-              {formatCurrency(1500)}
-            </Heading>
+            <CountUp
+              start={0}
+              end={tempAmount.spent}
+              delay={0}
+              duration={2}
+              formattingFn={useCallback(
+                (value: number) => formatCurrency(value),
+                [tempAmount.spent]
+              )}
+            >
+              {({ countUpRef }) => (
+                <Heading size="md" textAlign="center">
+                  <span ref={countUpRef} />
+                </Heading>
+              )}
+            </CountUp>
           </Box>
           <Box
             w="full"
@@ -315,9 +349,22 @@ export default function Nonrecurring() {
               Remaining Balance
             </Heading>
 
-            <Heading size="md" textAlign="center">
-              {formatCurrency(250)}
-            </Heading>
+            <CountUp
+              start={0}
+              end={tempAmount.remaining}
+              delay={0}
+              duration={2}
+              formattingFn={useCallback(
+                (value: number) => formatCurrency(value),
+                [tempAmount.remaining]
+              )}
+            >
+              {({ countUpRef }) => (
+                <Heading size="md" textAlign="center">
+                  <span ref={countUpRef} />
+                </Heading>
+              )}
+            </CountUp>
           </Box>
         </Flex>
 

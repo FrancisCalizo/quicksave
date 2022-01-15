@@ -16,6 +16,7 @@ export default function Logo() {
         layout="fixed"
         width={85}
         height={85}
+        priority
       />
       <Heading
         as="h3"
