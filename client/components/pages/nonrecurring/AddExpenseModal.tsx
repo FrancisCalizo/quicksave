@@ -123,7 +123,6 @@ export default function AddExpenseModal(props: AddExpenseModalprops) {
             </FormControl>
           </Flex>
 
-          {/* TODO: Get categories from the backend and implement into items prop */}
           <FormControl isRequired mb={4}>
             <FormLabel htmlFor="category">Category</FormLabel>
             <Combobox

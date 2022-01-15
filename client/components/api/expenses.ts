@@ -7,3 +7,6 @@ export const getAllExpensesByMonth = async (month: number, year: number) =>
       year,
     },
   });
+
+export const getAllCategoriesByUser = async (userId: number) =>
+  await axios.get(`/getAllCategoriesByUser/${userId}`);

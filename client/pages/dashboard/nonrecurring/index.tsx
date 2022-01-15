@@ -25,8 +25,11 @@ import ExpenseTable from 'components/pages/nonrecurring/ExpenseTable';
 import AddExpenseModal from 'components/pages/nonrecurring/AddExpenseModal';
 import DeleteExpenseModal from 'components/pages/nonrecurring/DeleteExpenseModal';
 import EditExpenseModal from 'components/pages/nonrecurring/EditExpenseModal';
-import { getAllExpensesByMonth } from 'components/api/expenses';
 import { formatCurrency } from 'utils';
+import {
+  getAllExpensesByMonth,
+  getAllCategoriesByUser,
+} from 'components/api/expenses';
 
 export const emptyForm = {
   description: '',
@@ -59,7 +62,6 @@ export default function Nonrecurring() {
   } = useDisclosure();
 
   const [date, setDate] = useState(new Date());
-  const [categories, setCategories] = useState([]);
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [minMaxDates, setMinMaxDates] = useState({ min: '', max: '' });
@@ -73,34 +75,29 @@ export default function Nonrecurring() {
     remaining: 250,
   });
 
+  // Load All Expenses For the Month
   const { data: expenses, isLoading } = useQuery(
     ['allExpensesByMonth', +format(date, 'M'), +format(date, 'yyyy')],
     () => getAllExpensesByMonth(+format(date, 'M'), +format(date, 'yyyy'))
   );
 
-  const handleFormatCurrency = useCallback(
-    (value: number) => formatCurrency(value),
-    [tempAmount]
+  // Load User Expense Categories
+  const { data: categories } = useQuery(['categories', 1], () =>
+    getAllCategoriesByUser(1)
   );
 
+  // Set Min and Max Date for DatePicker
   useEffect(() => {
-    // Set Min and Max Date for DatePicker
     setMinMaxDates({
       min: format(startOfMonth(date), 'yyyy-MM-dd'),
       max: format(endOfMonth(date), 'yyyy-MM-dd'),
     });
-
-    // Load User Expense Categories
-    (async function getAllCategoriesByUser(userId: number) {
-      try {
-        const res = await axios.get(`/getAllCategoriesByUser/${userId}`);
-
-        setCategories(res.data);
-      } catch (error) {
-        console.error(error);
-      }
-    })(1); // TODO: Hardcode the Userid until I get the User situation figured out
   }, []);
+
+  const handleFormatCurrency = useCallback(
+    (value: number) => formatCurrency(value),
+    [tempAmount]
+  );
 
   const handleAddNewExpense = async () => {
     setIsSubmitting(true);
@@ -385,7 +382,7 @@ export default function Nonrecurring() {
             onDeleteExpenseOpen={onDeleteExpenseOpen}
             onEditExpenseOpen={onEditExpenseOpen}
             setFormState={setFormState}
-            categories={categories}
+            categories={categories?.data}
           />
         </Box>
       </Flex>
@@ -408,7 +405,7 @@ export default function Nonrecurring() {
         minMaxDates={minMaxDates}
         handleAddNewExpense={handleAddNewExpense}
         isSubmitting={isSubmitting}
-        categories={categories}
+        categories={categories?.data}
       />
 
       {/* Delete Expense Modal */}
@@ -428,7 +425,7 @@ export default function Nonrecurring() {
         minMaxDates={minMaxDates}
         handleEditExpense={handleEditExpense}
         isSubmitting={isSubmitting}
-        categories={categories}
+        categories={categories?.data}
       />
     </>
   );
