@@ -172,7 +172,7 @@ export default function AddExpenseModal(props: AddExpenseModalprops) {
               !formState.description ||
               !formState.amount ||
               !formState.date ||
-              !formState.category ||
+              !formState.category.category_id ||
               isSubmitting
             }
           >
