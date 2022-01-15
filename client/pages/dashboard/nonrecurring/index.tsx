@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { FaPlus, FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import { useQuery, useQueryClient } from 'react-query';
 import startOfMonth from 'date-fns/startOfMonth';
 import endOfMonth from 'date-fns/endOfMonth';
 import DatePicker from 'react-datepicker';
@@ -24,6 +25,7 @@ import ExpenseTable from 'components/pages/nonrecurring/ExpenseTable';
 import AddExpenseModal from 'components/pages/nonrecurring/AddExpenseModal';
 import DeleteExpenseModal from 'components/pages/nonrecurring/DeleteExpenseModal';
 import EditExpenseModal from 'components/pages/nonrecurring/EditExpenseModal';
+import { getAllExpensesByMonth } from 'components/api/expenses';
 import { formatCurrency } from 'utils';
 
 export const emptyForm = {
@@ -36,6 +38,7 @@ export const emptyForm = {
 
 export default function Nonrecurring() {
   const toast = useToast();
+  const queryClient = useQueryClient();
 
   const {
     isOpen: isAddExpenseOpen,
@@ -56,7 +59,6 @@ export default function Nonrecurring() {
   } = useDisclosure();
 
   const [date, setDate] = useState(new Date());
-  const [expenses, setExpenses] = useState([]);
   const [categories, setCategories] = useState([]);
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -71,10 +73,17 @@ export default function Nonrecurring() {
     remaining: 250,
   });
 
-  useEffect(() => {
-    // Load expense list for given date
-    getList(+format(date, 'M'), +format(date, 'yyyy'));
+  const { data: expenses, isLoading } = useQuery(
+    ['allExpensesByMonth', +format(date, 'M'), +format(date, 'yyyy')],
+    () => getAllExpensesByMonth(+format(date, 'M'), +format(date, 'yyyy'))
+  );
 
+  const handleFormatCurrency = useCallback(
+    (value: number) => formatCurrency(value),
+    [tempAmount]
+  );
+
+  useEffect(() => {
     // Set Min and Max Date for DatePicker
     setMinMaxDates({
       min: format(startOfMonth(date), 'yyyy-MM-dd'),
@@ -93,21 +102,6 @@ export default function Nonrecurring() {
     })(1); // TODO: Hardcode the Userid until I get the User situation figured out
   }, []);
 
-  async function getList(month: number, year: number) {
-    try {
-      const res = await axios.get('/getAllExpensesByMonth', {
-        params: {
-          month,
-          year,
-        },
-      });
-
-      setExpenses(res.data);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
   const handleAddNewExpense = async () => {
     setIsSubmitting(true);
 
@@ -121,7 +115,11 @@ export default function Nonrecurring() {
         userId: 1, // TODO: Hardcoded until I figure out the user situation
       });
 
-      await getList(+format(date, 'M'), +format(date, 'yyyy'));
+      await queryClient.invalidateQueries([
+        'allExpensesByMonth',
+        +format(date, 'M'),
+        +format(date, 'yyyy'),
+      ]);
 
       setFormState(emptyForm);
       onAddExpenseClose();
@@ -163,7 +161,11 @@ export default function Nonrecurring() {
         userId: 1, // TODO: Hardcoded until I figure out the user situation
       });
 
-      await getList(+format(date, 'M'), +format(date, 'yyyy'));
+      await queryClient.invalidateQueries([
+        'allExpensesByMonth',
+        +format(date, 'M'),
+        +format(date, 'yyyy'),
+      ]);
 
       setFormState(emptyForm);
       onEditExpenseClose();
@@ -196,7 +198,11 @@ export default function Nonrecurring() {
     try {
       await axios.delete(`/deleteExpense/${expenseId}`);
 
-      await getList(+format(date, 'M'), +format(date, 'yyyy'));
+      await queryClient.invalidateQueries([
+        'allExpensesByMonth',
+        +format(date, 'M'),
+        +format(date, 'yyyy'),
+      ]);
 
       onDeleteExpenseClose();
 
@@ -221,6 +227,10 @@ export default function Nonrecurring() {
       });
     }
   };
+
+  if (isLoading) {
+    return null;
+  }
 
   return (
     <>
@@ -260,7 +270,6 @@ export default function Nonrecurring() {
             onChange={(date: any) => {
               setDate(date);
               setIsDatePickerOpen(false);
-              getList(+format(date, 'M'), +format(date, 'yyyy'));
               setMinMaxDates({
                 min: format(startOfMonth(date), 'yyyy-MM-dd'),
                 max: format(endOfMonth(date), 'yyyy-MM-dd'),
@@ -291,10 +300,7 @@ export default function Nonrecurring() {
               end={tempAmount.limit}
               delay={0}
               duration={2}
-              formattingFn={useCallback(
-                (value: number) => formatCurrency(value),
-                [tempAmount.limit]
-              )}
+              formattingFn={handleFormatCurrency}
             >
               {({ countUpRef }) => (
                 <Heading size="md" textAlign="center">
@@ -323,10 +329,7 @@ export default function Nonrecurring() {
               end={tempAmount.spent}
               delay={0}
               duration={2}
-              formattingFn={useCallback(
-                (value: number) => formatCurrency(value),
-                [tempAmount.spent]
-              )}
+              formattingFn={handleFormatCurrency}
             >
               {({ countUpRef }) => (
                 <Heading size="md" textAlign="center">
@@ -354,10 +357,7 @@ export default function Nonrecurring() {
               end={tempAmount.remaining}
               delay={0}
               duration={2}
-              formattingFn={useCallback(
-                (value: number) => formatCurrency(value),
-                [tempAmount.remaining]
-              )}
+              formattingFn={handleFormatCurrency}
             >
               {({ countUpRef }) => (
                 <Heading size="md" textAlign="center">
@@ -380,7 +380,7 @@ export default function Nonrecurring() {
 
         <Box id="table-container">
           <ExpenseTable
-            data={expenses}
+            data={expenses?.data}
             setSelectedRowInfo={setSelectedRowInfo}
             onDeleteExpenseOpen={onDeleteExpenseOpen}
             onEditExpenseOpen={onEditExpenseOpen}
