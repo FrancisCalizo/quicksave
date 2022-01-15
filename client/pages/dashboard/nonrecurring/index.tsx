@@ -218,7 +218,7 @@ export default function Nonrecurring() {
     <>
       {/* Middle Section */}
       <Flex
-        w={['100%', '100%', '60%', '60%', '60%']}
+        w={['100%', '100%', '70%']}
         direction="column"
         overflow="auto"
         minHeight="100vh"
@@ -345,14 +345,12 @@ export default function Nonrecurring() {
 
       {/* Right Section */}
       <Flex
-        w={['100%', '100%', '40%']}
+        w={['100%', '100%', '30%']}
         bgColor="#F5F5F5"
         flexDir="column"
         overflow="auto"
         minW={[null, null, '300px', '300px', '400px']}
-      >
-        <h3>NonrecurringRight</h3>
-      </Flex>
+      ></Flex>
 
       {/* Add Expense Modal */}
       <AddExpenseModal
