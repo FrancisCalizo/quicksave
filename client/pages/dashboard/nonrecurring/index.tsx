@@ -25,6 +25,7 @@ import ExpenseTable from 'components/pages/nonrecurring/ExpenseTable';
 import AddExpenseModal from 'components/pages/nonrecurring/AddExpenseModal';
 import DeleteExpenseModal from 'components/pages/nonrecurring/DeleteExpenseModal';
 import EditExpenseModal from 'components/pages/nonrecurring/EditExpenseModal';
+import SpendingBreakdown from 'components/pages/nonrecurring/SpendingBreakdown';
 import { formatCurrency } from 'utils';
 import {
   getAllExpensesByMonth,
@@ -394,7 +395,9 @@ export default function Nonrecurring() {
         flexDir="column"
         overflow="auto"
         minW={[null, null, '300px', '300px', '400px']}
-      ></Flex>
+      >
+        <SpendingBreakdown />
+      </Flex>
 
       {/* Add Expense Modal */}
       <AddExpenseModal
