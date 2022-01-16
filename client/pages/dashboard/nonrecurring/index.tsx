@@ -396,7 +396,9 @@ export default function Nonrecurring() {
         overflow="auto"
         minW={[null, null, '300px', '300px', '400px']}
       >
-        <SpendingBreakdown />
+        <Box my={4}>
+          <SpendingBreakdown />
+        </Box>
       </Flex>
 
       {/* Add Expense Modal */}

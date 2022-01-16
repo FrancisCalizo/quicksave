@@ -1,20 +1,16 @@
 import React from 'react';
-import {
-  Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend,
-  defaults,
-} from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+import { formatCurrency } from 'utils';
+
+ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
 export const data = {
   labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
   datasets: [
     {
-      label: '# of Votes',
       data: [12, 19, 3, 5, 2, 3],
       backgroundColor: [
         'rgba(255, 99, 132, 0.2)',
@@ -32,6 +28,7 @@ export const data = {
         'rgba(153, 102, 255, 1)',
         'rgba(255, 159, 64, 1)',
       ],
+      datalabels: { anchor: 'end' },
       borderWidth: 1,
     },
   ],
@@ -39,11 +36,34 @@ export const data = {
 
 export default function SpendingBreakdown() {
   return (
-    <div>
-      <Pie
-        data={data}
-        options={{ plugins: { legend: { position: 'bottom' } } }}
-      />
-    </div>
+    <Pie
+      data={data as any}
+      options={{
+        layout: { padding: 10 },
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: { padding: 30 },
+          },
+          datalabels: {
+            backgroundColor: function (context) {
+              return context.dataset.borderColor as any;
+            },
+            borderColor: 'white',
+            borderWidth: 2,
+            color: 'white',
+
+            font: {
+              weight: 'bold',
+              size: 12,
+            },
+            padding: 6,
+            formatter: (value) => {
+              return formatCurrency(value);
+            },
+          },
+        },
+      }}
+    />
   );
 }
