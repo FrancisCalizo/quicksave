@@ -1,6 +1,8 @@
 const express = require('express');
+const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const { cookieJwtAuth } = require('./middleware/cookieJwtAuth');
 
 const app = express();
 dotenv.config();
@@ -8,9 +10,11 @@ dotenv.config();
 // middleware
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 // Routes
-app.use('/', require('./routes/expenses'));
+app.post('/login', require('./routes/login'));
+app.use('/', cookieJwtAuth, require('./routes/expenses'));
 app.use('/', require('./routes/categories'));
 
 const PORT = process.env.PORT || 5000;
