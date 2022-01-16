@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 import axios from 'axios';
 
 import {
@@ -57,6 +58,11 @@ export default function Home() {
         <Button colorScheme="green" onClick={handleLogin}>
           Login
         </Button>
+        <Link href={'/dashboard'}>
+          <Button colorScheme="blue" my={3} variant="outline">
+            Straight To Dashboard
+          </Button>
+        </Link>
       </Flex>
     </Center>
   );

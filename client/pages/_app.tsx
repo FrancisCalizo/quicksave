@@ -4,6 +4,8 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import '../styles/globals.css';
 
+import { RouteGuard } from 'components/RouteGuard';
+
 const queryClient = new QueryClient();
 
 function MyApp({ Component, pageProps }: any) {
@@ -19,7 +21,7 @@ function MyApp({ Component, pageProps }: any) {
 
       <QueryClientProvider client={queryClient}>
         <ChakraProvider>
-          {getLayout(<Component {...pageProps} />)}
+          <RouteGuard>{getLayout(<Component {...pageProps} />)}</RouteGuard>
         </ChakraProvider>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>

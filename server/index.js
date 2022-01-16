@@ -14,6 +14,7 @@ app.use(cookieParser());
 
 // Routes
 app.post('/login', require('./routes/login'));
+app.post('/isLoggedIn', require('./routes/isLoggedIn'));
 app.use('/', cookieJwtAuth, require('./routes/expenses'));
 app.use('/', require('./routes/categories'));
 
