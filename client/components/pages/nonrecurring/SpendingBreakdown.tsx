@@ -83,14 +83,21 @@ export default function SpendingBreakdown(props: SpendingBreakdownProps) {
       />
 
       <Box px={4}>
-        {categories?.map((cat, key) => {
-          const total = expenses?.reduce((prev: any, curr: any) => {
-            return curr.category_id === cat.category_id
-              ? Number(prev) + Number(curr.amount)
-              : Number(prev);
-          }, 0);
+        {categories
+          // Get Total Spending By Category
+          ?.map((cat) => {
+            const total = expenses?.reduce((prev: any, curr: any) => {
+              return curr.category_id === cat.category_id
+                ? Number(prev) + Number(curr.amount)
+                : Number(prev);
+            }, 0);
 
-          return (
+            return { name: cat.name, amount: total };
+          })
+          // Sort the Spending in Descending Order
+          .sort((a, b) => b.amount - a.amount)
+          // Map it to JSX
+          .map((category, key) => (
             <React.Fragment key={key}>
               <Flex
                 justifyContent="space-between"
@@ -98,13 +105,12 @@ export default function SpendingBreakdown(props: SpendingBreakdownProps) {
                 py={2}
                 fontSize={14}
               >
-                <Text>{cat.name}</Text>
-                <Text>{formatCurrency(total)}</Text>
+                <Text>{category.name}</Text>
+                <Text>{formatCurrency(category.amount)}</Text>
               </Flex>
               <Divider borderColor="blackAlpha.500" />
             </React.Fragment>
-          );
-        })}
+          ))}
       </Box>
     </>
   );
