@@ -422,7 +422,10 @@ export default function Nonrecurring() {
         minW={[null, null, '300px', '300px', '400px']}
       >
         <Box my={4}>
-          <SpendingBreakdown />
+          <SpendingBreakdown
+            categories={categories?.data}
+            expenses={expenses?.data}
+          />
         </Box>
       </Flex>
 
