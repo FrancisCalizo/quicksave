@@ -71,15 +71,33 @@ export default function Nonrecurring() {
 
   // TODO: Temporary. DELETE LATER
   const [tempAmount, setTempAmount] = useState({
-    limit: 1750,
-    spent: 1500,
-    remaining: 250,
+    limit: 0,
+    spent: 0,
+    remaining: 0,
   });
 
   // Load All Expenses For the Month
   const { data: expenses, isLoading } = useQuery(
     ['allExpensesByMonth', +format(date, 'M'), +format(date, 'yyyy')],
-    () => getAllExpensesByMonth(+format(date, 'M'), +format(date, 'yyyy'))
+    () => getAllExpensesByMonth(+format(date, 'M'), +format(date, 'yyyy')),
+    {
+      refetchOnWindowFocus: false,
+      onSuccess: ({ data }) => {
+        const sumAmount = data
+          .map((ex: any) => ex.amount)
+          .reduce(
+            (prev: string, curr: string) => Number(prev) + Number(curr),
+            0
+          );
+
+        setTempAmount((old) => ({
+          ...old,
+          spent: sumAmount,
+          limit: 1700, // TODO: Limit is hardcoded for the time being
+          remaining: 1700 - sumAmount,
+        }));
+      },
+    }
   );
 
   // Load User Expense Categories
