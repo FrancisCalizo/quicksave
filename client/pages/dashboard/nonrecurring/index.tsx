@@ -316,6 +316,7 @@ export default function Nonrecurring() {
               end={tempAmount.limit}
               delay={0}
               duration={2}
+              decimals={2}
               formattingFn={handleFormatCurrency}
             >
               {({ countUpRef }) => (
@@ -345,6 +346,7 @@ export default function Nonrecurring() {
               end={tempAmount.spent}
               delay={0}
               duration={2}
+              decimals={2}
               formattingFn={handleFormatCurrency}
             >
               {({ countUpRef }) => (
@@ -373,10 +375,15 @@ export default function Nonrecurring() {
               end={tempAmount.remaining}
               delay={0}
               duration={2}
+              decimals={2}
               formattingFn={handleFormatCurrency}
             >
               {({ countUpRef }) => (
-                <Heading size="md" textAlign="center">
+                <Heading
+                  size="md"
+                  textAlign="center"
+                  color={+tempAmount.remaining < 0 ? 'red.500' : 'green.500'}
+                >
                   <span ref={countUpRef} />
                 </Heading>
               )}
