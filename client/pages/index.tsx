@@ -14,10 +14,14 @@ import {
 
 export default function Home() {
   const router = useRouter();
+
+  const [isLoading, setIsLoading] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const handleLogin = async () => {
+    setIsLoading(true);
+
     try {
       const res = await axios.post('/login', {
         username,
@@ -28,6 +32,7 @@ export default function Home() {
         router.push('/dashboard');
       }
     } catch (err) {
+      setIsLoading(false);
       console.log(err);
     }
   };
@@ -55,7 +60,12 @@ export default function Home() {
           />
         </FormControl>
 
-        <Button colorScheme="green" onClick={handleLogin}>
+        <Button
+          colorScheme="green"
+          onClick={handleLogin}
+          isLoading={isLoading}
+          loadingText="Logging In"
+        >
           Login
         </Button>
         <Link href={'/dashboard'}>
