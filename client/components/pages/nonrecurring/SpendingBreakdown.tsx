@@ -7,7 +7,6 @@ import { Text, Box, Flex, Divider, Heading } from '@chakra-ui/react';
 
 import { formatCurrency } from 'utils';
 import { Expense, CategoryObject } from 'utils/types';
-import { ca } from 'date-fns/locale';
 
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
@@ -115,16 +114,3 @@ export default function SpendingBreakdown(props: SpendingBreakdownProps) {
     </>
   );
 }
-
-const TEMP_DATA = [
-  { label: 'Groceries', value: 323 },
-  { label: 'Tattoo', value: 120 },
-  { label: 'Solo Dining', value: 53 },
-  { label: 'Group Dinner', value: 12 },
-  { label: 'Gas', value: 392 },
-  { label: 'Dinner Date', value: 323 },
-  { label: 'Misc', value: 0 },
-  { label: 'Nightlife/Going out', value: 73 },
-  { label: 'Fitness/Health', value: 0 },
-  { label: 'Travel', value: 1303 },
-];
