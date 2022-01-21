@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
   Flex,
@@ -31,7 +31,7 @@ interface EditExpenseModalprops {
   formState: Expense;
   setFormState: any;
   minMaxDates: { min: string; max: string };
-  handleEditExpense: () => void;
+  handleEditExpense: (data: any) => void;
   isSubmitting: boolean;
   categories: any[];
 }
@@ -48,12 +48,18 @@ export default function EditExpenseModal(props: EditExpenseModalprops) {
     categories,
   } = props;
 
+  const [formData, setFormData] = useState<Expense>(formState);
+
+  useEffect(() => {
+    setFormData(formState);
+  }, [formState]);
+
   return (
     <Modal
       isOpen={isEditExpenseOpen}
       onClose={() => {
         onEditExpenseClose();
-        setFormState(emptyForm);
+        setFormData(emptyForm);
       }}
       size="lg"
       motionPreset="scale"
@@ -72,9 +78,9 @@ export default function EditExpenseModal(props: EditExpenseModalprops) {
             <Input
               autoFocus
               id="transaction-name"
-              value={formState.description}
+              value={formData.description}
               onChange={(e) =>
-                setFormState((old: any) => ({
+                setFormData((old: any) => ({
                   ...old,
                   description: e.target.value,
                 }))
@@ -90,16 +96,16 @@ export default function EditExpenseModal(props: EditExpenseModalprops) {
                 {/* TODO: This will probably need to be a text input with regex */}
                 <NumberInput
                   width="100%"
-                  value={formState.amount}
+                  value={formData.amount}
                   onChange={(val) =>
-                    setFormState((old: any) => ({ ...old, amount: val }))
+                    setFormData((old: any) => ({ ...old, amount: val }))
                   }
                   onBlur={(e: any) => {
                     const val = Math.abs(
                       Number(parseFloat(e.target.value).toFixed(2))
                     );
 
-                    setFormState((old: any) => ({
+                    setFormData((old: any) => ({
                       ...old,
                       amount: val ? val.toFixed(2) : 0,
                     }));
@@ -116,9 +122,9 @@ export default function EditExpenseModal(props: EditExpenseModalprops) {
                 type="date"
                 min={minMaxDates.min}
                 max={minMaxDates.max}
-                value={formState.date}
+                value={formData.date}
                 onChange={(e) =>
-                  setFormState((old: any) => ({ ...old, date: e.target.value }))
+                  setFormData((old: any) => ({ ...old, date: e.target.value }))
                 }
               />
             </FormControl>
@@ -128,9 +134,9 @@ export default function EditExpenseModal(props: EditExpenseModalprops) {
           <FormControl isRequired mb={4}>
             <FormLabel htmlFor="category">Category</FormLabel>
             <Combobox
-              selectedItem={formState.category}
+              selectedItem={formData.category}
               handleSelectedItemChange={({ selectedItem }) => {
-                setFormState((old: any) => ({
+                setFormData((old: any) => ({
                   ...old,
                   category: selectedItem,
                 }));
@@ -144,9 +150,9 @@ export default function EditExpenseModal(props: EditExpenseModalprops) {
             <Textarea
               id="notes"
               resize="vertical"
-              value={formState.notes}
+              value={formData.notes}
               onChange={(e) =>
-                setFormState((old: any) => ({
+                setFormData((old: any) => ({
                   ...old,
                   notes: e.target.value,
                 }))
@@ -161,19 +167,22 @@ export default function EditExpenseModal(props: EditExpenseModalprops) {
             mr={3}
             onClick={() => {
               onEditExpenseClose();
-              setFormState(emptyForm);
+              setFormData(emptyForm);
             }}
           >
             Cancel
           </Button>
           <Button
             colorScheme="blue"
-            onClick={handleEditExpense}
+            onClick={() => {
+              setFormState(formData);
+              handleEditExpense(formData);
+            }}
             disabled={
-              !formState.description ||
-              !formState.amount ||
-              !formState.date ||
-              !formState.category ||
+              !formData.description ||
+              !formData.amount ||
+              !formData.date ||
+              !formData.category ||
               isSubmitting
             }
           >

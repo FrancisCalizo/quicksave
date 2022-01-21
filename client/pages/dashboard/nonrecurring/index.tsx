@@ -26,6 +26,7 @@ import AddExpenseModal from 'components/pages/nonrecurring/AddExpenseModal';
 import DeleteExpenseModal from 'components/pages/nonrecurring/DeleteExpenseModal';
 import EditExpenseModal from 'components/pages/nonrecurring/EditExpenseModal';
 import SpendingBreakdown from 'components/pages/nonrecurring/SpendingBreakdown';
+import { Expense } from 'utils/types';
 import { formatCurrency } from 'utils';
 import {
   getAllExpensesByMonth,
@@ -118,16 +119,16 @@ export default function Nonrecurring() {
     [tempAmount]
   );
 
-  const handleAddNewExpense = async () => {
+  const handleAddNewExpense = async (formData: Expense) => {
     setIsSubmitting(true);
 
     try {
       await axios.post('/createExpense', {
-        amount: Number(formState.amount),
-        date: formState.date,
-        description: formState.description,
-        category: formState.category.category_id,
-        notes: formState.notes,
+        amount: Number(formData.amount),
+        date: formData.date,
+        description: formData.description,
+        category: formData.category.category_id,
+        notes: formData.notes,
         userId: 1, // TODO: Hardcoded until I figure out the user situation
       });
 
@@ -164,16 +165,16 @@ export default function Nonrecurring() {
     setIsSubmitting(false);
   };
 
-  const handleEditExpense = async () => {
+  const handleEditExpense = async (formData: Expense) => {
     setIsSubmitting(true);
 
     try {
       await axios.put(`/updateExpense/${selectedRowInfo.expense_id}`, {
-        amount: Number(formState.amount),
-        date: formState.date,
-        description: formState.description,
-        category: formState.category.category_id,
-        notes: formState.notes,
+        amount: Number(formData.amount),
+        date: formData.date,
+        description: formData.description,
+        category: formData.category.category_id,
+        notes: formData.notes,
         userId: 1, // TODO: Hardcoded until I figure out the user situation
       });
 

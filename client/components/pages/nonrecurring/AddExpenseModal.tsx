@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import {
   Flex,
@@ -31,7 +31,7 @@ interface AddExpenseModalprops {
   formState: Expense;
   setFormState: any;
   minMaxDates: { min: string; max: string };
-  handleAddNewExpense: () => void;
+  handleAddNewExpense: (data: any) => void;
   isSubmitting: boolean;
   categories: any[];
 }
@@ -48,12 +48,14 @@ export default function AddExpenseModal(props: AddExpenseModalprops) {
     categories,
   } = props;
 
+  const [formData, setFormData] = useState<Expense>(emptyForm);
+
   return (
     <Modal
       isOpen={isAddExpenseOpen}
       onClose={() => {
         onAddExpenseClose();
-        setFormState(emptyForm);
+        setFormData(emptyForm);
       }}
       size="lg"
       motionPreset="scale"
@@ -72,9 +74,9 @@ export default function AddExpenseModal(props: AddExpenseModalprops) {
             <Input
               autoFocus
               id="transaction-name"
-              value={formState.description}
+              value={formData.description}
               onChange={(e) =>
-                setFormState((old: any) => ({
+                setFormData((old: any) => ({
                   ...old,
                   description: e.target.value,
                 }))
@@ -89,16 +91,16 @@ export default function AddExpenseModal(props: AddExpenseModalprops) {
                 <InputLeftAddon children="$" />
                 <NumberInput
                   width="100%"
-                  value={formState.amount}
+                  value={formData.amount}
                   onChange={(val) =>
-                    setFormState((old: any) => ({ ...old, amount: val }))
+                    setFormData((old: any) => ({ ...old, amount: val }))
                   }
                   onBlur={(e: any) => {
                     const val = Math.abs(
                       Number(parseFloat(e.target.value).toFixed(2))
                     );
 
-                    setFormState((old: any) => ({
+                    setFormData((old: any) => ({
                       ...old,
                       amount: val ? val.toFixed(2) : 0,
                     }));
@@ -115,9 +117,9 @@ export default function AddExpenseModal(props: AddExpenseModalprops) {
                 type="date"
                 min={minMaxDates.min}
                 max={minMaxDates.max}
-                value={formState.date}
+                value={formData.date}
                 onChange={(e) =>
-                  setFormState((old: any) => ({ ...old, date: e.target.value }))
+                  setFormData((old: any) => ({ ...old, date: e.target.value }))
                 }
               />
             </FormControl>
@@ -126,9 +128,9 @@ export default function AddExpenseModal(props: AddExpenseModalprops) {
           <FormControl isRequired mb={4}>
             <FormLabel htmlFor="category">Category</FormLabel>
             <Combobox
-              selectedItem={formState.category}
+              selectedItem={formData.category}
               handleSelectedItemChange={({ selectedItem }) => {
-                setFormState((old: any) => ({
+                setFormData((old: any) => ({
                   ...old,
                   category: selectedItem,
                 }));
@@ -142,9 +144,9 @@ export default function AddExpenseModal(props: AddExpenseModalprops) {
             <Textarea
               id="notes"
               resize="vertical"
-              value={formState.notes}
+              value={formData.notes}
               onChange={(e) =>
-                setFormState((old: any) => ({
+                setFormData((old: any) => ({
                   ...old,
                   notes: e.target.value,
                 }))
@@ -159,19 +161,22 @@ export default function AddExpenseModal(props: AddExpenseModalprops) {
             mr={3}
             onClick={() => {
               onAddExpenseClose();
-              setFormState(emptyForm);
+              setFormData(emptyForm);
             }}
           >
             Cancel
           </Button>
           <Button
             colorScheme="blue"
-            onClick={handleAddNewExpense}
+            onClick={() => {
+              setFormState(formData);
+              handleAddNewExpense(formData);
+            }}
             disabled={
-              !formState.description ||
-              !formState.amount ||
-              !formState.date ||
-              !formState.category.category_id ||
+              !formData.description ||
+              !formData.amount ||
+              !formData.date ||
+              !formData.category.category_id ||
               isSubmitting
             }
           >
