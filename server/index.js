@@ -16,7 +16,7 @@ app.use(cookieParser());
 app.post('/login', require('./routes/login'));
 app.post('/isLoggedIn', require('./routes/isLoggedIn'));
 app.use('/', cookieJwtAuth, require('./routes/expenses'));
-app.use('/', require('./routes/categories'));
+app.use('/', cookieJwtAuth, require('./routes/categories'));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server has started on port ${PORT}`));
