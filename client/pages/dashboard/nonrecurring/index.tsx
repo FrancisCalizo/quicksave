@@ -7,6 +7,7 @@ import DatePicker from 'react-datepicker';
 import CountUp from 'react-countup';
 import { format } from 'date-fns';
 import axios from 'axios';
+import _ from 'lodash';
 
 import {
   Flex,
@@ -78,7 +79,7 @@ export default function Nonrecurring() {
   });
 
   // Load All Expenses For the Month
-  const { data: expenses, isLoading } = useQuery(
+  const { data: expenses, isLoading: isExpensesLoading } = useQuery(
     ['allExpensesByMonth', +format(date, 'M'), +format(date, 'yyyy')],
     () => getAllExpensesByMonth(+format(date, 'M'), +format(date, 'yyyy')),
     {
@@ -102,8 +103,9 @@ export default function Nonrecurring() {
   );
 
   // Load User Expense Categories
-  const { data: categories } = useQuery(['categories', 1], () =>
-    getAllCategoriesByUser(1)
+  const { data: categories, isLoading: isCategoriesLoading } = useQuery(
+    ['categories', 1],
+    () => getAllCategoriesByUser(1)
   );
 
   // Set Min and Max Date for DatePicker
@@ -245,7 +247,7 @@ export default function Nonrecurring() {
     }
   };
 
-  if (isLoading) {
+  if (isExpensesLoading || isCategoriesLoading) {
     return null;
   }
 

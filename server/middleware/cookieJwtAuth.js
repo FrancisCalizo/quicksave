@@ -14,10 +14,7 @@ const cookieJwtAuth = (req, res, next) => {
 
     res.clearCookie('token');
 
-    return res.json({
-      status: 403,
-      error: 'Unauthorized',
-    });
+    return res.send(403);
   }
 };
 

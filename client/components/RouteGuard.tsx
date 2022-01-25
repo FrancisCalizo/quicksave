@@ -30,7 +30,7 @@ function RouteGuard({ children }: any) {
     try {
       res = await axios.post('/isLoggedIn');
 
-      if (!publicPaths.includes(path) && res.data.error === 'Unauthorized') {
+      if (!publicPaths.includes(path) && res.data === 'Unauthorized') {
         setAuthorized(false);
         router.push({
           pathname: '/',

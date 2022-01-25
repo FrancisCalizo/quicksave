@@ -12,9 +12,6 @@ module.exports = cookieJwtAuth = (req, res) => {
 
     res.clearCookie('token');
 
-    return res.json({
-      status: 403,
-      error: 'Unauthorized',
-    });
+    return res.json('Unauthorized');
   }
 };
