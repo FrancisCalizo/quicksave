@@ -257,7 +257,8 @@ export default function Nonrecurring() {
       <Flex
         w={['100%', '100%', '70%']}
         direction="column"
-        overflow="auto"
+        overflowY="auto"
+        overflowX="hidden"
         minHeight="100vh"
         px={4}
         py={6}
@@ -404,7 +405,7 @@ export default function Nonrecurring() {
           </Button>
         </Flex>
 
-        <Box id="table-container">
+        <Box id="table-container" overflowX="auto">
           <ExpenseTable
             data={expenses?.data}
             setSelectedRowInfo={setSelectedRowInfo}
