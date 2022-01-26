@@ -82,7 +82,7 @@ export default function ExpenseTable(props: ExpenseTableProps) {
       accessor: 'NULL',
       disableSortBy: true,
       Cell: (props: any) => (
-        <Flex alignItems="center" position="relative">
+        <Flex alignItems="center">
           <Popover placement="left">
             <PopoverTrigger>
               <IconButton
@@ -187,6 +187,7 @@ export default function ExpenseTable(props: ExpenseTableProps) {
                 transition: 'transform .1s linear',
                 cursor: 'pointer',
               }}
+              style={{ position: 'relative' }}
             >
               {row.cells.map((cell: any) => (
                 <Td {...cell.getCellProps()} isNumeric={cell.column.isNumeric}>
