@@ -3,24 +3,32 @@ import Image from 'next/image';
 
 import '@fontsource/roboto';
 
-import { Heading, Flex } from '@chakra-ui/react';
+import { Heading, Flex, useBreakpointValue } from '@chakra-ui/react';
 
 import MoneyBag from 'public/images/money-bag.png';
 
 export default function Logo() {
+  const widthHeight = useBreakpointValue({
+    sm: 85,
+    md: 40,
+    lg: 40,
+    xl: 85,
+    ['2xl']: 85,
+  });
+
   return (
     <Flex flexDirection="column" justifyContent="center" alignItems="center">
       <Image
         alt="Money-Bag"
         src={MoneyBag}
         layout="fixed"
-        width={85}
-        height={85}
+        width={widthHeight}
+        height={widthHeight}
         priority
       />
       <Heading
         as="h3"
-        fontSize="2xl"
+        fontSize={['2xl', '2xl', 'xs', 'xs', '2xl']}
         textAlign="left"
         fontFamily="Roboto"
         mt={-1}
