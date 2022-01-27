@@ -28,10 +28,9 @@ import { Expense } from 'utils/types';
 interface AddExpenseModalprops {
   isAddExpenseOpen: boolean;
   onAddExpenseClose: () => void;
-  formState: Expense;
   setFormState: any;
   minMaxDates: { min: string; max: string };
-  handleAddNewExpense: (data: any) => void;
+  handleAddNewExpense: (data: any, callback?: any) => void;
   isSubmitting: boolean;
   categories: any[];
 }
@@ -40,7 +39,6 @@ export default function AddExpenseModal(props: AddExpenseModalprops) {
   const {
     isAddExpenseOpen,
     onAddExpenseClose,
-    formState,
     setFormState,
     minMaxDates,
     handleAddNewExpense,
@@ -54,8 +52,8 @@ export default function AddExpenseModal(props: AddExpenseModalprops) {
     <Modal
       isOpen={isAddExpenseOpen}
       onClose={() => {
-        onAddExpenseClose();
         setFormData(emptyForm);
+        onAddExpenseClose();
       }}
       size="lg"
       motionPreset="scale"
@@ -170,7 +168,7 @@ export default function AddExpenseModal(props: AddExpenseModalprops) {
             colorScheme="blue"
             onClick={() => {
               setFormState(formData);
-              handleAddNewExpense(formData);
+              handleAddNewExpense(formData, () => setFormData(emptyForm));
             }}
             disabled={
               !formData.description ||

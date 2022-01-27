@@ -115,7 +115,10 @@ export default function Nonrecurring() {
     });
   }, []);
 
-  const handleAddNewExpense = async (formData: Expense) => {
+  const handleAddNewExpense = async (
+    formData: Expense,
+    clearFormCallback: any
+  ) => {
     setIsSubmitting(true);
 
     try {
@@ -145,6 +148,8 @@ export default function Nonrecurring() {
         isClosable: true,
         position: 'bottom-right',
       });
+
+      clearFormCallback();
     } catch (error) {
       console.error(error);
 
@@ -339,7 +344,6 @@ export default function Nonrecurring() {
       <AddExpenseModal
         isAddExpenseOpen={isAddExpenseOpen}
         onAddExpenseClose={onAddExpenseClose}
-        formState={formState}
         setFormState={setFormState}
         minMaxDates={minMaxDates}
         handleAddNewExpense={handleAddNewExpense}
