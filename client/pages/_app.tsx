@@ -5,6 +5,7 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 import '../styles/globals.css';
 
 import { RouteGuard } from 'components/RouteGuard';
+import { theme } from 'theme';
 
 const queryClient = new QueryClient();
 
@@ -20,7 +21,7 @@ function MyApp({ Component, pageProps }: any) {
       </Head>
 
       <QueryClientProvider client={queryClient}>
-        <ChakraProvider>
+        <ChakraProvider theme={theme}>
           <RouteGuard>{getLayout(<Component {...pageProps} />)}</RouteGuard>
         </ChakraProvider>
         <ReactQueryDevtools initialIsOpen={false} />
