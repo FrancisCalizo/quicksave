@@ -4,7 +4,6 @@ import { useQuery, useQueryClient } from 'react-query';
 import startOfMonth from 'date-fns/startOfMonth';
 import endOfMonth from 'date-fns/endOfMonth';
 import DatePicker from 'react-datepicker';
-import CountUp from 'react-countup';
 import { format } from 'date-fns';
 import axios from 'axios';
 import _ from 'lodash';
@@ -27,8 +26,8 @@ import AddExpenseModal from 'components/pages/nonrecurring/AddExpenseModal';
 import DeleteExpenseModal from 'components/pages/nonrecurring/DeleteExpenseModal';
 import EditExpenseModal from 'components/pages/nonrecurring/EditExpenseModal';
 import SpendingBreakdown from 'components/pages/nonrecurring/SpendingBreakdown';
+import HeadingOverview from 'components/pages/nonrecurring/HeadingOverview';
 import { Expense } from 'utils/types';
-import { formatCurrency } from 'utils';
 import {
   getAllExpensesByMonth,
   getAllCategoriesByUser,
@@ -115,11 +114,6 @@ export default function Nonrecurring() {
       max: format(endOfMonth(date), 'yyyy-MM-dd'),
     });
   }, []);
-
-  const handleFormatCurrency = useCallback(
-    (value: number) => formatCurrency(value),
-    [tempAmount]
-  );
 
   const handleAddNewExpense = async (formData: Expense) => {
     setIsSubmitting(true);
@@ -300,106 +294,14 @@ export default function Nonrecurring() {
           />
         )}
 
-        <Flex alignItems="center" justifyContent="space-between" my={4}>
-          <Box
-            w="full"
-            px={2}
-            py={4}
-            boxShadow="md"
-            rounded="md"
-            overflow="hidden"
-            bg="gray.50"
-            border="1px solid gainsboro"
-          >
-            <Heading size="sm" textAlign="center" mb={2} color="blackAlpha.700">
-              Spending Limit
-            </Heading>
+        <HeadingOverview tempAmount={tempAmount} />
 
-            <CountUp
-              start={0}
-              end={tempAmount.limit}
-              delay={0}
-              duration={2}
-              decimals={2}
-              formattingFn={handleFormatCurrency}
-            >
-              {({ countUpRef }) => (
-                <Heading size="md" textAlign="center">
-                  <span ref={countUpRef} />
-                </Heading>
-              )}
-            </CountUp>
-          </Box>
-          <Box
-            w="full"
-            px={2}
-            py={4}
-            mx={4}
-            boxShadow="md"
-            rounded="md"
-            overflow="hidden"
-            bg="gray.50"
-            border="1px solid gainsboro"
-          >
-            <Heading size="sm" textAlign="center" mb={2} color="blackAlpha.700">
-              Total Spent
-            </Heading>
-
-            <CountUp
-              start={0}
-              end={tempAmount.spent}
-              delay={0}
-              duration={2}
-              decimals={2}
-              formattingFn={handleFormatCurrency}
-            >
-              {({ countUpRef }) => (
-                <Heading size="md" textAlign="center">
-                  <span ref={countUpRef} />
-                </Heading>
-              )}
-            </CountUp>
-          </Box>
-          <Box
-            w="full"
-            px={2}
-            py={4}
-            boxShadow="md"
-            rounded="md"
-            overflow="hidden"
-            bg="gray.50"
-            border="1px solid gainsboro"
-          >
-            <Heading size="sm" textAlign="center" mb={2} color="blackAlpha.700">
-              Remaining Balance
-            </Heading>
-
-            <CountUp
-              start={0}
-              end={tempAmount.remaining}
-              delay={0}
-              duration={2}
-              decimals={2}
-              formattingFn={handleFormatCurrency}
-            >
-              {({ countUpRef }) => (
-                <Heading
-                  size="md"
-                  textAlign="center"
-                  color={+tempAmount.remaining < 0 ? 'red.500' : 'green.500'}
-                >
-                  <span ref={countUpRef} />
-                </Heading>
-              )}
-            </CountUp>
-          </Box>
-        </Flex>
-
-        <Flex justify="flex-end" align="center" mt={8} mb={2}>
+        <Flex justify="flex-end" align="center" mt={2} mb={[2, 2, 4, 2]}>
           <Button
             colorScheme="green"
             leftIcon={<Icon as={FaPlus} />}
             onClick={onAddExpenseOpen}
+            width={['100%', '100%', '100%', 'inherit']}
           >
             Add Expense
           </Button>
