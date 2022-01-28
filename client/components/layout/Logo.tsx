@@ -9,7 +9,8 @@ import MoneyBag from 'public/images/money-bag.png';
 
 export default function Logo() {
   const widthHeight = useBreakpointValue({
-    sm: 85,
+    base: 40,
+    sm: 40,
     md: 40,
     lg: 40,
     xl: 85,
@@ -28,7 +29,7 @@ export default function Logo() {
       />
       <Heading
         as="h3"
-        fontSize={['2xl', '2xl', 'xs', 'xs', '2xl']}
+        fontSize={['xs', 'xs', 'xs', 'xs', '2xl']}
         textAlign="left"
         fontFamily="Roboto"
         mt={-1}
