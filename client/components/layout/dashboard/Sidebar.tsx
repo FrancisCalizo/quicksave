@@ -55,6 +55,7 @@ export default function Sidebar() {
                   w="100%"
                   _hover={{ bg: 'green.600' }}
                   display="flex"
+                  flexDirection={['row', 'row', 'column', 'column', 'row']}
                   justifyContent={[
                     'flex-start',
                     'flex-start',
@@ -68,11 +69,7 @@ export default function Sidebar() {
                     size={iconSize}
                     style={{ marginRight: iconMargin, color: '#fff' }}
                   />
-                  <Text
-                    fontSize="14px"
-                    fontWeight={600}
-                    display={['block', 'block', 'none', 'none', 'block']}
-                  >
+                  <Text fontSize={[14, 14, 9, 9, 14]} fontWeight={600}>
                     {link.title}
                   </Text>
                 </Box>
