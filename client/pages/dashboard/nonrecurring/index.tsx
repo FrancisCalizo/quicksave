@@ -268,9 +268,15 @@ export default function Nonrecurring() {
             size="lg"
             cursor="pointer"
             onClick={() => setIsDatePickerOpen((isOpen) => !isOpen)}
+            data-type="calendar"
           >
             {format(date, 'MMMM')}{' '}
-            <Text as="span" fontWeight="normal" color="gray.500">
+            <Text
+              as="span"
+              fontWeight="normal"
+              color="gray.500"
+              data-type="calendar"
+            >
               {format(date, 'yyyy')}
             </Text>
           </Heading>
@@ -279,6 +285,7 @@ export default function Nonrecurring() {
             icon={isDatePickerOpen ? <FaChevronUp /> : <FaChevronDown />}
             size="sm"
             ml={4}
+            data-type="calendar"
             onClick={() => setIsDatePickerOpen((isOpen) => !isOpen)}
           />
         </Flex>
@@ -293,6 +300,11 @@ export default function Nonrecurring() {
                 min: format(startOfMonth(date), 'yyyy-MM-dd'),
                 max: format(endOfMonth(date), 'yyyy-MM-dd'),
               });
+            }}
+            onClickOutside={(e: any) => {
+              if (e.target.dataset?.type !== 'calendar') {
+                setIsDatePickerOpen(false);
+              }
             }}
             dateFormat="MM/yyyy"
             showMonthYearPicker
