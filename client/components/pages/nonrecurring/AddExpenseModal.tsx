@@ -19,6 +19,7 @@ import {
   InputLeftAddon,
   InputGroup,
   Textarea,
+  useBreakpointValue,
 } from '@chakra-ui/react';
 
 import Combobox from 'components/Combobox';
@@ -46,6 +47,15 @@ export default function AddExpenseModal(props: AddExpenseModalprops) {
     categories,
   } = props;
 
+  const modalSize = useBreakpointValue({
+    base: 'full',
+    sm: 'full',
+    md: 'lg',
+    lg: 'lg',
+    xl: 'lg',
+    ['2xl']: 'lg',
+  });
+
   const [formData, setFormData] = useState<Expense>(emptyForm);
 
   return (
@@ -55,7 +65,7 @@ export default function AddExpenseModal(props: AddExpenseModalprops) {
         setFormData(emptyForm);
         onAddExpenseClose();
       }}
-      size="lg"
+      size={modalSize}
       motionPreset="scale"
     >
       <ModalOverlay />
