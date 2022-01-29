@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaPlus, FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import { useQuery, useQueryClient } from 'react-query';
 import startOfMonth from 'date-fns/startOfMonth';
@@ -28,10 +28,8 @@ import EditExpenseModal from 'components/pages/nonrecurring/EditExpenseModal';
 import SpendingBreakdown from 'components/pages/nonrecurring/SpendingBreakdown';
 import HeadingOverview from 'components/pages/nonrecurring/HeadingOverview';
 import { Expense } from 'utils/types';
-import {
-  getAllExpensesByMonth,
-  getAllCategoriesByUser,
-} from 'components/api/expenses';
+import { getAllExpensesByMonth } from 'components/api/expenses';
+import { getAllCategoriesByUser } from 'components/api/categories';
 
 export const emptyForm = {
   description: '',
