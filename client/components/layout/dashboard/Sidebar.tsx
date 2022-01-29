@@ -33,6 +33,8 @@ export default function Sidebar() {
         w={['100%', '100%', '100px', '100px', '200px']}
         direction="column"
         bgGradient="linear(to-b, green.500, green.400)"
+        borderRight={'2px solid green'}
+        borderRightColor="green.600"
         color="#fff"
         py={4}
         display={['none', 'none', 'block']}

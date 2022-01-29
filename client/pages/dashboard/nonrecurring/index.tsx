@@ -301,7 +301,7 @@ export default function Nonrecurring() {
 
         <HeadingOverview tempAmount={tempAmount} />
 
-        <Flex justify="flex-end" align="center" mt={2} mb={[2, 2, 4, 2]}>
+        <Flex justify="flex-end" align="center" mt={2} mb={[2, 6, 6, 2]}>
           <Button
             colorScheme="green"
             leftIcon={<Icon as={FaPlus} />}
@@ -330,7 +330,7 @@ export default function Nonrecurring() {
         bgColor="#F5F5F5"
         flexDir="column"
         overflow="auto"
-        minW={[null, null, '300px', '300px', '400px']}
+        minW={[null, null, '250px', '300px', '400px']}
       >
         <Box my={4}>
           <SpendingBreakdown

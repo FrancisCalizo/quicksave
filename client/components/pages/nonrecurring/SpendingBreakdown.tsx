@@ -118,7 +118,7 @@ export default function SpendingBreakdown(props: SpendingBreakdownProps) {
                 justifyContent="space-between"
                 alignItems="center"
                 py={2}
-                fontSize={14}
+                fontSize={[14, 14, 12, 14]}
               >
                 <Text>{category.name}</Text>
                 <Text>{formatCurrency(category.amount)}</Text>

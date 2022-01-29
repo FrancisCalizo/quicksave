@@ -27,7 +27,7 @@ export default function HeadingOverview({ tempAmount }: HeadingOverviewProps) {
       alignItems="center"
       justifyContent="space-between"
       mt={2}
-      mb={4}
+      mb={[2, 2, 2, 4]}
     >
       <Box
         w="full"
