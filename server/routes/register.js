@@ -13,7 +13,7 @@ module.exports = async (req, res) => {
     const user = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
     // If so, return a 403 error
     if (user.rows.length) {
-      return res.status(403).send('User already exists');
+      return res.status(403).send('User email already exists');
     }
 
     const hash = await bcrypt.hash(password, 10);

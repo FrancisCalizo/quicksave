@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 
@@ -12,11 +12,16 @@ import {
   FormLabel,
   FormErrorMessage,
   Input,
+  Box,
+  Alert,
+  AlertIcon,
+  AlertDescription,
 } from '@chakra-ui/react';
 
 type FormValues = {
   email: string;
   password: string;
+  apiError: string;
 };
 
 export default function Login() {
@@ -26,9 +31,15 @@ export default function Login() {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
+    setError,
+    clearErrors,
   } = useForm<FormValues>();
 
+  const [_isSubmitting, setIsSubmitting] = useState(false);
+
   const handleLogin = async (values: { email: string; password: string }) => {
+    setIsSubmitting(true);
+
     const { email, password } = values;
 
     try {
@@ -45,22 +56,39 @@ export default function Login() {
 
       // Login Credentials are invalid
       if (err.response.data === 'Invalid Credentials') {
-        alert(err.response.data);
+        setError('apiError', { message: 'Incorrect email or password' });
       }
+
+      setIsSubmitting(false);
     }
   };
 
   return (
     <Center h="100vh">
       <Flex display="flex" flexDirection="column" minWidth={400}>
-        <form onSubmit={handleSubmit(handleLogin)}>
+        {errors.apiError && (
+          <Box mb={4}>
+            <Alert status="error">
+              <AlertIcon />
+              <AlertDescription> {errors.apiError.message}</AlertDescription>
+            </Alert>
+          </Box>
+        )}
+
+        <form
+          onSubmit={(e) => {
+            /* https://github.com/react-hook-form/react-hook-form/issues/70#issuecomment-939947190 */
+            clearErrors();
+            handleSubmit(handleLogin)(e);
+          }}
+        >
           <FormControl isRequired mb={4} isInvalid={errors.email as any}>
             <FormLabel htmlFor="email">Email</FormLabel>
             <Input
               id="email"
               autoFocus
               {...register('email', {
-                required: 'This is required',
+                required: 'Email is required',
               })}
             />
             <FormErrorMessage>
@@ -89,7 +117,7 @@ export default function Login() {
 
           <Button
             colorScheme="green"
-            isLoading={isSubmitting}
+            isLoading={isSubmitting || _isSubmitting}
             loadingText="Logging In"
             type="submit"
             width="100%"

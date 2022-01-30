@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
@@ -6,16 +6,21 @@ import axios from 'axios';
 import {
   Center,
   Flex,
+  Box,
   Button,
   FormControl,
   FormLabel,
   FormErrorMessage,
   Input,
+  Alert,
+  AlertIcon,
+  AlertDescription,
 } from '@chakra-ui/react';
 
 type FormValues = {
   email: string;
   password: string;
+  apiError: string;
 };
 
 export default function Signup() {
@@ -25,9 +30,15 @@ export default function Signup() {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
+    setError,
+    clearErrors,
   } = useForm<FormValues>();
 
+  const [_isSubmitting, setIsSubmitting] = useState(false);
+
   const handleRegister = async (values: FormValues) => {
+    setIsSubmitting(true);
+
     const { email, password } = values;
 
     try {
@@ -45,23 +56,40 @@ export default function Signup() {
       console.error(err);
 
       // User email already exists
-      if (err.response.data === 'User already exists') {
-        alert(err.response.data);
+      if (err.response.data === 'User email already exists') {
+        setError('apiError', { message: err.response.data });
       }
+
+      setIsSubmitting(false);
     }
   };
 
   return (
     <Center h="100vh">
       <Flex display="flex" flexDirection="column" minWidth={400}>
-        <form onSubmit={handleSubmit(handleRegister)}>
+        {errors.apiError && (
+          <Box mb={4}>
+            <Alert status="error">
+              <AlertIcon />
+              <AlertDescription> {errors.apiError.message}</AlertDescription>
+            </Alert>
+          </Box>
+        )}
+
+        <form
+          onSubmit={(e) => {
+            /* https://github.com/react-hook-form/react-hook-form/issues/70#issuecomment-939947190 */
+            clearErrors();
+            handleSubmit(handleRegister)(e);
+          }}
+        >
           <FormControl isRequired mb={4} isInvalid={errors.email as any}>
             <FormLabel htmlFor="email">Email</FormLabel>
             <Input
               id="email"
               autoFocus
               {...register('email', {
-                required: 'This is required',
+                required: 'Email is required',
               })}
             />
             <FormErrorMessage>
