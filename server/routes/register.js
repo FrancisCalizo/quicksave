@@ -1,4 +1,3 @@
-const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const pool = require('../db');
 
@@ -9,6 +8,13 @@ const pool = require('../db');
 module.exports = async (req, res) => {
   try {
     const { email, password } = req.body;
+
+    // Check DB if email already exists
+    const user = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+    // If so, return a 403 error
+    if (user.rows.length) {
+      return res.status(403).send('User already exists');
+    }
 
     const hash = await bcrypt.hash(password, 10);
 

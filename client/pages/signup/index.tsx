@@ -32,9 +32,12 @@ export default function Signup() {
       if (res.status === 200) {
         router.push('/login');
       }
-    } catch (err) {
-      setIsLoading(false);
-      console.log(err);
+    } catch (err: any) {
+      console.error(err.response);
+
+      if (err.response.data === 'User already exists') {
+        alert(err.response.data);
+      }
     }
 
     setIsLoading(false);
