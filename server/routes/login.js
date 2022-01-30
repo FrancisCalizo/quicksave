@@ -40,15 +40,12 @@ module.exports = async (req, res) => {
         return res.json(200);
       }
 
-      return res.status(403).json({
-        error: 'Invalid Login',
-      });
+      // Username & Password don't match
+      return res.status(403).send('Invalid Credentials');
     }
 
     // User doesn't exist, return 403 status
-    return res.status(403).json({
-      error: 'User not found',
-    });
+    return res.status(403).send('Invalid Credentials');
   } catch (err) {
     // Something went horribly wrong
     console.log(err);

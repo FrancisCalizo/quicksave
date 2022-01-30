@@ -31,11 +31,14 @@ export default function Login() {
       if (res.status === 200) {
         router.push('/dashboard');
       }
-    } catch (err) {
-      console.log(err);
-      setIsLoading(false);
+    } catch (err: any) {
+      console.error(err);
 
-      // TODO: Handle Invalid Login here
+      // Login Credentials are invalid
+      if (err.response.data === 'Invalid Credentials') {
+        alert(err.response.data);
+      }
+      setIsLoading(false);
     }
 
     setIsLoading(false);

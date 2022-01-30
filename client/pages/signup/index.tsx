@@ -33,8 +33,9 @@ export default function Signup() {
         router.push('/login');
       }
     } catch (err: any) {
-      console.error(err.response);
+      console.error(err);
 
+      // User email already exists
       if (err.response.data === 'User already exists') {
         alert(err.response.data);
       }
