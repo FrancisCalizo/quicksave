@@ -27,11 +27,11 @@ export default function Signup() {
         password,
       });
 
-      console.log(res);
-
-      // if (res.status === 200) {
-      //   router.push('/dashboard');
-      // }
+      // TODO: Just login the user after registration
+      // instead of bringing them to login page
+      if (res.status === 200) {
+        router.push('/login');
+      }
     } catch (err) {
       setIsLoading(false);
       console.log(err);

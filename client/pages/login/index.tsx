@@ -16,15 +16,15 @@ export default function Login() {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleLogin = async () => {
     setIsLoading(true);
 
     try {
-      const res = await axios.post('/login', {
-        username,
+      const res = await axios.post('/loginUser', {
+        email,
         password,
       });
 
@@ -32,21 +32,25 @@ export default function Login() {
         router.push('/dashboard');
       }
     } catch (err) {
-      setIsLoading(false);
       console.log(err);
+      setIsLoading(false);
+
+      // TODO: Handle Invalid Login here
     }
+
+    setIsLoading(false);
   };
 
   return (
     <Center h="100vh">
       <Flex display="flex" flexDirection="column" minWidth={400}>
         <FormControl isRequired mb={4}>
-          <FormLabel htmlFor="username">Username</FormLabel>
+          <FormLabel htmlFor="email">Email</FormLabel>
           <Input
             autoFocus
-            id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </FormControl>
         <FormControl isRequired mb={4}>

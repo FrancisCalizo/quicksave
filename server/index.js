@@ -13,8 +13,8 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Routes
-app.post('/login', require('./routes/login'));
 app.post('/register', require('./routes/register'));
+app.post('/loginUser', require('./routes/login'));
 app.post('/isLoggedIn', require('./routes/isLoggedIn'));
 app.use('/', cookieJwtAuth, require('./routes/expenses'));
 app.use('/', cookieJwtAuth, require('./routes/categories'));
