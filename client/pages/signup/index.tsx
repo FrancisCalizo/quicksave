@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
@@ -13,6 +13,11 @@ import {
   Input,
 } from '@chakra-ui/react';
 
+type FormValues = {
+  email: string;
+  password: string;
+};
+
 export default function Signup() {
   const router = useRouter();
 
@@ -20,11 +25,9 @@ export default function Signup() {
     handleSubmit,
     register,
     formState: { errors, isSubmitting },
-  } = useForm();
+  } = useForm<FormValues>();
 
-  const [password, setPassword] = useState('');
-
-  const handleRegister = async (values: any) => {
+  const handleRegister = async (values: FormValues) => {
     const { email, password } = values;
 
     try {
@@ -52,7 +55,7 @@ export default function Signup() {
     <Center h="100vh">
       <Flex display="flex" flexDirection="column" minWidth={400}>
         <form onSubmit={handleSubmit(handleRegister)}>
-          <FormControl isRequired mb={4} isInvalid={errors.email}>
+          <FormControl isRequired mb={4} isInvalid={errors.email as any}>
             <FormLabel htmlFor="email">Email</FormLabel>
             <Input
               id="email"
@@ -65,7 +68,8 @@ export default function Signup() {
               {errors.email && errors.email.message}
             </FormErrorMessage>
           </FormControl>
-          <FormControl isRequired mb={4} isInvalid={errors.password}>
+
+          <FormControl isRequired mb={4} isInvalid={errors.password as any}>
             <FormLabel htmlFor="password">Password</FormLabel>
             <Input
               id="password"

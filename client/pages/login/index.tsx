@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
-import Link from 'next/link';
+
 import axios from 'axios';
 
 import {
@@ -9,18 +10,26 @@ import {
   Button,
   FormControl,
   FormLabel,
+  FormErrorMessage,
   Input,
 } from '@chakra-ui/react';
+
+type FormValues = {
+  email: string;
+  password: string;
+};
 
 export default function Login() {
   const router = useRouter();
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const {
+    handleSubmit,
+    register,
+    formState: { errors, isSubmitting },
+  } = useForm<FormValues>();
 
-  const handleLogin = async () => {
-    setIsLoading(true);
+  const handleLogin = async (values: { email: string; password: string }) => {
+    const { email, password } = values;
 
     try {
       const res = await axios.post('/loginUser', {
@@ -38,43 +47,56 @@ export default function Login() {
       if (err.response.data === 'Invalid Credentials') {
         alert(err.response.data);
       }
-      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
 
   return (
     <Center h="100vh">
       <Flex display="flex" flexDirection="column" minWidth={400}>
-        <FormControl isRequired mb={4}>
-          <FormLabel htmlFor="email">Email</FormLabel>
-          <Input
-            autoFocus
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </FormControl>
-        <FormControl isRequired mb={4}>
-          <FormLabel htmlFor="password">Password</FormLabel>
-          <Input
-            type="password"
-            autoFocus
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </FormControl>
+        <form onSubmit={handleSubmit(handleLogin)}>
+          <FormControl isRequired mb={4} isInvalid={errors.email as any}>
+            <FormLabel htmlFor="email">Email</FormLabel>
+            <Input
+              id="email"
+              autoFocus
+              {...register('email', {
+                required: 'This is required',
+              })}
+            />
+            <FormErrorMessage>
+              {errors.email && errors.email.message}
+            </FormErrorMessage>
+          </FormControl>
 
-        <Button
-          colorScheme="green"
-          onClick={handleLogin}
-          isLoading={isLoading}
-          loadingText="Logging In"
-        >
-          Login
-        </Button>
+          <FormControl isRequired mb={4} isInvalid={errors.password as any}>
+            <FormLabel htmlFor="password">Password</FormLabel>
+            <Input
+              id="password"
+              type="password"
+              autoFocus
+              {...register('password', {
+                required: 'This is required',
+                minLength: {
+                  value: 4,
+                  message: 'Password must be at least 4 characters',
+                },
+              })}
+            />
+            <FormErrorMessage>
+              {errors.password && errors.password.message}
+            </FormErrorMessage>
+          </FormControl>
+
+          <Button
+            colorScheme="green"
+            isLoading={isSubmitting}
+            loadingText="Logging In"
+            type="submit"
+            width="100%"
+          >
+            Login
+          </Button>
+        </form>
       </Flex>
     </Center>
   );
