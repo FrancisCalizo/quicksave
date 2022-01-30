@@ -15,37 +15,41 @@ export default function Signup() {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = async () => {
+  const handleRegister = async () => {
     setIsLoading(true);
 
     try {
-      const res = await axios.post('/login', {
-        username,
+      const res = await axios.post('/register', {
+        email,
         password,
       });
 
-      if (res.status === 200) {
-        router.push('/dashboard');
-      }
+      console.log(res);
+
+      // if (res.status === 200) {
+      //   router.push('/dashboard');
+      // }
     } catch (err) {
       setIsLoading(false);
       console.log(err);
     }
+
+    setIsLoading(false);
   };
 
   return (
     <Center h="100vh">
       <Flex display="flex" flexDirection="column" minWidth={400}>
         <FormControl isRequired mb={4}>
-          <FormLabel htmlFor="username">Username</FormLabel>
+          <FormLabel htmlFor="email">Email</FormLabel>
           <Input
             autoFocus
-            id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
         </FormControl>
         <FormControl isRequired mb={4}>
@@ -61,11 +65,11 @@ export default function Signup() {
 
         <Button
           colorScheme="green"
-          onClick={handleLogin}
+          onClick={handleRegister}
           isLoading={isLoading}
           loadingText="Logging In"
         >
-          Login
+          Register
         </Button>
       </Flex>
     </Center>
