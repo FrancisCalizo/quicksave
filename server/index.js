@@ -7,7 +7,7 @@ const { cookieJwtAuth } = require('./middleware/cookieJwtAuth');
 const app = express();
 dotenv.config();
 
-// middleware
+// Middleware
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());

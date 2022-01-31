@@ -7,6 +7,7 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 import TopBarProgress from 'react-topbar-progress-indicator';
 import '../styles/globals.css';
 
+import AppContext from 'components/AppContext';
 import { RouteGuard } from 'components/RouteGuard';
 import { theme } from 'theme';
 
@@ -41,7 +42,7 @@ function MyApp({ Component, pageProps }: any) {
         <ChakraProvider theme={theme}>
           <RouteGuard>
             {progress && <TopBarProgress />}
-            {getLayout(<Component {...pageProps} />)}
+            <AppContext>{getLayout(<Component {...pageProps} />)}</AppContext>
           </RouteGuard>
         </ChakraProvider>
         <ReactQueryDevtools initialIsOpen={false} />
