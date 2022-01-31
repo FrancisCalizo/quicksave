@@ -14,7 +14,7 @@ const cookieJwtAuth = (req, res, next) => {
 
     res.clearCookie('token');
 
-    return res.send(403);
+    return res.sendStatus(403);
   }
 };
 

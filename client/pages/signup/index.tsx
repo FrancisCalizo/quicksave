@@ -47,10 +47,8 @@ export default function Signup() {
         password,
       });
 
-      // TODO: Just login the user after registration
-      // instead of bringing them to login page
       if (res.status === 200) {
-        router.push('/login');
+        router.push('/dashboard');
       }
     } catch (err: any) {
       console.error(err);
@@ -117,8 +115,8 @@ export default function Signup() {
 
           <Button
             colorScheme="green"
-            isLoading={isSubmitting}
-            loadingText="Logging In"
+            isLoading={isSubmitting || _isSubmitting}
+            loadingText={isSubmitting ? 'Registering' : 'Logging In'}
             type="submit"
             width="100%"
           >

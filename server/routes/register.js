@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const pool = require('../db');
 
@@ -16,11 +17,30 @@ module.exports = async (req, res) => {
       return res.status(403).send('User email already exists');
     }
 
+    // Hash password with bcrypt
     const hash = await bcrypt.hash(password, 10);
-
+    // Insert Credentials into DB
     const newUser = await pool.query('INSERT INTO users (email, password) VALUES($1, $2) RETURNING *', [email, hash]);
 
-    res.status(200).json(newUser.rows);
+    // Put the user info into a new object
+    const userInfo = newUser.rows[0];
+
+    // No need to store password in the cookie
+    delete userInfo.password;
+
+    // Sign a JWT to the user
+    const token = jwt.sign(userInfo, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+    // Store that in a an HTTP Cookie
+    res.cookie('token', token, {
+      httpOnly: true,
+      // secure: true,
+      // maxAge: 1000000,
+      // signed: true
+    });
+
+    // Return 200 Success Response
+    return res.status(200).json(userInfo);
   } catch (err) {
     console.log(err);
     res.status(500).send('Something went wrong with registration');
