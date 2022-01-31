@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
-
 import axios from 'axios';
+
+import useAppContext from 'components/hooks/useAppContext';
 
 import {
   Center,
@@ -48,6 +49,7 @@ export default function Login() {
         password,
       });
 
+      // Redirect them to their dashboard
       if (res.status === 200) {
         router.push('/dashboard');
       }

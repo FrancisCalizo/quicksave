@@ -40,10 +40,12 @@ function MyApp({ Component, pageProps }: any) {
 
       <QueryClientProvider client={queryClient}>
         <ChakraProvider theme={theme}>
-          <RouteGuard>
-            {progress && <TopBarProgress />}
-            <AppContext>{getLayout(<Component {...pageProps} />)}</AppContext>
-          </RouteGuard>
+          <AppContext>
+            <RouteGuard>
+              {progress && <TopBarProgress />}
+              {getLayout(<Component {...pageProps} />)}
+            </RouteGuard>
+          </AppContext>
         </ChakraProvider>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
