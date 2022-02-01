@@ -29,7 +29,7 @@ import SpendingBreakdown from 'components/pages/nonrecurring/SpendingBreakdown';
 import HeadingOverview from 'components/pages/nonrecurring/HeadingOverview';
 import { Expense } from 'utils/types';
 import { getAllExpensesByMonth } from 'components/api/expenses';
-import { getAllCategoriesByUser } from 'components/api/categories';
+import { useFetchCategories } from 'components/hooks/queries/useFetchCategories';
 
 export const emptyForm = {
   description: '',
@@ -100,10 +100,8 @@ export default function Nonrecurring() {
   );
 
   // Load User Expense Categories
-  const { data: categories, isLoading: isCategoriesLoading } = useQuery(
-    ['categories', 1],
-    () => getAllCategoriesByUser(1)
-  );
+  const { data: categories, isLoading: isCategoriesLoading } =
+    useFetchCategories(1);
 
   // Set Min and Max Date for DatePicker
   useEffect(() => {
@@ -329,7 +327,6 @@ export default function Nonrecurring() {
             onDeleteExpenseOpen={onDeleteExpenseOpen}
             onEditExpenseOpen={onEditExpenseOpen}
             setFormState={setFormState}
-            categories={categories?.data}
           />
         </Box>
       </Flex>

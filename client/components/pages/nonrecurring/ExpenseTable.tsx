@@ -25,8 +25,9 @@ import {
   Text,
 } from '@chakra-ui/react';
 
-import { Expense, CategoryObject } from 'utils/types';
+import { Expense } from 'utils/types';
 import { formatCurrency, BADGE_COLORS } from 'utils';
+import { useFetchCategories } from 'components/hooks/queries/useFetchCategories';
 
 interface ExpenseTableProps {
   data: Expense[];
@@ -34,7 +35,6 @@ interface ExpenseTableProps {
   onEditExpenseOpen: () => void;
   setSelectedRowInfo: (value: any) => any;
   setFormState: any;
-  categories: CategoryObject[];
 }
 
 export default function ExpenseTable(props: ExpenseTableProps) {
@@ -44,8 +44,10 @@ export default function ExpenseTable(props: ExpenseTableProps) {
     onEditExpenseOpen,
     setSelectedRowInfo,
     setFormState,
-    categories,
   } = props;
+
+  const { data: categories, isLoading: isCategoriesLoading } =
+    useFetchCategories(1);
 
   const reactTableColumns = [
     {
@@ -141,11 +143,17 @@ export default function ExpenseTable(props: ExpenseTableProps) {
         description: row.original.description,
         amount: Number(row.original.amount),
         date: date.substring(0, date.indexOf('T')),
-        category: categories.find((cat) => cat.name === row.original.category),
+        category: categories.find(
+          (cat: any) => cat.name === row.original.category
+        ),
         notes: row.original.notes,
       });
     }
   };
+
+  if (isCategoriesLoading) {
+    return null;
+  }
 
   return (
     <Table {...getTableProps()} size="sm">
