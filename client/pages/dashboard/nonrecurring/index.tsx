@@ -28,7 +28,7 @@ import EditExpenseModal from 'components/pages/nonrecurring/EditExpenseModal';
 import SpendingBreakdown from 'components/pages/nonrecurring/SpendingBreakdown';
 import HeadingOverview from 'components/pages/nonrecurring/HeadingOverview';
 import { Expense } from 'utils/types';
-import { getAllExpensesByMonth } from 'components/api/expenses';
+import { useFetchExpensesByMonth } from 'components/hooks/queries/useFetchExpensesByMonth';
 import { useFetchCategories } from 'components/hooks/queries/useFetchCategories';
 
 export const emptyForm = {
@@ -76,28 +76,19 @@ export default function Nonrecurring() {
   });
 
   // Load All Expenses For the Month
-  const { data: expenses, isLoading: isExpensesLoading } = useQuery(
-    ['allExpensesByMonth', +format(date, 'M'), +format(date, 'yyyy')],
-    () => getAllExpensesByMonth(+format(date, 'M'), +format(date, 'yyyy')),
-    {
-      refetchOnWindowFocus: false,
-      onSuccess: ({ data }) => {
-        const sumAmount = data
-          .map((ex: any) => ex.amount)
-          .reduce(
-            (prev: string, curr: string) => Number(prev) + Number(curr),
-            0
-          );
+  const { data: expenses, isLoading: isExpensesLoading } =
+    useFetchExpensesByMonth(date, (data: any) => {
+      const sumAmount = data.data
+        .map((ex: any) => ex.amount)
+        .reduce((prev: string, curr: string) => Number(prev) + Number(curr), 0);
 
-        setTempAmount((old) => ({
-          ...old,
-          spent: sumAmount,
-          limit: 1700, // TODO: Limit is hardcoded for the time being
-          remaining: 1700 - sumAmount,
-        }));
-      },
-    }
-  );
+      setTempAmount((old) => ({
+        ...old,
+        spent: sumAmount,
+        limit: 1700, // TODO: Limit is hardcoded for the time being
+        remaining: 1700 - sumAmount,
+      }));
+    });
 
   // Load User Expense Categories
   const { data: categories, isLoading: isCategoriesLoading } =
