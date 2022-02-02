@@ -27,10 +27,11 @@ import DeleteExpenseModal from 'components/pages/nonrecurring/DeleteExpenseModal
 import EditExpenseModal from 'components/pages/nonrecurring/EditExpenseModal';
 import SpendingBreakdown from 'components/pages/nonrecurring/SpendingBreakdown';
 import HeadingOverview from 'components/pages/nonrecurring/HeadingOverview';
-import { Expense } from 'utils/types';
 import { useFetchExpensesByMonth } from 'components/hooks/queries/useFetchExpensesByMonth';
 import { useFetchCategories } from 'components/hooks/queries/useFetchCategories';
 import NonrecurringSkeleton from 'components/layout/skeletons/NonrecurringSkeleton';
+import useAppContext from 'components/hooks/useAppContext';
+import { Expense } from 'utils/types';
 
 export const emptyForm = {
   description: '',
@@ -43,6 +44,9 @@ export const emptyForm = {
 export default function Nonrecurring() {
   const toast = useToast();
   const queryClient = useQueryClient();
+  const {
+    userInfo: { userid: userId },
+  } = useAppContext();
 
   const {
     isOpen: isAddExpenseOpen,
@@ -78,7 +82,7 @@ export default function Nonrecurring() {
 
   // Load All Expenses For the Month
   const { data: expenses, isLoading: isExpensesLoading } =
-    useFetchExpensesByMonth(date, (data: any) => {
+    useFetchExpensesByMonth(userId, date, (data: any) => {
       const sumAmount = data.data
         .map((ex: any) => ex.amount)
         .reduce((prev: string, curr: string) => Number(prev) + Number(curr), 0);
@@ -93,7 +97,7 @@ export default function Nonrecurring() {
 
   // Load User Expense Categories
   const { data: categories, isLoading: isCategoriesLoading } =
-    useFetchCategories(1);
+    useFetchCategories(userId);
 
   // Set Min and Max Date for DatePicker
   useEffect(() => {
@@ -116,7 +120,7 @@ export default function Nonrecurring() {
         description: formData.description,
         category: formData.category.category_id,
         notes: formData.notes,
-        userId: 1, // TODO: Hardcoded until I figure out the user situation
+        userId,
       });
 
       await queryClient.invalidateQueries([
@@ -164,7 +168,7 @@ export default function Nonrecurring() {
         description: formData.description,
         category: formData.category.category_id,
         notes: formData.notes,
-        userId: 1, // TODO: Hardcoded until I figure out the user situation
+        userId,
       });
 
       await queryClient.invalidateQueries([
