@@ -89,14 +89,7 @@ export default function Categories() {
   }
 
   return (
-    <Flex
-      w={['100%', '100%', '60%', '60%', '55%']}
-      flexDir="column"
-      overflow="auto"
-      minH="100vh"
-      px={4}
-      py={6}
-    >
+    <Flex w="100%" flexDir="column" overflow="auto" minH="100vh" px={4} py={6}>
       <Heading as="h2" size="lg">
         My Categories
       </Heading>

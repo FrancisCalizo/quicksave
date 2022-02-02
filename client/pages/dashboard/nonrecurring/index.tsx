@@ -30,6 +30,7 @@ import HeadingOverview from 'components/pages/nonrecurring/HeadingOverview';
 import { Expense } from 'utils/types';
 import { useFetchExpensesByMonth } from 'components/hooks/queries/useFetchExpensesByMonth';
 import { useFetchCategories } from 'components/hooks/queries/useFetchCategories';
+import NonrecurringSkeleton from 'components/layout/skeletons/NonrecurringSkeleton';
 
 export const emptyForm = {
   description: '',
@@ -234,7 +235,7 @@ export default function Nonrecurring() {
   };
 
   if (isExpensesLoading || isCategoriesLoading) {
-    return null;
+    return <NonrecurringSkeleton />;
   }
 
   return (
