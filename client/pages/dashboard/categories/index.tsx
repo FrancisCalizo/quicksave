@@ -1,8 +1,10 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import Head from 'next/head';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { useQuery, useQueryClient } from 'react-query';
+
+import { CATEGORY_COLORS } from 'utils';
 
 import {
   Heading,
@@ -122,11 +124,15 @@ export default function Categories() {
                 required: 'color is required',
               })}
             >
-              {COLORS.map((color, key) => (
-                <option value={color.value} key={key}>
-                  {color.label}
-                </option>
-              ))}
+              {CATEGORY_COLORS.map((color, key) => {
+                const s = color.label;
+
+                return (
+                  <option value={color.value} key={key}>
+                    {s[0].toUpperCase() + s.slice(1)}
+                  </option>
+                );
+              })}
             </Select>
             <FormErrorMessage>
               {errors.categoryColor && errors.categoryColor.message}
@@ -156,19 +162,3 @@ export default function Categories() {
 }
 
 Categories.getLayout = (page: any) => <DashboardLayout>{page}</DashboardLayout>;
-
-const COLORS = [
-  { value: 'red', label: 'red' },
-  { value: 'orange', label: 'orange' },
-  { value: 'yellow', label: 'yellow' },
-  { value: 'green', label: 'green' },
-  { value: 'teal', label: 'teal' },
-  { value: 'blue', label: 'blue' },
-  { value: 'cyan', label: 'cyan' },
-  { value: 'purple', label: 'purple' },
-  { value: 'teal', label: 'teal' },
-  { value: 'pink', label: 'pink' },
-  { value: 'gray', label: 'gray' },
-  { value: 'black', label: 'black' },
-  { value: 'white', label: 'white' },
-];

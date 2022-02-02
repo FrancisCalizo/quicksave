@@ -26,8 +26,9 @@ import {
 } from '@chakra-ui/react';
 
 import { Expense } from 'utils/types';
-import { formatCurrency, BADGE_COLORS } from 'utils';
+import { formatCurrency } from 'utils';
 import { useFetchCategories } from 'components/hooks/queries/useFetchCategories';
+import useAppContext from 'components/hooks/useAppContext';
 
 interface ExpenseTableProps {
   data: Expense[];
@@ -39,6 +40,10 @@ interface ExpenseTableProps {
 
 export default function ExpenseTable(props: ExpenseTableProps) {
   const {
+    userInfo: { userid: userId },
+  } = useAppContext();
+
+  const {
     data,
     onDeleteExpenseOpen,
     onEditExpenseOpen,
@@ -47,7 +52,7 @@ export default function ExpenseTable(props: ExpenseTableProps) {
   } = props;
 
   const { data: categories, isLoading: isCategoriesLoading } =
-    useFetchCategories(1);
+    useFetchCategories(userId);
 
   const reactTableColumns = [
     {
@@ -72,7 +77,11 @@ export default function ExpenseTable(props: ExpenseTableProps) {
           px={2}
           py={1}
           textTransform="capitalize"
-          colorScheme={BADGE_COLORS[props.row.original.category_id]}
+          colorScheme={
+            categories.data.find(
+              (c: any) => c.category_id === props.row.original.category_id
+            ).color
+          }
           borderRadius={5}
         >
           {props.value}
@@ -143,7 +152,7 @@ export default function ExpenseTable(props: ExpenseTableProps) {
         description: row.original.description,
         amount: Number(row.original.amount),
         date: date.substring(0, date.indexOf('T')),
-        category: categories.find(
+        category: categories.data.find(
           (cat: any) => cat.name === row.original.category
         ),
         notes: row.original.notes,
