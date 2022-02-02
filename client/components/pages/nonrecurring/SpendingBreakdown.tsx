@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Chart as ChartJS, ArcElement, Tooltip } from 'chart.js';
+import { transparentize } from 'polished';
 import { Pie } from 'react-chartjs-2';
 
 import { Text, Box, Flex, Divider, Heading } from '@chakra-ui/react';
 
-import { formatCurrency } from 'utils';
+import { formatCurrency, CATEGORY_COLORS } from 'utils';
 import { Expense, CategoryObject } from 'utils/types';
 
 ChartJS.register(ArcElement, Tooltip, ChartDataLabels);
@@ -17,6 +18,32 @@ interface SpendingBreakdownProps {
 
 export default function SpendingBreakdown(props: SpendingBreakdownProps) {
   const { expenses, categories } = props;
+
+  const [breakdownData, setBreakdownData] = useState<any[]>([]);
+
+  useEffect(() => {
+    (function calculateSpendingBreakdown() {
+      const res = categories
+        // Get Total Spending By Category
+        ?.map((cat) => {
+          const total = expenses?.reduce((prev: any, curr: any) => {
+            return curr.category_id === cat.category_id
+              ? Number(prev) + Number(curr.amount)
+              : Number(prev);
+          }, 0);
+
+          const colorHex = CATEGORY_COLORS.find(
+            (c) => c.label.toLowerCase() === cat.color.toLowerCase()
+          )!.rgb;
+
+          return { name: cat.name, amount: total, colorHex };
+        })
+        // Sort the Spending in Descending Order
+        .sort((a, b) => b.amount - a.amount);
+
+      setBreakdownData(res);
+    })();
+  }, [expenses]);
 
   return (
     <>
@@ -41,26 +68,20 @@ export default function SpendingBreakdown(props: SpendingBreakdownProps) {
       <Box px={4}>
         <Pie
           data={{
-            labels: categories?.map((cat) => cat.name),
+            labels: breakdownData
+              .filter((data) => data.amount > 0)
+              .map((cat) => cat.name),
             datasets: [
               {
-                data: [12, 19, 3, 5, 2, 3],
-                backgroundColor: [
-                  'rgba(255, 99, 132, 0.2)',
-                  'rgba(54, 162, 235, 0.2)',
-                  'rgba(255, 206, 86, 0.2)',
-                  'rgba(75, 192, 192, 0.2)',
-                  'rgba(153, 102, 255, 0.2)',
-                  'rgba(255, 159, 64, 0.2)',
-                ],
-                borderColor: [
-                  'rgba(255, 99, 132, 1)',
-                  'rgba(54, 162, 235, 1)',
-                  'rgba(255, 206, 86, 1)',
-                  'rgba(75, 192, 192, 1)',
-                  'rgba(153, 102, 255, 1)',
-                  'rgba(255, 159, 64, 1)',
-                ],
+                data: breakdownData
+                  .filter((data) => data.amount > 0)
+                  .map((cat) => cat.amount),
+                backgroundColor: breakdownData
+                  .filter((data) => data.amount > 0)
+                  .map((cat) => transparentize(0.5, cat.colorHex)),
+                borderColor: breakdownData
+                  .filter((data) => data.amount > 0)
+                  .map((cat) => cat.colorHex),
                 datalabels: { anchor: 'end' },
                 borderWidth: 1,
               },
@@ -98,21 +119,9 @@ export default function SpendingBreakdown(props: SpendingBreakdownProps) {
       </Box>
 
       <Box px={4}>
-        {categories
-          // Get Total Spending By Category
-          ?.map((cat) => {
-            const total = expenses?.reduce((prev: any, curr: any) => {
-              return curr.category_id === cat.category_id
-                ? Number(prev) + Number(curr.amount)
-                : Number(prev);
-            }, 0);
-
-            return { name: cat.name, amount: total };
-          })
-          // Sort the Spending in Descending Order
-          .sort((a, b) => b.amount - a.amount)
+        {breakdownData
           // Map it to JSX
-          .map((category, key) => (
+          ?.map((category, key) => (
             <React.Fragment key={key}>
               <Flex
                 justifyContent="space-between"

@@ -2,6 +2,7 @@ export type CategoryObject = {
   name: string;
   category_id: number;
   user_id: number;
+  color: string;
 };
 
 export type Expense = {
