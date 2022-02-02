@@ -19,14 +19,15 @@ router.get('/getAllCategoriesByUser/:id', async (req, res) => {
 
 // @route     POST /createCategory
 // @desc      Create a category
-// @body      { name: string, userId: int }
+// @body      { name: string, color: string, userId: int }
 // @access    Private
 router.post('/createCategory', async (req, res) => {
   try {
-    const { name, userId } = req.body;
+    const { name, color, userId } = req.body;
 
-    const newCategory = await pool.query('INSERT INTO category (name, user_id) VALUES($1, $2) RETURNING *', [
+    const newCategory = await pool.query('INSERT INTO category (name, color, user_id) VALUES($1, $2, $3) RETURNING *', [
       name,
+      color,
       userId,
     ]);
 

@@ -11,3 +11,18 @@ export type Expense = {
   category: CategoryObject;
   notes: string;
 };
+
+export type CategoryColors =
+  | 'red'
+  | 'orange'
+  | 'yellow'
+  | 'green'
+  | 'teal'
+  | 'blue'
+  | 'cyan'
+  | 'purple'
+  | 'teal'
+  | 'pink'
+  | 'gray'
+  | 'black'
+  | 'white';

@@ -4,7 +4,16 @@ import { useTable, useSortBy } from 'react-table';
 
 import { TriangleDownIcon, TriangleUpIcon } from '@chakra-ui/icons';
 import { FaTrash } from 'react-icons/fa';
-import { Table, Thead, Tbody, Tr, Th, Td, chakra } from '@chakra-ui/react';
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  Badge,
+  chakra,
+} from '@chakra-ui/react';
 
 interface CategoryTableProps {
   data: any;
@@ -13,12 +22,23 @@ interface CategoryTableProps {
 export default function CategoryTable({ data }: CategoryTableProps) {
   const reactTableColumns = [
     {
-      Header: 'Cateogry',
+      Header: 'Category',
       accessor: 'name',
     },
     {
       Header: 'Color',
       accessor: 'color',
+      Cell: (props: any) => (
+        <Badge
+          px={2}
+          py={1}
+          textTransform="capitalize"
+          colorScheme={props.row.original.color}
+          borderRadius={5}
+        >
+          {props.value}
+        </Badge>
+      ),
     },
     {
       Header: '',
