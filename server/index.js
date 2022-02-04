@@ -12,10 +12,12 @@ app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
-// Routes
-app.post('/register', require('./routes/register'));
-app.post('/loginUser', require('./routes/login'));
-app.post('/isLoggedIn', require('./routes/isLoggedIn'));
+// Auth Routes
+app.post('/register', require('./routes/auth/register'));
+app.post('/loginUser', require('./routes/auth/login'));
+app.post('/isLoggedIn', require('./routes/auth/isLoggedIn'));
+
+// Other Routes
 app.use('/', cookieJwtAuth, require('./routes/expenses'));
 app.use('/', cookieJwtAuth, require('./routes/categories'));
 

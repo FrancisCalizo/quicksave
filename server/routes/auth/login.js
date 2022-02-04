@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const pool = require('../db');
+const pool = require('../../db');
 
 // @route     POST /login
 // @desc      Login an already existing user
