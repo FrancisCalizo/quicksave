@@ -29,7 +29,7 @@ module.exports = async (req, res) => {
     delete userInfo.password;
 
     // Sign a JWT to the user
-    const token = jwt.sign(userInfo, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign(userInfo, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
 
     // Store that in a an HTTP Cookie
     res.cookie('token', token, {
