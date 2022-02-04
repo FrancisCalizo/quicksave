@@ -5,11 +5,11 @@ const pool = require('../db');
 // @route     GET /getAllCateogoriesByUser
 // @desc      Get all categories for a specific user
 // @access    Private
-router.get('/getAllCategoriesByUser/:id', async (req, res) => {
-  const { id } = req.params;
+router.get('/getAllCategoriesByUser', async (req, res) => {
+  const { userid } = req.user;
 
   try {
-    const categories = await pool.query('SELECT * FROM category WHERE user_id = $1', [id]);
+    const categories = await pool.query('SELECT * FROM category WHERE user_id = $1', [userid]);
 
     res.json(categories.rows);
   } catch (error) {
@@ -23,12 +23,13 @@ router.get('/getAllCategoriesByUser/:id', async (req, res) => {
 // @access    Private
 router.post('/createCategory', async (req, res) => {
   try {
-    const { name, color, userId } = req.body;
+    const { name, color } = req.body;
+    const { userid } = req.user;
 
     const newCategory = await pool.query('INSERT INTO category (name, color, user_id) VALUES($1, $2, $3) RETURNING *', [
       name,
       color,
-      userId,
+      userid,
     ]);
 
     res.json(newCategory.rows[0]);

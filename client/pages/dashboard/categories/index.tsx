@@ -40,8 +40,8 @@ export default function Categories() {
 
   // Load User Expense Categories
   const { data: categories, isLoading: isCategoriesLoading } = useQuery(
-    ['categories', userId],
-    () => getAllCategoriesByUser(userId)
+    ['categories'],
+    () => getAllCategoriesByUser()
   );
 
   const {
