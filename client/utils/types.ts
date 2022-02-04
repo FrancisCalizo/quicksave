@@ -1,8 +1,7 @@
 export type CategoryObject = {
   name: string;
   category_id: number;
-  user_id: number;
-  color: string;
+  color?: string; // TODO: Make this mandatory?
 };
 
 export type Expense = {

@@ -36,13 +36,14 @@ router.get('/getSingleExpense/:id', async (req, res) => {
 // @access    Private
 router.get('/getAllExpensesByMonth', async (req, res) => {
   try {
-    const { month, year, userId } = req.query;
+    const { month, year } = req.query;
+    const { userid } = req.user;
 
     const expense = await pool.query(
       'SELECT e.expense_id, e.description, e.amount, e.date, e.notes, c.category_id, c.name as category ' +
         'FROM expense AS e INNER JOIN category as c ON e.category = c.category_id ' +
         'WHERE EXTRACT(MONTH FROM date) = $1 and EXTRACT(YEAR FROM date) = $2 and e.user_id = $3 order by date asc',
-      [month, year, userId]
+      [month, year, userid]
     );
 
     res.json(expense.rows);
@@ -58,10 +59,11 @@ router.get('/getAllExpensesByMonth', async (req, res) => {
 router.post('/createExpense', async (req, res) => {
   try {
     const { description, amount, date, category, notes, userId } = req.body;
+    const { userid } = req.user;
 
     const newExpense = await pool.query(
       'INSERT INTO expense (description, amount, date, category, notes, user_id) VALUES($1, $2, $3, $4, $5, $6) RETURNING *',
-      [description, amount, date, category, notes, userId]
+      [description, amount, date, category, notes, userid]
     );
 
     res.json(newExpense.rows[0]);

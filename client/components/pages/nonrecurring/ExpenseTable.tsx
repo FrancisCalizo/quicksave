@@ -28,7 +28,6 @@ import {
 import { Expense } from 'utils/types';
 import { formatCurrency } from 'utils';
 import { useFetchCategories } from 'components/hooks/queries/useFetchCategories';
-import useAppContext from 'components/hooks/useAppContext';
 
 interface ExpenseTableProps {
   data: Expense[];
@@ -40,10 +39,6 @@ interface ExpenseTableProps {
 
 export default function ExpenseTable(props: ExpenseTableProps) {
   const {
-    userInfo: { userid: userId },
-  } = useAppContext();
-
-  const {
     data,
     onDeleteExpenseOpen,
     onEditExpenseOpen,
@@ -52,7 +47,7 @@ export default function ExpenseTable(props: ExpenseTableProps) {
   } = props;
 
   const { data: categories, isLoading: isCategoriesLoading } =
-    useFetchCategories(userId);
+    useFetchCategories();
 
   const reactTableColumns = [
     {

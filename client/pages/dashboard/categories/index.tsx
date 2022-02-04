@@ -23,7 +23,6 @@ import {
 import CategoryTable from 'components/pages/categories/CategoryTable';
 import DashboardLayout from 'components/layout/dashboard/DashboardLayout';
 import { getAllCategoriesByUser } from 'components/api/categories';
-import useAppContext from 'components/hooks/useAppContext';
 import { CategoryColors } from 'utils/types';
 
 type FormValues = {
@@ -34,9 +33,6 @@ type FormValues = {
 export default function Categories() {
   const queryClient = useQueryClient();
   const toast = useToast();
-  const {
-    userInfo: { userid: userId },
-  } = useAppContext();
 
   // Load User Expense Categories
   const { data: categories, isLoading: isCategoriesLoading } = useQuery(
@@ -58,14 +54,13 @@ export default function Categories() {
       await axios.post('/createCategory', {
         name: categoryName,
         color: categoryColor,
-        userId,
       });
 
       // TODO: Supposedly this is not the best way to clear a form
       // in RHF. Find a better way to do so: https://react-hook-form.com/api/useform/reset
       reset();
 
-      await queryClient.invalidateQueries(['categories', userId]);
+      await queryClient.invalidateQueries(['categories']);
 
       toast({
         title: 'Success!',

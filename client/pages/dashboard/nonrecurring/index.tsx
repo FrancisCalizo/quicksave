@@ -30,23 +30,19 @@ import HeadingOverview from 'components/pages/nonrecurring/HeadingOverview';
 import { useFetchExpensesByMonth } from 'components/hooks/queries/useFetchExpensesByMonth';
 import { useFetchCategories } from 'components/hooks/queries/useFetchCategories';
 import NonrecurringSkeleton from 'components/layout/skeletons/NonrecurringSkeleton';
-import useAppContext from 'components/hooks/useAppContext';
 import { Expense } from 'utils/types';
 
 export const emptyForm = {
   description: '',
   amount: '',
   date: '',
-  category: { name: '', category_id: 0, user_id: 0 },
+  category: { name: '', category_id: 0 },
   notes: '',
 };
 
 export default function Nonrecurring() {
   const toast = useToast();
   const queryClient = useQueryClient();
-  const {
-    userInfo: { userid: userId },
-  } = useAppContext();
 
   const {
     isOpen: isAddExpenseOpen,
@@ -82,7 +78,7 @@ export default function Nonrecurring() {
 
   // Load All Expenses For the Month
   const { data: expenses, isLoading: isExpensesLoading } =
-    useFetchExpensesByMonth(userId, date, (data: any) => {
+    useFetchExpensesByMonth(date, (data: any) => {
       const sumAmount = data.data
         .map((ex: any) => ex.amount)
         .reduce((prev: string, curr: string) => Number(prev) + Number(curr), 0);
@@ -97,7 +93,7 @@ export default function Nonrecurring() {
 
   // Load User Expense Categories
   const { data: categories, isLoading: isCategoriesLoading } =
-    useFetchCategories(userId);
+    useFetchCategories();
 
   // Set Min and Max Date for DatePicker
   useEffect(() => {
@@ -120,7 +116,6 @@ export default function Nonrecurring() {
         description: formData.description,
         category: formData.category.category_id,
         notes: formData.notes,
-        userId,
       });
 
       await queryClient.invalidateQueries([
@@ -168,7 +163,6 @@ export default function Nonrecurring() {
         description: formData.description,
         category: formData.category.category_id,
         notes: formData.notes,
-        userId,
       });
 
       await queryClient.invalidateQueries([
