@@ -25,16 +25,31 @@ module.exports = async (req, res) => {
       if (validPass) {
         delete userInfo.password;
 
-        // Sign a JWT to the user
-        const token = jwt.sign(userInfo, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
+        // Sign a JWT to the user & create Access|Refresh Tokens
+        const accessToken = generateAccessToken(userInfo);
+        const refreshToken = generateRefreshToken(userInfo);
 
-        // Store that in a an HTTP Cookie
-        res.cookie('token', token, {
+        // Store ACCESS TOKEN in HTTP Cookie
+        res.cookie('accessToken', accessToken, {
           httpOnly: true,
           // secure: true,
           // maxAge: 1000000,
           // signed: true
         });
+
+        // Store REFRESH TOKEN in HTTP Cookie
+        res.cookie('refreshToken', refreshToken, {
+          httpOnly: true,
+          // secure: true,
+          // maxAge: 1000000,
+          // signed: true
+        });
+
+        // Store REFRESH TOKEN info into the database
+        await pool.query(
+          "INSERT INTO session (user_id, refresh_token, generated_date, expiration_date) VALUES($1, $2, NOW(), NOW() + INTERVAL '30 DAY' ) RETURNING *",
+          [userInfo.userid, refreshToken]
+        );
 
         // Return 200 Success Response
         return res.json(200);
@@ -52,3 +67,11 @@ module.exports = async (req, res) => {
     res.status(500).send('Something went wrong with login');
   }
 };
+
+function generateAccessToken(userInfo) {
+  return jwt.sign(userInfo, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10s' });
+}
+
+function generateRefreshToken(userInfo) {
+  return jwt.sign(userInfo, process.env.REFRESH_TOKEN_SECRET);
+}

@@ -26,13 +26,13 @@ module.exports = async (req, res) => {
     const userInfo = newUser.rows[0];
 
     // No need to store password in the cookie
-    delete userInfo.password;
+    // delete userInfo.password;
 
     // Sign a JWT to the user
-    const token = jwt.sign(userInfo, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
+    const accessToken = jwt.sign(userInfo, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10s' });
 
     // Store that in a an HTTP Cookie
-    res.cookie('token', token, {
+    res.cookie('accessToken', accessToken, {
       httpOnly: true,
       // secure: true,
       // maxAge: 1000000,

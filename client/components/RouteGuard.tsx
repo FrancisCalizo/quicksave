@@ -47,8 +47,8 @@ function RouteGuard({ children }: any) {
           const user = res?.data?.user;
 
           if (user) {
-            delete user.exp;
-            delete user.iat;
+            // delete user.exp;
+            // delete user.iat;
 
             setUserInfo(res.data.user);
           }
