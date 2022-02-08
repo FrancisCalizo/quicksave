@@ -33,8 +33,10 @@ export default function SpendingBreakdown(props: SpendingBreakdownProps) {
           }, 0);
 
           const colorHex = CATEGORY_COLORS.find(
-            (c) => c.label.toLowerCase() === cat.color.toLowerCase()
-          )!.rgb;
+            (c) =>
+              c.label.replace(/ +/g, '').toLowerCase() ===
+              cat.color?.toLowerCase()
+          )?.rgb;
 
           return { name: cat.name, amount: total, colorHex };
         })

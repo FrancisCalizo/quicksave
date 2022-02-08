@@ -1,6 +1,7 @@
 import { extendTheme } from '@chakra-ui/react';
 
 // Used https://maketintsandshades.com
+// or https://smart-swatch.netlify.app/
 // to generate the color shades
 export const theme = extendTheme({
   colors: {
@@ -36,6 +37,55 @@ export const theme = extendTheme({
       700: '#763fbb',
       800: '#6737a4',
       900: '#582f8c',
+    },
+    // Mainly for colorscheme on badges
+    lime: {
+      50: '#f2ffde',
+      100: '#defcb2',
+      200: '#caf884',
+      300: '#b5f554',
+      400: '#a1f226',
+      500: '#88d90d',
+      600: '#69a905',
+      700: '#4a7801',
+      800: '#2b4800',
+      900: '#0b1900',
+    },
+    hotPink: {
+      50: '#ffe2f4',
+      100: '#ffb2da',
+      200: '#ff80bf',
+      300: '#fe4ea6',
+      400: '#fd218c',
+      500: '#e40d73',
+      600: '#b20559',
+      700: '#800040',
+      800: '#4e0026',
+      900: '#1f000f',
+    },
+    olive: {
+      50: '#ffffdd',
+      100: '#ffffb0',
+      200: '#ffff80',
+      300: '#ffff4f',
+      400: '#ffff23',
+      500: '#e5e611',
+      600: '#b2b306',
+      700: '#7f8000',
+      800: '#4c4d00',
+      900: '#191a00',
+    },
+    navy: {
+      50: '#e4e4ff',
+      100: '#b2b3ff',
+      200: '#8080ff',
+      300: '#4e4dfe',
+      400: '#1f1bfd',
+      500: '#0a02e4',
+      600: '#0301b2',
+      700: '#000080',
+      800: '#00004f',
+      900: '#00001f',
     },
   },
 });

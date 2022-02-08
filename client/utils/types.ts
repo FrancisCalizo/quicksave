@@ -25,4 +25,8 @@ export type CategoryColors =
   | 'pink'
   | 'gray'
   | 'black'
-  | 'white';
+  | 'white'
+  | 'lime'
+  | 'hotPink'
+  | 'olive'
+  | 'navy';

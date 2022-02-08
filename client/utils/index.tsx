@@ -18,4 +18,8 @@ export const CATEGORY_COLORS = [
   { value: 'gray', label: 'gray', rgb: '#718096' },
   { value: 'black', label: 'black', rgb: '#000' },
   { value: 'white', label: 'white', rgb: '#fff' },
+  { value: 'lime', label: 'lime', rgb: '#88d90d' },
+  { value: 'hotPink', label: 'hot pink', rgb: '#e40d73' },
+  { value: 'olive', label: 'olive', rgb: '#7f8000' },
+  { value: 'navy', label: 'navy', rgb: '#0301b2' },
 ];
