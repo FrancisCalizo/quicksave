@@ -11,6 +11,7 @@ import {
   ModalCloseButton,
   Heading,
   Text,
+  useBreakpointValue,
 } from '@chakra-ui/react';
 
 interface DeleteExpenseModalProps {
@@ -28,11 +29,20 @@ export default function DeleteExpenseModal(props: DeleteExpenseModalProps) {
     selectedRowInfo,
   } = props;
 
+  const modalSize = useBreakpointValue({
+    base: 'full',
+    sm: 'full',
+    md: 'lg',
+    lg: 'lg',
+    xl: 'lg',
+    ['2xl']: 'lg',
+  });
+
   return (
     <Modal
       isOpen={isDeleteExpenseOpen}
       onClose={() => onDeleteExpenseClose()}
-      size="lg"
+      size={modalSize}
       motionPreset="scale"
     >
       <ModalOverlay />
