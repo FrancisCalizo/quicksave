@@ -1,5 +1,4 @@
 import React from 'react';
-import Head from 'next/head';
 import { useTable, useSortBy } from 'react-table';
 
 import { TriangleDownIcon, TriangleUpIcon } from '@chakra-ui/icons';
@@ -12,14 +11,28 @@ import {
   Th,
   Td,
   Badge,
+  Flex,
+  IconButton,
   chakra,
 } from '@chakra-ui/react';
 
 interface CategoryTableProps {
   data: any;
+  onDeleteCategoryOpen: () => void;
+  // onEditCategoryOpen: () => void;
+  setSelectedRowInfo: (value: any) => any;
+  setFormState: any;
 }
 
-export default function CategoryTable({ data }: CategoryTableProps) {
+export default function CategoryTable(props: CategoryTableProps) {
+  const {
+    data,
+    onDeleteCategoryOpen,
+    // onEditCategoryOpen,
+    setSelectedRowInfo,
+    setFormState,
+  } = props;
+
   const reactTableColumns = [
     {
       Header: 'Category',
@@ -43,6 +56,22 @@ export default function CategoryTable({ data }: CategoryTableProps) {
     {
       Header: '',
       accessor: 'NULL',
+      disableSortBy: true,
+      Cell: (props: any) => (
+        <Flex alignItems="center" justifyContent="flex-end">
+          <IconButton
+            aria-label="Delete Category"
+            colorScheme="red"
+            onClick={() => {
+              console.log(props.row?.original);
+              setSelectedRowInfo(props.row?.original);
+              onDeleteCategoryOpen();
+            }}
+          >
+            <FaTrash style={{ pointerEvents: 'none' }} />
+          </IconButton>
+        </Flex>
+      ),
     },
   ];
 
