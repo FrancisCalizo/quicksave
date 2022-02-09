@@ -5,6 +5,9 @@ export const formatCurrency = (value: number) =>
     minimumFractionDigits: 2,
   }).format(value);
 
+export const getPathName = (path: string, startPath: string) =>
+  path.split(startPath)[1];
+
 export const CATEGORY_COLORS = [
   { value: 'red', label: 'red', rgb: '#E53E3E' },
   { value: 'orange', label: 'orange', rgb: '#DD6B20' },

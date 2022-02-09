@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import NextLink from 'next/link';
 
 import {
@@ -19,13 +20,22 @@ import {
 import { HamburgerIcon } from '@chakra-ui/icons';
 
 import { SIDEBAR_LINKS } from 'utils/routes';
+import { getPathName } from 'utils';
 import Logo from 'components/layout/Logo';
 
 export default function Sidebar() {
+  const router = useRouter();
+
   // prettier-ignore
   const iconSize = useBreakpointValue({ sm: '1.25em', md: '1.75em', lg: '1.75em', xl: '1.25em', ['2xl']: '1.25em' });
   // prettier-ignore
   const iconMargin = useBreakpointValue({ sm: 12, md: 0, lg: 0, xl: 12, ['2xl']: 12, });
+
+  const [currentRoute, setCurrentRoute] = useState<string | null>(null);
+
+  useEffect(() => {
+    setCurrentRoute(getPathName(router.pathname, 'dashboard/'));
+  }, [router.pathname]);
 
   return (
     <React.Fragment>
@@ -53,7 +63,6 @@ export default function Sidebar() {
                   as="button"
                   py={[1.5, 1.5, 3, 3, 1.5]}
                   w="100%"
-                  _hover={{ bg: 'green.600' }}
                   display="flex"
                   flexDirection={['row', 'row', 'column', 'column', 'row']}
                   justifyContent={[
@@ -64,6 +73,23 @@ export default function Sidebar() {
                     'flex-start',
                   ]}
                   alignItems="center"
+                  bg={
+                    link.title.toLowerCase() ===
+                    currentRoute?.toLocaleLowerCase()
+                      ? 'green.600'
+                      : link.title === 'Overview' && !currentRoute
+                      ? 'green.600'
+                      : 'inherit'
+                  }
+                  _hover={{
+                    bg:
+                      link.title.toLowerCase() ===
+                      currentRoute?.toLocaleLowerCase()
+                        ? 'green.800'
+                        : link.title === 'Overview' && !currentRoute
+                        ? 'green.800'
+                        : 'green.600',
+                  }}
                 >
                   <Icon
                     size={iconSize}
@@ -81,12 +107,12 @@ export default function Sidebar() {
         <div />
       </Flex>
 
-      <MobileSidebar />
+      <MobileSidebar currentRoute={currentRoute} />
     </React.Fragment>
   );
 }
 
-function MobileSidebar() {
+function MobileSidebar({ currentRoute }: { currentRoute: string | null }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -133,12 +159,28 @@ function MobileSidebar() {
                       py={4}
                       pl={6}
                       w="100%"
-                      _hover={{ bg: 'green.300' }}
                       display="flex"
                       alignItems="center"
                       borderBottom="1px solid gainsboro"
                       borderTop={!key ? '1px solid gainsboro' : 'none'}
                       onClick={onClose}
+                      bg={
+                        link.title.toLowerCase() ===
+                        currentRoute?.toLocaleLowerCase()
+                          ? 'green.300'
+                          : link.title === 'Overview' && !currentRoute
+                          ? 'green.300'
+                          : 'inherit'
+                      }
+                      _hover={{
+                        bg:
+                          link.title.toLowerCase() ===
+                          currentRoute?.toLocaleLowerCase()
+                            ? 'green.500'
+                            : link.title === 'Overview' && !currentRoute
+                            ? 'green.500'
+                            : 'green.300',
+                      }}
                     >
                       <Icon style={{ color: '#000', marginRight: 20 }} />
                       <Text
