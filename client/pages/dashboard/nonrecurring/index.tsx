@@ -37,6 +37,7 @@ import HeadingOverview from 'components/pages/nonrecurring/HeadingOverview';
 import { useFetchExpensesByMonth } from 'components/hooks/queries/useFetchExpensesByMonth';
 import { useFetchCategories } from 'components/hooks/queries/useFetchCategories';
 import NonrecurringSkeleton from 'components/layout/skeletons/NonrecurringSkeleton';
+import PageTitle from 'components/layout/dashboard/PageTitle';
 import { Expense } from 'utils/types';
 
 export const emptyForm = {
@@ -255,7 +256,12 @@ export default function Nonrecurring() {
         px={4}
         py={6}
       >
-        <Flex align="center">
+        <PageTitle
+          title="Nonrecurring Expenses"
+          description="Track expenses that occur irregularly for a given month"
+        />
+
+        <Flex align="center" mt={8} mb={4} justifyContent="center">
           <IconButton
             aria-label="Previous Month"
             icon={<FaChevronLeft />}

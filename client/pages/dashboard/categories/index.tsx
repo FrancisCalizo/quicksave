@@ -20,6 +20,7 @@ import {
 import CategoryTable from 'components/pages/categories/CategoryTable';
 import DashboardLayout from 'components/layout/dashboard/DashboardLayout';
 import { getAllCategoriesByUser } from 'components/api/categories';
+import PageTitle from 'components/layout/dashboard/PageTitle';
 import AddCategoryModal from 'components/pages/categories/AddCategoryModal';
 import DeleteCategoryModal from 'components/pages/categories/DeleteCategoryModal';
 import EditCategoryModal from 'components/pages/categories/EditCategoryModal';
@@ -129,13 +130,10 @@ export default function Categories() {
 
   return (
     <Flex w="100%" flexDir="column" overflow="auto" minH="100vh" px={4} py={6}>
-      <Heading as="h2" size="lg">
-        My Categories
-      </Heading>
-
-      <Text color="blackAlpha.600">
-        Customize the categories in which you label your expenses
-      </Text>
+      <PageTitle
+        title="My Categories"
+        description="Customize the categories in which you label your expenses"
+      />
 
       <Flex justify="flex-end" align="center" mt={2} mb={[2, 6, 6, 2]}>
         <Button
