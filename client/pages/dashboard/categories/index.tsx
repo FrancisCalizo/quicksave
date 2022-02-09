@@ -4,6 +4,8 @@ import Head from 'next/head';
 import { useQueryClient, useQuery } from 'react-query';
 import { FaPlus } from 'react-icons/fa';
 
+import { FormValues } from 'components/pages/categories/EditCategoryModal';
+
 import {
   Heading,
   Flex,
@@ -20,6 +22,7 @@ import DashboardLayout from 'components/layout/dashboard/DashboardLayout';
 import { getAllCategoriesByUser } from 'components/api/categories';
 import AddCategoryModal from 'components/pages/categories/AddCategoryModal';
 import DeleteCategoryModal from 'components/pages/categories/DeleteCategoryModal';
+import EditCategoryModal from 'components/pages/categories/EditCategoryModal';
 
 export const emptyForm = {
   categoryName: '',
@@ -42,6 +45,12 @@ export default function Categories() {
     onClose: onDeleteCategoryClose,
   } = useDisclosure();
 
+  const {
+    isOpen: isEditCategoryOpen,
+    onOpen: onEditCategoryOpen,
+    onClose: onEditCategoryClose,
+  } = useDisclosure();
+
   // Load User Expense Categories
   const { data: categories, isLoading: isCategoriesLoading } = useQuery(
     ['categories'],
@@ -49,7 +58,6 @@ export default function Categories() {
   );
 
   const [selectedRowInfo, setSelectedRowInfo] = useState<any>({});
-  const [formState, setFormState] = useState(emptyForm);
 
   const handleDeleteCategory = async (categoryId: number) => {
     try {
@@ -81,6 +89,40 @@ export default function Categories() {
     }
   };
 
+  const handleEditCategory = async (formData: FormValues) => {
+    console.log(formData);
+    try {
+      await axios.put(`/updateCategory/${selectedRowInfo.category_id}`, {
+        name: formData.categoryName,
+        color: formData.categoryColor,
+      });
+
+      await queryClient.invalidateQueries(['categories']);
+
+      onEditCategoryClose();
+
+      toast({
+        title: 'Success!',
+        description: 'Category was updated successfully.',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+        position: 'bottom-right',
+      });
+    } catch (error) {
+      console.error(error);
+
+      toast({
+        title: 'Oops!',
+        description: 'There was an error processing your request.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        position: 'bottom-right',
+      });
+    }
+  };
+
   if (isCategoriesLoading) {
     return null;
   }
@@ -90,21 +132,6 @@ export default function Categories() {
       <Heading as="h2" size="lg">
         My Categories
       </Heading>
-
-      {/* Add Category Modal */}
-
-      <AddCategoryModal
-        isAddCategoryOpen={isAddCategoryOpen}
-        onAddCategoryClose={onAddCategoryClose}
-      />
-
-      {/* Delete Category Modal */}
-      <DeleteCategoryModal
-        isDeleteCategoryOpen={isDeleteCategoryOpen}
-        onDeleteCategoryClose={onDeleteCategoryClose}
-        handleDeleteCategory={handleDeleteCategory}
-        selectedRowInfo={selectedRowInfo}
-      />
 
       <Text color="blackAlpha.600">
         Customize the categories in which you label your expenses
@@ -128,10 +155,32 @@ export default function Categories() {
           data={categories?.data}
           setSelectedRowInfo={setSelectedRowInfo}
           onDeleteCategoryOpen={onDeleteCategoryOpen}
-          // onEditCategoryOpen={onEditCategoryOpen}
-          setFormState={setFormState}
+          onEditCategoryOpen={onEditCategoryOpen}
         />
       </Box>
+
+      {/* Add Category Modal */}
+      <AddCategoryModal
+        isAddCategoryOpen={isAddCategoryOpen}
+        onAddCategoryClose={onAddCategoryClose}
+      />
+
+      {/* Delete Category Modal */}
+      <DeleteCategoryModal
+        isDeleteCategoryOpen={isDeleteCategoryOpen}
+        onDeleteCategoryClose={onDeleteCategoryClose}
+        handleDeleteCategory={handleDeleteCategory}
+        selectedRowInfo={selectedRowInfo}
+      />
+
+      {/* Edit Expense Modal */}
+      <EditCategoryModal
+        isEditCategoryOpen={isEditCategoryOpen}
+        onEditCategoryClose={onEditCategoryClose}
+        handleEditCategory={handleEditCategory}
+        selectedRowInfo={selectedRowInfo}
+        setSelectedRowInfo={setSelectedRowInfo}
+      />
     </Flex>
   );
 }

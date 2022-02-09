@@ -1,7 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useQueryClient } from 'react-query';
-import axios from 'axios';
 
 import {
   Button,
@@ -18,28 +16,33 @@ import {
   FormLabel,
   Input,
   Select,
-  useToast,
   useBreakpointValue,
 } from '@chakra-ui/react';
 
 import { CATEGORY_COLORS } from 'utils';
-import { CategoryColors } from 'utils/types';
+import { CategoryObject, CategoryColors } from 'utils/types';
 
-type FormValues = {
+export type FormValues = {
   categoryName: string;
   categoryColor: CategoryColors;
 };
 
-interface AddCategoryModalprops {
-  isAddCategoryOpen: boolean;
-  onAddCategoryClose: () => void;
+interface EditCategoryModalprops {
+  isEditCategoryOpen: boolean;
+  onEditCategoryClose: () => void;
+  handleEditCategory: (data: any) => void;
+  selectedRowInfo: CategoryObject;
+  setSelectedRowInfo: React.Dispatch<React.SetStateAction<any>>;
 }
 
-export default function AddCategoryModal(props: AddCategoryModalprops) {
-  const toast = useToast();
-  const queryClient = useQueryClient();
-
-  const { isAddCategoryOpen, onAddCategoryClose } = props;
+export default function EditCategoryModal(props: EditCategoryModalprops) {
+  const {
+    isEditCategoryOpen,
+    onEditCategoryClose,
+    handleEditCategory,
+    selectedRowInfo,
+    setSelectedRowInfo,
+  } = props;
 
   const modalSize = useBreakpointValue({
     base: 'full',
@@ -55,63 +58,35 @@ export default function AddCategoryModal(props: AddCategoryModalprops) {
     register,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<FormValues>();
+  } = useForm<FormValues>({
+    defaultValues: { categoryName: '', categoryColor: '' as CategoryColors },
+  });
 
-  const handleAddNewCategory = async (values: FormValues) => {
-    const { categoryName, categoryColor } = values;
-
-    try {
-      await axios.post('/createCategory', {
-        name: categoryName,
-        color: categoryColor,
-      });
-
-      onAddCategoryClose();
-
-      // TODO: Supposedly this is not the best way to clear a form
-      // in RHF. Find a better way to do so: https://react-hook-form.com/api/useform/reset
-      reset();
-
-      await queryClient.invalidateQueries(['categories']);
-
-      toast({
-        title: 'Success!',
-        description: 'Category was added successfully.',
-        status: 'success',
-        duration: 5000,
-        isClosable: true,
-        position: 'bottom-right',
-      });
-    } catch (error) {
-      console.error(error);
-
-      toast({
-        title: 'Oops!',
-        description: 'There was an error processing your request.',
-        status: 'error',
-        duration: 5000,
-        isClosable: true,
-        position: 'bottom-right',
-      });
-    }
-  };
+  useEffect(() => {
+    // The reset() method can be used to provide default values
+    // mentioned here: https://react-hook-form.com/api/useform/reset
+    reset({
+      categoryName: selectedRowInfo.name,
+      categoryColor: selectedRowInfo.color as CategoryColors,
+    });
+  }, [selectedRowInfo]);
 
   return (
     <Modal
-      isOpen={isAddCategoryOpen}
+      isOpen={isEditCategoryOpen}
       onClose={() => {
-        onAddCategoryClose();
-        reset();
+        onEditCategoryClose();
+        setSelectedRowInfo({});
       }}
       size={modalSize}
       motionPreset="scale"
     >
       <ModalOverlay />
       <ModalContent>
-        <form onSubmit={handleSubmit(handleAddNewCategory)}>
+        <form onSubmit={handleSubmit(handleEditCategory)}>
           <ModalHeader borderTopRadius={5}>
             <Heading size="lg" color="gray.500">
-              Add Category
+              Edit Category
             </Heading>
           </ModalHeader>
           <ModalCloseButton />
@@ -160,14 +135,14 @@ export default function AddCategoryModal(props: AddCategoryModalprops) {
               variant="outline"
               mr={3}
               onClick={() => {
-                onAddCategoryClose();
-                reset();
+                onEditCategoryClose();
+                setSelectedRowInfo({});
               }}
             >
               Cancel
             </Button>
             <Button colorScheme="blue" type="submit" isLoading={isSubmitting}>
-              Add Category
+              Update Category
             </Button>
           </ModalFooter>
         </form>

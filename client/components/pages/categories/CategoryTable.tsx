@@ -19,19 +19,13 @@ import {
 interface CategoryTableProps {
   data: any;
   onDeleteCategoryOpen: () => void;
-  // onEditCategoryOpen: () => void;
+  onEditCategoryOpen: () => void;
   setSelectedRowInfo: (value: any) => any;
-  setFormState: any;
 }
 
 export default function CategoryTable(props: CategoryTableProps) {
-  const {
-    data,
-    onDeleteCategoryOpen,
-    // onEditCategoryOpen,
-    setSelectedRowInfo,
-    setFormState,
-  } = props;
+  const { data, onDeleteCategoryOpen, onEditCategoryOpen, setSelectedRowInfo } =
+    props;
 
   const reactTableColumns = [
     {
@@ -80,6 +74,13 @@ export default function CategoryTable(props: CategoryTableProps) {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ columns, data } as any, useSortBy);
 
+  const handleRowclick = (row: any, event: any) => {
+    if (event.target.type !== 'button') {
+      setSelectedRowInfo(row.original);
+      onEditCategoryOpen();
+    }
+  };
+
   return (
     <Table {...getTableProps()} size="sm">
       <Thead>
@@ -113,7 +114,7 @@ export default function CategoryTable(props: CategoryTableProps) {
           return (
             <Tr
               {...row.getRowProps()}
-              // onClick={(e: any) => handleRowclick(row, e)}
+              onClick={(e: any) => handleRowclick(row, e)}
               _hover={{
                 background: 'gray.100',
                 transform: 'scale(1.01)',

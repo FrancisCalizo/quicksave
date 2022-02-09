@@ -44,9 +44,9 @@ router.post('/createCategory', async (req, res) => {
 router.put('/updateCategory/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const { name } = req.body;
+    const { name, color } = req.body;
 
-    await pool.query('UPDATE category SET name = $1 WHERE category_id = $2', [name, id]);
+    await pool.query('UPDATE category SET name = $1, color = $2 WHERE category_id = $3', [name, color, id]);
 
     res.json('Category updated succesfully');
   } catch (error) {
