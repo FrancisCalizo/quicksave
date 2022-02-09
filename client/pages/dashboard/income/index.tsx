@@ -3,11 +3,22 @@ import Head from 'next/head';
 import { Flex } from '@chakra-ui/react';
 
 import DashboardLayout from 'components/layout/dashboard/DashboardLayout';
+import PageTitle from 'components/layout/dashboard/PageTitle';
 
 export default function Income() {
   return (
-    <Flex w={['100%', '100%', '60%', '60%', '55%']} flexDir="column" overflow="auto" minH="100vh">
-      <h3>Income</h3>
+    <Flex
+      w={['100%', '100%', '60%', '60%', '55%']}
+      flexDir="column"
+      overflow="auto"
+      minH="100vh"
+      px={4}
+      py={6}
+    >
+      <PageTitle
+        title="My Income"
+        description="Measure your monthly income earned"
+      />
     </Flex>
   );
 }

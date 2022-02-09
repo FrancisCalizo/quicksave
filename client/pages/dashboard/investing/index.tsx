@@ -1,9 +1,11 @@
+import Head from 'next/head';
+
 import { Flex } from '@chakra-ui/react';
 
 import DashboardLayout from 'components/layout/dashboard/DashboardLayout';
 import PageTitle from 'components/layout/dashboard/PageTitle';
 
-export default function Recurring() {
+export default function Investing() {
   return (
     <Flex
       w={['100%', '100%', '60%', '60%', '55%']}
@@ -14,11 +16,11 @@ export default function Recurring() {
       py={6}
     >
       <PageTitle
-        title="Recurring Expenses"
-        description="Track recurring expenses that occur consistenly within your budget"
+        title="My Investing"
+        description="Track how much of your incomes goes towards investments"
       />
     </Flex>
   );
 }
 
-Recurring.getLayout = (page: any) => <DashboardLayout>{page}</DashboardLayout>;
+Investing.getLayout = (page: any) => <DashboardLayout>{page}</DashboardLayout>;

@@ -7,9 +7,7 @@ import { FaPlus } from 'react-icons/fa';
 import { FormValues } from 'components/pages/categories/EditCategoryModal';
 
 import {
-  Heading,
   Flex,
-  Text,
   Box,
   Icon,
   Button,
