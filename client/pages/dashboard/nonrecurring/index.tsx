@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { FaPlus, FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import { useQueryClient } from 'react-query';
 import startOfMonth from 'date-fns/startOfMonth';
 import endOfMonth from 'date-fns/endOfMonth';
 import DatePicker from 'react-datepicker';
+import addMonths from 'date-fns/addMonths';
 import { format } from 'date-fns';
 import axios from 'axios';
 import _ from 'lodash';
+import {
+  FaPlus,
+  FaChevronDown,
+  FaChevronUp,
+  FaChevronLeft,
+  FaChevronRight,
+} from 'react-icons/fa';
 
 import {
   Flex,
@@ -249,6 +256,15 @@ export default function Nonrecurring() {
         py={6}
       >
         <Flex align="center">
+          <IconButton
+            aria-label="Previous Month"
+            icon={<FaChevronLeft />}
+            variant="ghost"
+            size="xs"
+            mr={4}
+            onClick={() => setDate(addMonths(date, -1))}
+          />
+
           <Heading
             as="h2"
             size="lg"
@@ -266,6 +282,7 @@ export default function Nonrecurring() {
               {format(date, 'yyyy')}
             </Text>
           </Heading>
+
           <IconButton
             aria-label="Change Date"
             icon={isDatePickerOpen ? <FaChevronUp /> : <FaChevronDown />}
@@ -273,6 +290,15 @@ export default function Nonrecurring() {
             ml={4}
             data-type="calendar"
             onClick={() => setIsDatePickerOpen((isOpen) => !isOpen)}
+          />
+
+          <IconButton
+            aria-label="Next Month"
+            icon={<FaChevronRight />}
+            variant="ghost"
+            size="xs"
+            ml={4}
+            onClick={() => setDate(addMonths(date, 1))}
           />
         </Flex>
         {isDatePickerOpen && (
