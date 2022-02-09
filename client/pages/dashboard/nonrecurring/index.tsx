@@ -4,6 +4,7 @@ import startOfMonth from 'date-fns/startOfMonth';
 import endOfMonth from 'date-fns/endOfMonth';
 import DatePicker from 'react-datepicker';
 import addMonths from 'date-fns/addMonths';
+import styled from 'styled-components';
 import { format } from 'date-fns';
 import axios from 'axios';
 import _ from 'lodash';
@@ -25,6 +26,7 @@ import {
   Text,
   Box,
   useToast,
+  useBreakpointValue,
 } from '@chakra-ui/react';
 
 import DashboardLayout from 'components/layout/dashboard/DashboardLayout';
@@ -51,6 +53,16 @@ export const emptyForm = {
 export default function Nonrecurring() {
   const toast = useToast();
   const queryClient = useQueryClient();
+
+  // Used to center the inline date picker
+  const datePickerOffset = useBreakpointValue({
+    base: '115px',
+    sm: '120px',
+    md: '215px',
+    lg: '220px',
+    xl: '225px',
+    ['2xl']: '230px',
+  });
 
   const {
     isOpen: isAddExpenseOpen,
@@ -277,6 +289,7 @@ export default function Nonrecurring() {
             cursor="pointer"
             onClick={() => setIsDatePickerOpen((isOpen) => !isOpen)}
             data-type="calendar"
+            position="relative"
           >
             {format(date, 'MMMM')}{' '}
             <Text
@@ -308,25 +321,27 @@ export default function Nonrecurring() {
           />
         </Flex>
         {isDatePickerOpen && (
-          <DatePicker
-            inline
-            selected={date}
-            onChange={(date: any) => {
-              setDate(date);
-              setIsDatePickerOpen(false);
-              setMinMaxDates({
-                min: format(startOfMonth(date), 'yyyy-MM-dd'),
-                max: format(endOfMonth(date), 'yyyy-MM-dd'),
-              });
-            }}
-            onClickOutside={(e: any) => {
-              if (e.target.dataset?.type !== 'calendar') {
+          <DatePickerStyles datePickerOffset={datePickerOffset}>
+            <DatePicker
+              inline
+              selected={date}
+              onChange={(date: any) => {
+                setDate(date);
                 setIsDatePickerOpen(false);
-              }
-            }}
-            dateFormat="MM/yyyy"
-            showMonthYearPicker
-          />
+                setMinMaxDates({
+                  min: format(startOfMonth(date), 'yyyy-MM-dd'),
+                  max: format(endOfMonth(date), 'yyyy-MM-dd'),
+                });
+              }}
+              onClickOutside={(e: any) => {
+                if (e.target.dataset?.type !== 'calendar') {
+                  setIsDatePickerOpen(false);
+                }
+              }}
+              dateFormat="MM/yyyy"
+              showMonthYearPicker
+            />
+          </DatePickerStyles>
         )}
 
         <HeadingOverview tempAmount={tempAmount} />
@@ -406,3 +421,9 @@ export default function Nonrecurring() {
 Nonrecurring.getLayout = (page: any) => (
   <DashboardLayout>{page}</DashboardLayout>
 );
+
+const DatePickerStyles = styled.div<{ datePickerOffset?: string }>`
+  .react-datepicker {
+    left: ${({ datePickerOffset }) => `calc(50% - ${datePickerOffset})`};
+  }
+`;
