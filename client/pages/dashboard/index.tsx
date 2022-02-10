@@ -15,7 +15,7 @@ export default function Dashboard() {
       </Head>
 
       <Flex
-        w={['100%', '100%', '60%', '60%', '55%']}
+        flex={1}
         flexDir="column"
         overflow="auto"
         minH="100vh"

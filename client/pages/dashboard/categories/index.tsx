@@ -127,7 +127,7 @@ export default function Categories() {
   }
 
   return (
-    <Flex w="100%" flexDir="column" overflow="auto" minH="100vh" px={4} py={6}>
+    <Flex flex={1} flexDir="column" overflow="auto" minH="100vh" px={4} py={6}>
       <PageTitle
         title="My Categories"
         description="Customize the categories in which you label your expenses"

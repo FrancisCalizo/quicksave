@@ -5,14 +5,7 @@ import PageTitle from 'components/layout/dashboard/PageTitle';
 
 export default function Recurring() {
   return (
-    <Flex
-      w={['100%', '100%', '60%', '60%', '55%']}
-      flexDir="column"
-      overflow="auto"
-      minH="100vh"
-      px={4}
-      py={6}
-    >
+    <Flex flex={1} flexDir="column" overflow="auto" minH="100vh" px={4} py={6}>
       <PageTitle
         title="Recurring Expenses"
         description="Track recurring expenses that occur consistenly within your budget"

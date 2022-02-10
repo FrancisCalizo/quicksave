@@ -260,7 +260,7 @@ export default function Nonrecurring() {
     <>
       {/* Middle Section */}
       <Flex
-        w={['100%', '100%', '70%']}
+        flex={1}
         direction="column"
         overflowY="auto"
         overflowX="hidden"
@@ -370,11 +370,10 @@ export default function Nonrecurring() {
 
       {/* Right Section */}
       <Flex
-        w={['100%', '100%', '30%']}
         bgColor="#F5F5F5"
         flexDir="column"
         overflow="auto"
-        minW={[null, null, '250px', '300px', '400px']}
+        w={[null, null, '250px', '300px', '400px']}
       >
         <Box my={4}>
           <SpendingBreakdown
