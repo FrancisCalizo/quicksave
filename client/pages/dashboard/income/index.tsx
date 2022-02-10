@@ -18,6 +18,7 @@ import RecurringIncomeTable from 'components/pages/income/RecurringIncomeTable';
 import PageTitle from 'components/layout/dashboard/PageTitle';
 import { useFetchRecurringIncome } from 'components/hooks/queries/useFetchRecurringIncome';
 import DeleteRecurringIncomeModal from 'components/pages/income/DeleteRecurringIncomeModal';
+import AddRecurringIncomeModal from 'components/pages/income/AddRecurringIncomeModal';
 
 export default function Income() {
   const queryClient = useQueryClient();
@@ -26,6 +27,12 @@ export default function Income() {
   // Load User Expense Categories
   const { data: recurringIncome, isLoading: isRecurringIncomeLoading } =
     useFetchRecurringIncome();
+
+  const {
+    isOpen: isAddRecurringIncomeOpen,
+    onOpen: onAddRecurringIncomeOpen,
+    onClose: onAddRecurringIncomeClose,
+  } = useDisclosure();
 
   const {
     isOpen: isDeleteRecurringIncomeOpen,
@@ -80,7 +87,7 @@ export default function Income() {
         <Button
           colorScheme="green"
           leftIcon={<Icon as={FaPlus} />}
-          // onClick={onAddCategoryOpen}
+          onClick={onAddRecurringIncomeOpen}
           width={['100%', '100%', '100%', 'inherit']}
         >
           Add Recurring Income
@@ -106,6 +113,12 @@ export default function Income() {
           Add One-Time Income
         </Button>
       </Flex>
+
+      {/* Add RecurringIncome Modal */}
+      <AddRecurringIncomeModal
+        isAddRecurringIncomeOpen={isAddRecurringIncomeOpen}
+        onAddRecurringIncomeClose={onAddRecurringIncomeClose}
+      />
 
       {/* Delete Recurring Income Modal */}
       <DeleteRecurringIncomeModal
