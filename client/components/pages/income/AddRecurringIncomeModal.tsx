@@ -17,13 +17,17 @@ import {
   FormControl,
   FormLabel,
   Input,
-  Select,
+  InputLeftAddon,
+  InputGroup,
+  NumberInputField,
+  NumberInput,
   useToast,
   useBreakpointValue,
 } from '@chakra-ui/react';
 
 type FormValues = {
-  recurringIncomeName: string;
+  description: string;
+  amount: string;
 };
 
 interface AddRecurringIncomeModalprops {
@@ -56,12 +60,13 @@ export default function AddRecurringIncomeModal(
   } = useForm<FormValues>();
 
   const handleAddNewRecurringIncome = async (values: FormValues) => {
-    const { recurringIncomeName } = values;
+    const { description, amount } = values;
 
     try {
-      // await axios.post('/createRecurringIncome', {
-      //   name: recurringIncomeName,
-      // });
+      await axios.post('/createRecurringIncome', {
+        description,
+        amount,
+      });
 
       onAddRecurringIncomeClose();
 
@@ -69,7 +74,7 @@ export default function AddRecurringIncomeModal(
       // in RHF. Find a better way to do so: https://react-hook-form.com/api/useform/reset
       reset();
 
-      await queryClient.invalidateQueries(['categories']);
+      await queryClient.invalidateQueries(['recurringIncome']);
 
       toast({
         title: 'Success!',
@@ -114,20 +119,34 @@ export default function AddRecurringIncomeModal(
           <ModalCloseButton />
           <ModalBody>
             <FormControl isRequired mb={4}>
-              <FormLabel htmlFor="recurring-income-name">
-                Recurring Income Name
-              </FormLabel>
+              <FormLabel htmlFor="description">Description</FormLabel>
               <Input
                 autoFocus
-                id="recurring-income-name"
-                {...register('recurringIncomeName', {
+                id="description"
+                {...register('description', {
                   required: 'Name is required',
                 })}
               />
               <FormErrorMessage>
-                {errors.recurringIncomeName &&
-                  errors.recurringIncomeName.message}
+                {errors.description && errors.description.message}
               </FormErrorMessage>
+            </FormControl>
+
+            <FormControl isRequired mb={4} mr={2}>
+              <FormLabel htmlFor="amount">Amount</FormLabel>
+              <InputGroup>
+                <InputLeftAddon children="$" />
+                {/* TODO: Format this number to fixed (has more than 2 decimal points) */}
+                <NumberInput width="100%">
+                  <NumberInputField
+                    id="amount"
+                    borderLeftRadius={0}
+                    {...register('amount', {
+                      required: 'Amount is required',
+                    })}
+                  />
+                </NumberInput>
+              </InputGroup>
             </FormControl>
           </ModalBody>
 
