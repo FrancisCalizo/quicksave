@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import Head from 'next/head';
-import { useQueryClient, useQuery } from 'react-query';
+import { useQueryClient } from 'react-query';
 import { FaPlus } from 'react-icons/fa';
 
 import { FormValues } from 'components/pages/categories/EditCategoryModal';
@@ -17,7 +17,7 @@ import {
 
 import CategoryTable from 'components/pages/categories/CategoryTable';
 import DashboardLayout from 'components/layout/dashboard/DashboardLayout';
-import { getAllCategoriesByUser } from 'components/api/categories';
+import { useFetchCategories } from 'components/hooks/queries/useFetchCategories';
 import PageTitle from 'components/layout/dashboard/PageTitle';
 import AddCategoryModal from 'components/pages/categories/AddCategoryModal';
 import DeleteCategoryModal from 'components/pages/categories/DeleteCategoryModal';
@@ -51,10 +51,8 @@ export default function Categories() {
   } = useDisclosure();
 
   // Load User Expense Categories
-  const { data: categories, isLoading: isCategoriesLoading } = useQuery(
-    ['categories'],
-    () => getAllCategoriesByUser()
-  );
+  const { data: categories, isLoading: isCategoriesLoading } =
+    useFetchCategories();
 
   const [selectedRowInfo, setSelectedRowInfo] = useState<any>({});
 
@@ -89,7 +87,6 @@ export default function Categories() {
   };
 
   const handleEditCategory = async (formData: FormValues) => {
-    console.log(formData);
     try {
       await axios.put(`/updateCategory/${selectedRowInfo.category_id}`, {
         name: formData.categoryName,

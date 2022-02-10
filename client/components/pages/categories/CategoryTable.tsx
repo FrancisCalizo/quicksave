@@ -57,7 +57,6 @@ export default function CategoryTable(props: CategoryTableProps) {
             aria-label="Delete Category"
             colorScheme="red"
             onClick={() => {
-              console.log(props.row?.original);
               setSelectedRowInfo(props.row?.original);
               onDeleteCategoryOpen();
             }}
