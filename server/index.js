@@ -20,6 +20,7 @@ app.post('/isLoggedIn', require('./routes/auth/isLoggedIn'));
 // Other Routes
 app.use('/', cookieJwtAuth, require('./routes/expenses'));
 app.use('/', cookieJwtAuth, require('./routes/categories'));
+app.use('/', cookieJwtAuth, require('./routes/income'));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server has started on port ${PORT}`));
