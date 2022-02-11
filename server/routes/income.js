@@ -37,6 +37,26 @@ router.post('/createFixedIncome', async (req, res) => {
   }
 });
 
+// @route     PUT updateFixedIncome/:id
+// @desc      Update a FixedIncome
+// @access    Private
+router.put('/updateFixedIncome/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { description, amount } = req.body;
+
+    await pool.query('UPDATE fixedIncome SET description = $1, monthly_amount = $2 WHERE id = $3', [
+      description,
+      amount,
+      id,
+    ]);
+
+    res.json('Fixed Income updated succesfully');
+  } catch (error) {
+    console.log(error.message);
+  }
+});
+
 // @route     DELETE deleteFixedIncome/:id
 // @desc      Delete a Category
 // @access    Private

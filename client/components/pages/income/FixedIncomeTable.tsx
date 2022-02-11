@@ -20,7 +20,7 @@ import { formatCurrency } from 'utils';
 interface FixedIncomeTableProps {
   data: any;
   onDeleteFixedIncomeOpen: () => void;
-  // onEditFixedIncomeOpen: () => void;
+  onEditFixedIncomeOpen: () => void;
   setSelectedRowInfo: (value: any) => any;
 }
 
@@ -28,7 +28,7 @@ export default function FixedIncomeTable(props: FixedIncomeTableProps) {
   const {
     data,
     onDeleteFixedIncomeOpen,
-    // onEditFixedIncomeOpen,
+    onEditFixedIncomeOpen,
     setSelectedRowInfo,
   } = props;
 
@@ -71,10 +71,10 @@ export default function FixedIncomeTable(props: FixedIncomeTableProps) {
     useTable({ columns, data } as any, useSortBy);
 
   const handleRowclick = (row: any, event: any) => {
-    // if (event.target.type !== 'button') {
-    //   setSelectedRowInfo(row.original);
-    //   onEditFixedIncomeOpen();
-    // }
+    if (event.target.type !== 'button') {
+      setSelectedRowInfo(row.original);
+      onEditFixedIncomeOpen();
+    }
   };
 
   return (

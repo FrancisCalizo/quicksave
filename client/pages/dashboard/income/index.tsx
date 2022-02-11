@@ -13,12 +13,14 @@ import {
   useToast,
 } from '@chakra-ui/react';
 
+import { FormValues } from 'components/pages/income/EditFixedIncomeModal';
 import DashboardLayout from 'components/layout/dashboard/DashboardLayout';
 import FixedIncomeTable from 'components/pages/income/FixedIncomeTable';
 import PageTitle from 'components/layout/dashboard/PageTitle';
 import { useFetchFixedIncome } from 'components/hooks/queries/useFetchFixedIncome';
-import DeleteFixedIncomeModal from 'components/pages/income/DeleteFixedIncomeModal';
 import AddFixedIncomeModal from 'components/pages/income/AddFixedIncomeModal';
+import EditFixedIncomeModal from 'components/pages/income/EditFixedIncomeModal';
+import DeleteFixedIncomeModal from 'components/pages/income/DeleteFixedIncomeModal';
 
 export default function Income() {
   const queryClient = useQueryClient();
@@ -35,12 +37,53 @@ export default function Income() {
   } = useDisclosure();
 
   const {
+    isOpen: isEditFixedIncomeOpen,
+    onOpen: onEditFixedIncomeOpen,
+    onClose: onEditFixedIncomeClose,
+  } = useDisclosure();
+
+  const {
     isOpen: isDeleteFixedIncomeOpen,
     onOpen: onDeleteFixedIncomeOpen,
     onClose: onDeleteFixedIncomeClose,
   } = useDisclosure();
 
   const [selectedRowInfo, setSelectedRowInfo] = useState<any>({});
+
+  const handleEditFixedIncome = async (formData: FormValues) => {
+    const { description, amount } = formData;
+
+    try {
+      await axios.put(`/updateFixedIncome/${selectedRowInfo.id}`, {
+        description,
+        amount: Number(amount),
+      });
+
+      await queryClient.invalidateQueries(['fixedIncome']);
+
+      onEditFixedIncomeClose();
+
+      toast({
+        title: 'Success!',
+        description: 'Fixed Income was updated successfully.',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
+        position: 'bottom-right',
+      });
+    } catch (error) {
+      console.error(error);
+
+      toast({
+        title: 'Oops!',
+        description: 'There was an error processing your request.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+        position: 'bottom-right',
+      });
+    }
+  };
 
   const handleDeleteFixedIncome = async (id: number) => {
     try {
@@ -99,7 +142,7 @@ export default function Income() {
           data={fixedIncome?.data}
           setSelectedRowInfo={setSelectedRowInfo}
           onDeleteFixedIncomeOpen={onDeleteFixedIncomeOpen}
-          // onEditCategoryOpen={onEditCategoryOpen}
+          onEditFixedIncomeOpen={onEditFixedIncomeOpen}
         />
       </Box>
 
@@ -107,14 +150,14 @@ export default function Income() {
         <Button
           colorScheme="blue"
           leftIcon={<Icon as={FaPlus} />}
-          // onClick={onAddCategoryOpen}
+          // onClick={onAddVariableIncomeOpen}
           width={['100%', '100%', '100%', 'inherit']}
         >
-          Add One-Time Income
+          Add Variable Income
         </Button>
       </Flex>
 
-      {/* Add FixedIncome Modal */}
+      {/* Add Fixed Income Modal */}
       <AddFixedIncomeModal
         isAddFixedIncomeOpen={isAddFixedIncomeOpen}
         onAddFixedIncomeClose={onAddFixedIncomeClose}
@@ -126,6 +169,15 @@ export default function Income() {
         onDeleteFixedIncomeClose={onDeleteFixedIncomeClose}
         handleDeleteFixedIncome={handleDeleteFixedIncome}
         selectedRowInfo={selectedRowInfo}
+      />
+
+      {/* Edit Fixed Income Modal */}
+      <EditFixedIncomeModal
+        isEditFixedIncomeOpen={isEditFixedIncomeOpen}
+        onEditFixedIncomeClose={onEditFixedIncomeClose}
+        handleEditFixedIncome={handleEditFixedIncome}
+        selectedRowInfo={selectedRowInfo}
+        setSelectedRowInfo={setSelectedRowInfo}
       />
     </Flex>
   );
