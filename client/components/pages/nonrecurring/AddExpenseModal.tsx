@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import NumberFormat from 'react-number-format';
 
 import {
   Flex,
@@ -103,18 +104,14 @@ export default function AddExpenseModal(props: AddExpenseModalprops) {
                   onChange={(val) =>
                     setFormData((old: any) => ({ ...old, amount: val }))
                   }
-                  onBlur={(e: any) => {
-                    const val = Math.abs(
-                      Number(parseFloat(e.target.value).toFixed(2))
-                    );
-
-                    setFormData((old: any) => ({
-                      ...old,
-                      amount: val ? val.toFixed(2) : 0,
-                    }));
-                  }}
                 >
-                  <NumberInputField id="amount" borderLeftRadius={0} />
+                  <NumberFormat
+                    borderLeftRadius={0}
+                    customInput={NumberInputField}
+                    thousandSeparator={true}
+                    decimalScale={2}
+                    isNumericString
+                  />
                 </NumberInput>
               </InputGroup>
             </FormControl>
