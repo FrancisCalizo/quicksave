@@ -1,6 +1,7 @@
 import React from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { useQueryClient } from 'react-query';
+import NumberFormat from 'react-number-format';
 import axios from 'axios';
 
 import {
@@ -54,6 +55,7 @@ export default function AddFixedIncomeModal(props: AddFixedIncomeModalprops) {
     handleSubmit,
     register,
     reset,
+    control,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>();
 
@@ -134,14 +136,24 @@ export default function AddFixedIncomeModal(props: AddFixedIncomeModalprops) {
               <FormLabel htmlFor="amount">Amount</FormLabel>
               <InputGroup>
                 <InputLeftAddon children="$" />
-                {/* TODO: Format this number to fixed (has more than 2 decimal points) */}
-                <NumberInput width="100%">
-                  <NumberInputField
-                    id="amount"
-                    borderLeftRadius={0}
-                    {...register('amount', {
-                      required: 'Amount is required',
-                    })}
+                <NumberInput width="100%" precision={2}>
+                  <Controller
+                    control={control}
+                    name="amount"
+                    render={({
+                      field: { onChange, ref, name, value, onBlur, ...rest },
+                    }) => (
+                      <NumberFormat
+                        customInput={NumberInputField}
+                        {...rest}
+                        name={name}
+                        onChange={onChange}
+                        value={value}
+                        thousandSeparator={true}
+                        decimalScale={2}
+                        isNumericString
+                      />
+                    )}
                   />
                 </NumberInput>
               </InputGroup>
