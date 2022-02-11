@@ -17,18 +17,18 @@ import {
 
 import { formatCurrency } from 'utils';
 
-interface RecurringIncomeTableProps {
+interface FixedIncomeTableProps {
   data: any;
-  onDeleteRecurringIncomeOpen: () => void;
-  // onEditRecurringIncomeOpen: () => void;
+  onDeleteFixedIncomeOpen: () => void;
+  // onEditFixedIncomeOpen: () => void;
   setSelectedRowInfo: (value: any) => any;
 }
 
-export default function RecurringIncomeTable(props: RecurringIncomeTableProps) {
+export default function FixedIncomeTable(props: FixedIncomeTableProps) {
   const {
     data,
-    onDeleteRecurringIncomeOpen,
-    // onEditRecurringIncomeOpen,
+    onDeleteFixedIncomeOpen,
+    // onEditFixedIncomeOpen,
     setSelectedRowInfo,
   } = props;
 
@@ -55,7 +55,7 @@ export default function RecurringIncomeTable(props: RecurringIncomeTableProps) {
             colorScheme="red"
             onClick={() => {
               setSelectedRowInfo(props.row?.original);
-              onDeleteRecurringIncomeOpen();
+              onDeleteFixedIncomeOpen();
             }}
           >
             <FaTrash style={{ pointerEvents: 'none' }} />
@@ -73,7 +73,7 @@ export default function RecurringIncomeTable(props: RecurringIncomeTableProps) {
   const handleRowclick = (row: any, event: any) => {
     // if (event.target.type !== 'button') {
     //   setSelectedRowInfo(row.original);
-    //   onEditRecurringIncomeOpen();
+    //   onEditFixedIncomeOpen();
     // }
   };
 

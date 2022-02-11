@@ -14,45 +14,45 @@ import {
 } from '@chakra-ui/react';
 
 import DashboardLayout from 'components/layout/dashboard/DashboardLayout';
-import RecurringIncomeTable from 'components/pages/income/RecurringIncomeTable';
+import FixedIncomeTable from 'components/pages/income/FixedIncomeTable';
 import PageTitle from 'components/layout/dashboard/PageTitle';
-import { useFetchRecurringIncome } from 'components/hooks/queries/useFetchRecurringIncome';
-import DeleteRecurringIncomeModal from 'components/pages/income/DeleteRecurringIncomeModal';
-import AddRecurringIncomeModal from 'components/pages/income/AddRecurringIncomeModal';
+import { useFetchFixedIncome } from 'components/hooks/queries/useFetchFixedIncome';
+import DeleteFixedIncomeModal from 'components/pages/income/DeleteFixedIncomeModal';
+import AddFixedIncomeModal from 'components/pages/income/AddFixedIncomeModal';
 
 export default function Income() {
   const queryClient = useQueryClient();
   const toast = useToast();
 
   // Load User Expense Categories
-  const { data: recurringIncome, isLoading: isRecurringIncomeLoading } =
-    useFetchRecurringIncome();
+  const { data: fixedIncome, isLoading: isFixedIncomeLoading } =
+    useFetchFixedIncome();
 
   const {
-    isOpen: isAddRecurringIncomeOpen,
-    onOpen: onAddRecurringIncomeOpen,
-    onClose: onAddRecurringIncomeClose,
+    isOpen: isAddFixedIncomeOpen,
+    onOpen: onAddFixedIncomeOpen,
+    onClose: onAddFixedIncomeClose,
   } = useDisclosure();
 
   const {
-    isOpen: isDeleteRecurringIncomeOpen,
-    onOpen: onDeleteRecurringIncomeOpen,
-    onClose: onDeleteRecurringIncomeClose,
+    isOpen: isDeleteFixedIncomeOpen,
+    onOpen: onDeleteFixedIncomeOpen,
+    onClose: onDeleteFixedIncomeClose,
   } = useDisclosure();
 
   const [selectedRowInfo, setSelectedRowInfo] = useState<any>({});
 
-  const handleDeleteRecurringIncome = async (id: number) => {
+  const handleDeleteFixedIncome = async (id: number) => {
     try {
-      await axios.delete(`/deleteRecurringIncome/${id}`);
+      await axios.delete(`/deleteFixedIncome/${id}`);
 
-      await queryClient.invalidateQueries(['recurringIncome']);
+      await queryClient.invalidateQueries(['fixedIncome']);
 
-      onDeleteRecurringIncomeClose();
+      onDeleteFixedIncomeClose();
 
       toast({
         title: 'Success!',
-        description: 'Recurring Income was deleted successfully.',
+        description: 'Fixed Income was deleted successfully.',
         status: 'success',
         duration: 5000,
         isClosable: true,
@@ -72,7 +72,7 @@ export default function Income() {
     }
   };
 
-  if (isRecurringIncomeLoading) {
+  if (isFixedIncomeLoading) {
     return null;
   }
 
@@ -87,18 +87,18 @@ export default function Income() {
         <Button
           colorScheme="green"
           leftIcon={<Icon as={FaPlus} />}
-          onClick={onAddRecurringIncomeOpen}
+          onClick={onAddFixedIncomeOpen}
           width={['100%', '100%', '100%', 'inherit']}
         >
-          Add Recurring Income
+          Add Fixed Income
         </Button>
       </Flex>
 
       <Box my={6}>
-        <RecurringIncomeTable
-          data={recurringIncome?.data}
+        <FixedIncomeTable
+          data={fixedIncome?.data}
           setSelectedRowInfo={setSelectedRowInfo}
-          onDeleteRecurringIncomeOpen={onDeleteRecurringIncomeOpen}
+          onDeleteFixedIncomeOpen={onDeleteFixedIncomeOpen}
           // onEditCategoryOpen={onEditCategoryOpen}
         />
       </Box>
@@ -114,17 +114,17 @@ export default function Income() {
         </Button>
       </Flex>
 
-      {/* Add RecurringIncome Modal */}
-      <AddRecurringIncomeModal
-        isAddRecurringIncomeOpen={isAddRecurringIncomeOpen}
-        onAddRecurringIncomeClose={onAddRecurringIncomeClose}
+      {/* Add FixedIncome Modal */}
+      <AddFixedIncomeModal
+        isAddFixedIncomeOpen={isAddFixedIncomeOpen}
+        onAddFixedIncomeClose={onAddFixedIncomeClose}
       />
 
-      {/* Delete Recurring Income Modal */}
-      <DeleteRecurringIncomeModal
-        isDeleteRecurringIncomeOpen={isDeleteRecurringIncomeOpen}
-        onDeleteRecurringIncomeClose={onDeleteRecurringIncomeClose}
-        handleDeleteRecurringIncome={handleDeleteRecurringIncome}
+      {/* Delete Fixed Income Modal */}
+      <DeleteFixedIncomeModal
+        isDeleteFixedIncomeOpen={isDeleteFixedIncomeOpen}
+        onDeleteFixedIncomeClose={onDeleteFixedIncomeClose}
+        handleDeleteFixedIncome={handleDeleteFixedIncome}
         selectedRowInfo={selectedRowInfo}
       />
     </Flex>

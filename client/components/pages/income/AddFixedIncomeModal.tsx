@@ -30,18 +30,16 @@ type FormValues = {
   amount: string;
 };
 
-interface AddRecurringIncomeModalprops {
-  isAddRecurringIncomeOpen: boolean;
-  onAddRecurringIncomeClose: () => void;
+interface AddFixedIncomeModalprops {
+  isAddFixedIncomeOpen: boolean;
+  onAddFixedIncomeClose: () => void;
 }
 
-export default function AddRecurringIncomeModal(
-  props: AddRecurringIncomeModalprops
-) {
+export default function AddFixedIncomeModal(props: AddFixedIncomeModalprops) {
   const toast = useToast();
   const queryClient = useQueryClient();
 
-  const { isAddRecurringIncomeOpen, onAddRecurringIncomeClose } = props;
+  const { isAddFixedIncomeOpen, onAddFixedIncomeClose } = props;
 
   const modalSize = useBreakpointValue({
     base: 'full',
@@ -59,26 +57,26 @@ export default function AddRecurringIncomeModal(
     formState: { errors, isSubmitting },
   } = useForm<FormValues>();
 
-  const handleAddNewRecurringIncome = async (values: FormValues) => {
+  const handleAddNewFixedIncome = async (values: FormValues) => {
     const { description, amount } = values;
 
     try {
-      await axios.post('/createRecurringIncome', {
+      await axios.post('/createFixedIncome', {
         description,
         amount,
       });
 
-      onAddRecurringIncomeClose();
+      onAddFixedIncomeClose();
 
       // TODO: Supposedly this is not the best way to clear a form
       // in RHF. Find a better way to do so: https://react-hook-form.com/api/useform/reset
       reset();
 
-      await queryClient.invalidateQueries(['recurringIncome']);
+      await queryClient.invalidateQueries(['fixedIncome']);
 
       toast({
         title: 'Success!',
-        description: 'Recurring Income was added successfully.',
+        description: 'Fixed Income was added successfully.',
         status: 'success',
         duration: 5000,
         isClosable: true,
@@ -100,9 +98,9 @@ export default function AddRecurringIncomeModal(
 
   return (
     <Modal
-      isOpen={isAddRecurringIncomeOpen}
+      isOpen={isAddFixedIncomeOpen}
       onClose={() => {
-        onAddRecurringIncomeClose();
+        onAddFixedIncomeClose();
         reset();
       }}
       size={modalSize}
@@ -110,10 +108,10 @@ export default function AddRecurringIncomeModal(
     >
       <ModalOverlay />
       <ModalContent>
-        <form onSubmit={handleSubmit(handleAddNewRecurringIncome)}>
+        <form onSubmit={handleSubmit(handleAddNewFixedIncome)}>
           <ModalHeader borderTopRadius={5}>
             <Heading size="lg" color="gray.500">
-              Add Recurring Income
+              Add Fixed Income
             </Heading>
           </ModalHeader>
           <ModalCloseButton />
@@ -155,14 +153,14 @@ export default function AddRecurringIncomeModal(
               variant="outline"
               mr={3}
               onClick={() => {
-                onAddRecurringIncomeClose();
+                onAddFixedIncomeClose();
                 reset();
               }}
             >
               Cancel
             </Button>
             <Button colorScheme="blue" type="submit" isLoading={isSubmitting}>
-              Add Recurring Income
+              Add Fixed Income
             </Button>
           </ModalFooter>
         </form>

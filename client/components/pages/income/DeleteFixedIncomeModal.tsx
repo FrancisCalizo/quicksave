@@ -14,20 +14,20 @@ import {
   useBreakpointValue,
 } from '@chakra-ui/react';
 
-interface DeleteRecurringIncomeModalProps {
+interface DeleteFixedIncomeModalProps {
   selectedRowInfo: any;
-  isDeleteRecurringIncomeOpen: boolean;
-  onDeleteRecurringIncomeClose: () => void;
-  handleDeleteRecurringIncome: (recurringIncomeId: number) => void;
+  isDeleteFixedIncomeOpen: boolean;
+  onDeleteFixedIncomeClose: () => void;
+  handleDeleteFixedIncome: (fixedIncomeId: number) => void;
 }
 
-export default function DeleteRecurringIncomeModal(
-  props: DeleteRecurringIncomeModalProps
+export default function DeleteFixedIncomeModal(
+  props: DeleteFixedIncomeModalProps
 ) {
   const {
-    isDeleteRecurringIncomeOpen,
-    onDeleteRecurringIncomeClose,
-    handleDeleteRecurringIncome,
+    isDeleteFixedIncomeOpen,
+    onDeleteFixedIncomeClose,
+    handleDeleteFixedIncome,
     selectedRowInfo,
   } = props;
 
@@ -42,8 +42,8 @@ export default function DeleteRecurringIncomeModal(
 
   return (
     <Modal
-      isOpen={isDeleteRecurringIncomeOpen}
-      onClose={() => onDeleteRecurringIncomeClose()}
+      isOpen={isDeleteFixedIncomeOpen}
+      onClose={() => onDeleteFixedIncomeClose()}
       motionPreset="scale"
       size={modalSize}
     >
@@ -51,13 +51,13 @@ export default function DeleteRecurringIncomeModal(
       <ModalContent>
         <ModalHeader borderTopRadius={5}>
           <Heading size="lg" color="gray.500">
-            Delete Recurring Income
+            Delete Fixed Income
           </Heading>
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <Text>
-            Are you sure you want to delete the recurring income
+            Are you sure you want to delete the Fixed Income
             <Text as="span" fontWeight="bold">
               {` "${selectedRowInfo.description}"`}
             </Text>
@@ -69,15 +69,15 @@ export default function DeleteRecurringIncomeModal(
           <Button
             variant="outline"
             mr={3}
-            onClick={() => onDeleteRecurringIncomeClose()}
+            onClick={() => onDeleteFixedIncomeClose()}
           >
             Cancel
           </Button>
           <Button
             colorScheme="red"
-            onClick={() => handleDeleteRecurringIncome(selectedRowInfo.id)}
+            onClick={() => handleDeleteFixedIncome(selectedRowInfo.id)}
           >
-            Delete Recurring Income
+            Delete Fixed Income
           </Button>
         </ModalFooter>
       </ModalContent>
