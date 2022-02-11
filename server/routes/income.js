@@ -9,7 +9,7 @@ router.get('/getAllRecurringIncome', async (req, res) => {
   const { userid } = req.user;
 
   try {
-    const recurringIncome = await pool.query('SELECT * FROM income_recurring WHERE user_id = $1', [userid]);
+    const recurringIncome = await pool.query('SELECT * FROM fixedIncome WHERE user_id = $1', [userid]);
 
     res.json(recurringIncome.rows);
   } catch (error) {
@@ -27,7 +27,7 @@ router.post('/createRecurringIncome', async (req, res) => {
     const { userid } = req.user;
 
     const newIncome = await pool.query(
-      'INSERT INTO income_recurring (description, monthly_amount, user_id) VALUES($1, $2, $3) RETURNING *',
+      'INSERT INTO fixedIncome (description, monthly_amount, user_id) VALUES($1, $2, $3) RETURNING *',
       [description, amount, userid]
     );
 
@@ -44,7 +44,7 @@ router.delete('/deleteRecurringIncome/:id', async (req, res) => {
   try {
     const { id } = req.params;
 
-    await pool.query('DELETE FROM income_recurring WHERE id = $1', [id]);
+    await pool.query('DELETE FROM fixedIncome WHERE id = $1', [id]);
 
     res.json('Recurring Income deleted succesfully');
   } catch (error) {
